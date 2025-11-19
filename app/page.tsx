@@ -1,65 +1,153 @@
-import Image from "next/image";
+import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="min-h-screen bg-gradient-to-b from-[#f6fbfb] to-white">
+      {/* Header */}
+      <header className="border-b border-gray-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-[#007a80]">Rhythm</h1>
+            <p className="text-sm text-gray-600">Pharma Content Hub</p>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+            Create Compliant Pharma Content
+          </h2>
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600">
+            Generate FDA-compliant marketing materials for rare disease pharmaceuticals.
+            From HCP emails to social media posts, all with proper ISI and references.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {/* Content Type Cards */}
+        <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {/* HCP Email Card */}
+          <Link
+            href="/chat?type=hcp-email"
+            className="group relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition-all hover:shadow-lg hover:border-[#007a80]"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#007a80]/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="relative">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#007a80]/10">
+                <svg className="h-6 w-6 text-[#007a80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-gray-900">HCP Email</h3>
+              <p className="mt-2 text-sm text-gray-600">
+                Create professional emails for healthcare providers with proper structure, references, and ISI.
+              </p>
+              <div className="mt-4 flex items-center text-sm font-medium text-[#007a80]">
+                Start creating
+                <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </Link>
+
+          {/* Social Media Card */}
+          <Link
+            href="/chat?type=social-media"
+            className="group relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition-all hover:shadow-lg hover:border-[#007a80]"
           >
-            Documentation
-          </a>
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#007a80]/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="relative">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#007a80]/10">
+                <svg className="h-6 w-6 text-[#007a80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                </svg>
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-gray-900">Social Media</h3>
+              <p className="mt-2 text-sm text-gray-600">
+                Generate compliant social media posts for Facebook, Instagram, and X with hashtags and visual prompts.
+              </p>
+              <div className="mt-4 flex items-center text-sm font-medium text-[#007a80]">
+                Start creating
+                <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </Link>
+
+          {/* Patient Email Card - Coming Soon */}
+          <div className="group relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm opacity-60">
+            <div className="relative">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100">
+                <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-gray-900">Patient Email</h3>
+              <p className="mt-2 text-sm text-gray-600">
+                Create patient-friendly emails with simple language and supportive tone.
+              </p>
+              <div className="mt-4 flex items-center text-sm font-medium text-gray-400">
+                Coming soon
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Features Section */}
+        <div className="mt-24">
+          <h3 className="text-center text-2xl font-bold text-gray-900">Built for Compliance</h3>
+          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#007a80]/10">
+                <svg className="h-6 w-6 text-[#007a80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h4 className="mt-4 font-semibold text-gray-900">FDA Compliant</h4>
+              <p className="mt-2 text-sm text-gray-600">All content includes proper ISI and follows regulations</p>
+            </div>
+            <div className="text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#007a80]/10">
+                <svg className="h-6 w-6 text-[#007a80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+              <h4 className="mt-4 font-semibold text-gray-900">AMA References</h4>
+              <p className="mt-2 text-sm text-gray-600">Proper citation formatting for all claims</p>
+            </div>
+            <div className="text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#007a80]/10">
+                <svg className="h-6 w-6 text-[#007a80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                </svg>
+              </div>
+              <h4 className="mt-4 font-semibold text-gray-900">Brand Consistent</h4>
+              <p className="mt-2 text-sm text-gray-600">Maintains visual identity and tone guidelines</p>
+            </div>
+            <div className="text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#007a80]/10">
+                <svg className="h-6 w-6 text-[#007a80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h4 className="mt-4 font-semibold text-gray-900">Fast Generation</h4>
+              <p className="mt-2 text-sm text-gray-600">Create content in minutes, not weeks</p>
+            </div>
+          </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="mt-24 border-t border-gray-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <p className="text-center text-sm text-gray-500">
+            © 2025 Rhythm Content Hub. Built for pharmaceutical content generation.
+          </p>
+        </div>
+      </footer>
     </div>
-  );
+  )
 }
