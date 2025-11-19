@@ -20,13 +20,14 @@ function ChatContent() {
   const [isLoading, setIsLoading] = useState(false)
   const [generatedContent, setGeneratedContent] = useState<string | null>(null)
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
+  const [generatedVideo, setGeneratedVideo] = useState<string | null>(null)
 
   useEffect(() => {
     // Initialize conversation with greeting
     const greetings: Record<ContentType, string> = {
       'hcp-email': `Hi! I'll help you create a compliant HCP email. Let's start with a few questions.\n\nFirst, what is the product name you're creating content for?`,
       'social-media': `Hi! I'll help you create compliant social media content. Let's gather some information.\n\nFirst, what is the product name you're creating content for?`,
-      'video': `Hi! I'll help you create a short video script and concept.\n\nFirst, what is the product name you're creating content for?`,
+      'video': `Hi! I'll help you create a video.\n\nFirst, what is the product name you're creating content for?`,
       'patient-email': 'Hi! Patient email generation is coming soon. Please select another content type for now.'
     }
 
@@ -67,6 +68,10 @@ function ChatContent() {
 
       if (data.imageUrl) {
         setGeneratedImage(data.imageUrl)
+      }
+
+      if (data.videoUrl) {
+        setGeneratedVideo(data.videoUrl)
       }
     } catch (error) {
       console.error('Error:', error)
@@ -207,6 +212,29 @@ function ChatContent() {
                   className="mt-2 inline-block text-sm text-[#FF6B35] hover:text-[#E65A2B]"
                 >
                   Download Image
+                </a>
+              </div>
+            )}
+
+            {/* Generated Video */}
+            {generatedVideo && (
+              <div className="mb-6">
+                <video
+                  src={generatedVideo}
+                  controls
+                  loop
+                  className="w-full rounded-lg shadow-lg"
+                >
+                  Your browser does not support the video tag.
+                </video>
+                <a
+                  href={generatedVideo}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block text-sm text-[#FF6B35] hover:text-[#E65A2B]"
+                >
+                  Download Video
                 </a>
               </div>
             )}

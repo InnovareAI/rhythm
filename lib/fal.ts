@@ -51,3 +51,40 @@ export async function generateImage(prompt: string): Promise<string> {
     throw error
   }
 }
+
+export async function generateVideo(imageUrl: string, prompt: string): Promise<string> {
+  initializeFal()
+
+  try {
+    console.log('Generating video with Sora 2 from image:', imageUrl.substring(0, 50) + '...')
+
+    const result = await fal.subscribe('fal-ai/sora', {
+      input: {
+        image_url: imageUrl,
+        prompt,
+        duration: 5, // 5 seconds
+        aspect_ratio: '16:9',
+        loop: false
+      },
+      logs: false,
+      onQueueUpdate: (update) => {
+        if (update.status === 'IN_PROGRESS') {
+          console.log('Video generation in progress...')
+        }
+      },
+    })
+
+    // @ts-ignore - fal.ai types are not perfect
+    const videoUrl = result.data?.video?.url
+
+    if (!videoUrl) {
+      throw new Error('No video URL returned from fal.ai')
+    }
+
+    console.log('Video generated:', videoUrl)
+    return videoUrl
+  } catch (error) {
+    console.error('Error generating video with fal.ai:', error)
+    throw error
+  }
+}

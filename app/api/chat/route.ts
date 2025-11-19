@@ -3,7 +3,7 @@ import { getOpenRouter, defaultModel } from '@/lib/openrouter'
 import { getHCPEmailPrompt } from '@/lib/prompts/hcp-email'
 import { getSocialMediaPrompt } from '@/lib/prompts/social-media'
 import { getVideoPrompt } from '@/lib/prompts/video'
-import { generateImage } from '@/lib/fal'
+import { generateImage, generateVideo } from '@/lib/fal'
 
 type Message = {
   role: 'user' | 'assistant'
@@ -160,10 +160,41 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
       // Store product name
       data.productName = lastUserMessage
       return {
-        message: `Great! Creating content for ${lastUserMessage}.\n\nWhat type of video would you like to create?\n1. Patient Story/Testimonial\n2. Disease Education\n3. Product Mechanism Animation\n4. Social Media Reel (15-30 sec)\n\nJust tell me the type or number.`,
+        message: `Great! Creating content for ${lastUserMessage}.\n\nDo you have an image to use, or should we generate one?\n1. I'll provide an image URL\n2. Generate an image from a prompt\n\nJust tell me 1 or 2.`,
         shouldGenerate: false
       }
     } else if (step === 2) {
+      // Store image source choice
+      if (message.includes('provide') || message.includes('url') || message === '1') {
+        data.imageSource = 'upload'
+        return {
+          message: `Perfect! Please provide the image URL.`,
+          shouldGenerate: false
+        }
+      } else if (message.includes('generate') || message.includes('prompt') || message === '2') {
+        data.imageSource = 'generate'
+        return {
+          message: `Great! Describe the image you want to generate.\n\nFor example:\n• Professional medical setting with diverse patients\n• Product packaging in a pharmacy\n• Healthcare professional consulting with patient`,
+          shouldGenerate: false
+        }
+      } else {
+        return {
+          message: 'Please select 1 or 2.',
+          shouldGenerate: false
+        }
+      }
+    } else if (step === 3) {
+      // Store image URL or prompt
+      if (data.imageSource === 'upload') {
+        data.imageUrl = lastUserMessage
+      } else {
+        data.imagePrompt = lastUserMessage
+      }
+      return {
+        message: `Got it! What type of video animation would you like?\n1. Patient Story/Testimonial\n2. Disease Education\n3. Product Mechanism Animation\n4. Social Media Reel (15-30 sec)\n\nJust tell me the type or number.`,
+        shouldGenerate: false
+      }
+    } else if (step === 4) {
       // Determine video type
       let videoType = ''
       if (message.includes('patient') || message.includes('story') || message.includes('testimonial') || message === '1') {
@@ -182,7 +213,7 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
 
       if (videoType) {
         return {
-          message: `Great! ${videoType.replace('-', ' ')} video it is.\n\nWhat duration would you like?\n• 15-30 seconds (Social media reel)\n• 60 seconds (Short explainer)\n• 90 seconds (Full story)\n\nOr specify your preferred length.`,
+          message: `Great! ${videoType.replace('-', ' ')} video it is.\n\nWho is the target audience?\n• Patients\n• Caregivers/Family\n• Healthcare Professionals\n• General Awareness`,
           shouldGenerate: false
         }
       } else {
@@ -191,25 +222,18 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
           shouldGenerate: false
         }
       }
-    } else if (step === 3) {
-      // Store duration
-      data.duration = lastUserMessage
-      return {
-        message: `Perfect! Who is the target audience?\n• Patients\n• Caregivers/Family\n• Healthcare Professionals\n• General Awareness`,
-        shouldGenerate: false
-      }
-    } else if (step === 4) {
+    } else if (step === 5) {
       // Store target
       data.targetAudience = lastUserMessage
       return {
-        message: `Great! What's the key message or story you want to tell?\n\nFor example:\n• Understanding the genetic condition\n• Living with the condition\n• How the treatment works\n• Patient support resources`,
+        message: `Great! Describe how you want the video to animate.\n\nFor example:\n• Slow zoom in on product\n• Gentle pan across the scene\n• Subtle movement showing interaction\n• Camera slowly moving forward`,
         shouldGenerate: false
       }
-    } else if (step >= 5) {
-      // Generate content
+    } else if (step >= 6) {
+      // Store animation description as key message
       data.keyMessage = lastUserMessage
       return {
-        message: 'Generating your video script and concept now...',
+        message: 'Generating your video now (this may take 2-3 minutes)...',
         shouldGenerate: true
       }
     }
@@ -221,7 +245,7 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
   }
 }
 
-async function generateContent(contentType: string, data: Record<string, any>): Promise<{ content: string; imageUrl?: string }> {
+async function generateContent(contentType: string, data: Record<string, any>): Promise<{ content: string; imageUrl?: string; videoUrl?: string }> {
   try {
     let systemPrompt = ''
 
@@ -268,6 +292,8 @@ async function generateContent(contentType: string, data: Record<string, any>): 
 
     // For social media, generate an image
     let imageUrl: string | undefined
+    let videoUrl: string | undefined
+
     if (contentType === 'social-media') {
       try {
         // Extract image prompt from the generated content
@@ -296,7 +322,36 @@ async function generateContent(contentType: string, data: Record<string, any>): 
       }
     }
 
-    return { content, imageUrl }
+    // For video, use provided image or generate one, then animate it with Sora 2
+    if (contentType === 'video') {
+      try {
+        // Check if user provided an image URL or we need to generate one
+        if (data.imageSource === 'upload' && data.imageUrl) {
+          // User provided an image URL
+          imageUrl = data.imageUrl
+          console.log('Using provided image URL:', imageUrl)
+        } else if (data.imageSource === 'generate' && data.imagePrompt) {
+          // Generate image from user's prompt
+          console.log('Generating image for video with prompt:', data.imagePrompt)
+          imageUrl = await generateImage(data.imagePrompt)
+          console.log('Image generated for video:', imageUrl)
+        }
+
+        // Now generate video from the image
+        if (imageUrl) {
+          const videoPrompt = `${data.keyMessage || 'smooth camera movement'}, professional pharmaceutical content for ${data.productName || 'product'}, ${data.targetAudience} audience, calm atmosphere`
+
+          console.log('Generating video with Sora 2...')
+          videoUrl = await generateVideo(imageUrl, videoPrompt)
+          console.log('Video generated:', videoUrl)
+        }
+      } catch (error) {
+        console.error('Error generating video:', error)
+        // Continue without video if generation fails
+      }
+    }
+
+    return { content, imageUrl, videoUrl }
   } catch (error) {
     console.error('Error generating content:', error)
     throw error
@@ -320,17 +375,20 @@ export async function POST(request: NextRequest) {
 
     let generatedContent = null
     let imageUrl = null
+    let videoUrl = null
 
     if (shouldGenerate) {
       const result = await generateContent(contentType, state.data)
       generatedContent = result.content
       imageUrl = result.imageUrl || null
+      videoUrl = result.videoUrl || null
     }
 
     return NextResponse.json({
       message,
       generatedContent,
       imageUrl,
+      videoUrl,
       state: state.data
     })
   } catch (error) {
