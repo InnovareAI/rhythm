@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
@@ -11,7 +11,7 @@ type Message = {
 
 type ContentType = 'hcp-email' | 'social-media' | 'patient-email'
 
-export default function ChatPage() {
+function ChatContent() {
   const searchParams = useSearchParams()
   const contentType = (searchParams?.get('type') as ContentType) || 'hcp-email'
 
@@ -191,5 +191,20 @@ export default function ChatPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-[#007a80] border-t-transparent"></div>
+          <p className="mt-4 text-sm text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <ChatContent />
+    </Suspense>
   )
 }
