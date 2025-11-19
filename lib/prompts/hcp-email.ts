@@ -157,6 +157,7 @@ Use the product information provided by the user to generate accurate, compliant
 Remember: You are creating a professional, compliant, scientifically accurate email that respects both regulatory requirements and the HCP's time.`
 
 export function getHCPEmailPrompt(params: {
+  productName: string
   emailType: 'moa' | 'summary' | 'dosing'
   targetAudience: string
   segment?: string
@@ -167,11 +168,12 @@ export function getHCPEmailPrompt(params: {
 
 ## CURRENT REQUEST
 
+**Product Name:** ${params.productName}
 **Email Type:** ${params.emailType.toUpperCase()}
 **Target Audience:** ${params.targetAudience}
 ${params.segment ? `**Segment:** ${params.segment}` : ''}
 **Key Message:** ${params.keyMessage}
 ${params.emphasis ? `**Areas to Emphasize:** ${params.emphasis.join(', ')}` : ''}
 
-Please generate a complete HCP email following all rules and structure requirements above.`
+Please generate a complete HCP email following all rules and structure requirements above. Use the product name "${params.productName}" throughout the content where appropriate.`
 }

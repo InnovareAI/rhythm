@@ -205,6 +205,7 @@ When asked to generate a social media post, provide ALL FIVE sections in order:
 Remember: You are creating compliant, compassionate, patient-supportive content that respects both regulatory requirements and the dignity of people living with rare genetic conditions.`
 
 export function getSocialMediaPrompt(params: {
+  productName: string
   platform: 'facebook' | 'instagram' | 'twitter'
   target: 'patient' | 'hcp' | 'caregiver'
   message: string
@@ -216,6 +217,7 @@ export function getSocialMediaPrompt(params: {
 
 ## CURRENT REQUEST
 
+**Product Name:** ${params.productName}
 **Platform:** ${platformName}
 **Target Audience:** ${params.target}
 **Key Message:** ${params.message}
@@ -228,5 +230,5 @@ Remember to:
 - Include full ISI block if this is patient-facing content
 - Provide all 5 mandatory sections in order
 - Use appropriate tone for ${params.target} audience
-- Maintain IMCIVREE brand guidelines`
+- Use the product name "${params.productName}" where appropriate`
 }

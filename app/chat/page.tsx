@@ -23,9 +23,9 @@ function ChatContent() {
   useEffect(() => {
     // Initialize conversation with greeting
     const greetings: Record<ContentType, string> = {
-      'hcp-email': `Hi! I'll help you create a compliant HCP email. Let's start with a few questions.\n\nWhat type of HCP email would you like to create?\n1. Mechanism of Action (MOA)\n2. Clinical Summary\n3. Dosing Information\n\nJust tell me the type or number.`,
-      'social-media': `Hi! I'll help you create compliant social media content. Let's gather some information.\n\nWhich platform are you creating content for?\n1. Facebook\n2. Instagram\n3. X (Twitter)\n\nJust tell me the platform or number.`,
-      'video': `Hi! I'll help you create a short video script and concept.\n\nWhat type of video would you like to create?\n1. Patient Story/Testimonial\n2. Disease Education\n3. Product Mechanism Animation\n4. Social Media Reel (15-30 sec)\n\nJust tell me the type or number.`,
+      'hcp-email': `Hi! I'll help you create a compliant HCP email. Let's start with a few questions.\n\nFirst, what is the product name you're creating content for?`,
+      'social-media': `Hi! I'll help you create compliant social media content. Let's gather some information.\n\nFirst, what is the product name you're creating content for?`,
+      'video': `Hi! I'll help you create a short video script and concept.\n\nFirst, what is the product name you're creating content for?`,
       'patient-email': 'Hi! Patient email generation is coming soon. Please select another content type for now.'
     }
 

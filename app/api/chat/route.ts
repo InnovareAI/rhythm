@@ -36,6 +36,13 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
 
   if (contentType === 'hcp-email') {
     if (step === 1) {
+      // Store product name
+      data.productName = lastUserMessage
+      return {
+        message: `Great! Creating content for ${lastUserMessage}.\n\nWhat type of HCP email would you like to create?\n1. Mechanism of Action (MOA)\n2. Clinical Summary\n3. Dosing Information\n\nJust tell me the type or number.`,
+        shouldGenerate: false
+      }
+    } else if (step === 2) {
       // Determine email type
       let emailType = ''
       if (message.includes('moa') || message.includes('mechanism') || message === '1') {
@@ -60,28 +67,28 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
           shouldGenerate: false
         }
       }
-    } else if (step === 2) {
+    } else if (step === 3) {
       // Store target audience
       data.targetAudience = lastUserMessage
       return {
-        message: `Perfect! Targeting ${lastUserMessage}.\n\nWhat segment are they in?\n• Loyalists (already prescribe IMCIVREE)\n• Champions (advocates for the product)\n• Open to learning\n• Skeptics/Need convincing`,
-        shouldGenerate: false
-      }
-    } else if (step === 3) {
-      // Store segment
-      data.segment = lastUserMessage
-      return {
-        message: `Got it. What's the key message you want to convey?\n\nFor example:\n• How IMCIVREE works through the MC4R pathway\n• Clinical efficacy in BBS patients\n• Dosing and administration guidance`,
+        message: `Perfect! Targeting ${lastUserMessage}.\n\nWhat segment are they in?\n• Loyalists (already prescribe the product)\n• Champions (advocates for the product)\n• Open to learning\n• Skeptics/Need convincing`,
         shouldGenerate: false
       }
     } else if (step === 4) {
+      // Store segment
+      data.segment = lastUserMessage
+      return {
+        message: `Got it. What's the key message you want to convey?\n\nFor example:\n• How the product works (mechanism of action)\n• Clinical efficacy data\n• Dosing and administration guidance`,
+        shouldGenerate: false
+      }
+    } else if (step === 5) {
       // Store key message
       data.keyMessage = lastUserMessage
       return {
         message: `Excellent! Do you want to emphasize any specific areas?\n\nType one or more:\n• Mechanism of action\n• Clinical efficacy\n• Safety profile\n• Dosing\n\nOr just say "generate" to create the email now.`,
         shouldGenerate: false
       }
-    } else if (step >= 5) {
+    } else if (step >= 6) {
       // Generate content
       if (message.includes('generate') || message.includes('create') || message.includes('yes')) {
         data.emphasis = lastUserMessage.includes('generate') ? [] : [lastUserMessage]
@@ -99,6 +106,13 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
     }
   } else if (contentType === 'social-media') {
     if (step === 1) {
+      // Store product name
+      data.productName = lastUserMessage
+      return {
+        message: `Great! Creating content for ${lastUserMessage}.\n\nWhich platform are you creating content for?\n1. Facebook\n2. Instagram\n3. X (Twitter)\n\nJust tell me the platform or number.`,
+        shouldGenerate: false
+      }
+    } else if (step === 2) {
       // Determine platform
       let platform = ''
       if (message.includes('facebook') || message === '1') {
@@ -114,7 +128,7 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
 
       if (platform) {
         return {
-          message: `${platform.charAt(0).toUpperCase() + platform.slice(1)} it is!\n\nWho is the target audience?\n• Patients with BBS\n• Caregivers/Family members\n• Healthcare professionals\n• General awareness`,
+          message: `${platform.charAt(0).toUpperCase() + platform.slice(1)} it is!\n\nWho is the target audience?\n• Patients\n• Caregivers/Family members\n• Healthcare professionals\n• General awareness`,
           shouldGenerate: false
         }
       } else {
@@ -123,16 +137,16 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
           shouldGenerate: false
         }
       }
-    } else if (step === 2) {
+    } else if (step === 3) {
       // Store target
       data.target = message.includes('patient') ? 'patient' :
                     message.includes('caregiver') || message.includes('family') ? 'caregiver' :
                     message.includes('hcp') || message.includes('professional') ? 'hcp' : 'patient'
       return {
-        message: `Great! What's the key message?\n\nFor example:\n• Understanding BBS and genetic obesity\n• IMCIVREE as a treatment option\n• Patient support and resources\n• Living with BBS`,
+        message: `Great! What's the key message?\n\nFor example:\n• Understanding the condition\n• Product as a treatment option\n• Patient support and resources\n• Living with the condition`,
         shouldGenerate: false
       }
-    } else if (step >= 3) {
+    } else if (step >= 4) {
       // Generate content
       data.message = lastUserMessage
       return {
@@ -142,6 +156,13 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
     }
   } else if (contentType === 'video') {
     if (step === 1) {
+      // Store product name
+      data.productName = lastUserMessage
+      return {
+        message: `Great! Creating content for ${lastUserMessage}.\n\nWhat type of video would you like to create?\n1. Patient Story/Testimonial\n2. Disease Education\n3. Product Mechanism Animation\n4. Social Media Reel (15-30 sec)\n\nJust tell me the type or number.`,
+        shouldGenerate: false
+      }
+    } else if (step === 2) {
       // Determine video type
       let videoType = ''
       if (message.includes('patient') || message.includes('story') || message.includes('testimonial') || message === '1') {
@@ -169,21 +190,21 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
           shouldGenerate: false
         }
       }
-    } else if (step === 2) {
+    } else if (step === 3) {
       // Store duration
       data.duration = lastUserMessage
       return {
         message: `Perfect! Who is the target audience?\n• Patients\n• Caregivers/Family\n• Healthcare Professionals\n• General Awareness`,
         shouldGenerate: false
       }
-    } else if (step === 3) {
+    } else if (step === 4) {
       // Store target
       data.targetAudience = lastUserMessage
       return {
         message: `Great! What's the key message or story you want to tell?\n\nFor example:\n• Understanding the genetic condition\n• Living with the condition\n• How the treatment works\n• Patient support resources`,
         shouldGenerate: false
       }
-    } else if (step >= 4) {
+    } else if (step >= 5) {
       // Generate content
       data.keyMessage = lastUserMessage
       return {
@@ -205,21 +226,24 @@ async function generateContent(contentType: string, data: Record<string, any>): 
 
     if (contentType === 'hcp-email') {
       systemPrompt = getHCPEmailPrompt({
+        productName: data.productName || 'Product Name',
         emailType: data.emailType || 'moa',
         targetAudience: data.targetAudience || 'endocrinologists',
         segment: data.segment,
-        keyMessage: data.keyMessage || 'IMCIVREE mechanism of action',
+        keyMessage: data.keyMessage || 'Product mechanism of action',
         emphasis: data.emphasis || []
       })
     } else if (contentType === 'social-media') {
       systemPrompt = getSocialMediaPrompt({
+        productName: data.productName || 'Product Name',
         platform: data.platform || 'instagram',
         target: data.target || 'patient',
-        message: data.message || 'Understanding BBS',
+        message: data.message || 'Understanding the condition',
         emphasis: data.emphasis || []
       })
     } else if (contentType === 'video') {
       systemPrompt = getVideoPrompt({
+        productName: data.productName || 'Product Name',
         videoType: data.videoType || 'education',
         targetAudience: data.targetAudience || 'patients',
         duration: data.duration,

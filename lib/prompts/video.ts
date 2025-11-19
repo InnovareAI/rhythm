@@ -139,6 +139,7 @@ For patient-facing videos, ensure appropriate ISI is included either:
 Remember: You are creating professional, compliant, compassionate video content that respects both regulatory requirements and the dignity of people living with rare genetic conditions.`
 
 export function getVideoPrompt(params: {
+  productName: string
   videoType: 'patient-story' | 'education' | 'mechanism' | 'reel'
   targetAudience: string
   duration?: string
@@ -149,11 +150,12 @@ export function getVideoPrompt(params: {
 
 ## CURRENT REQUEST
 
+**Product Name:** ${params.productName}
 **Video Type:** ${params.videoType.toUpperCase()}
 **Target Audience:** ${params.targetAudience}
 ${params.duration ? `**Duration:** ${params.duration}` : ''}
 **Key Message:** ${params.keyMessage}
 ${params.emphasis ? `**Areas to Emphasize:** ${params.emphasis.join(', ')}` : ''}
 
-Please generate a complete video script and concept following all compliance rules and structure requirements above.`
+Please generate a complete video script and concept following all compliance rules and structure requirements above. Use the product name "${params.productName}" throughout the content where appropriate.`
 }
