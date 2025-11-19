@@ -30,20 +30,20 @@ export default function Home() {
           {/* HCP Email Card */}
           <Link
             href="/chat?type=hcp-email"
-            className="group relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition-all hover:shadow-lg hover:border-[#FF6B35]"
+            className="group relative rounded-2xl border border-[#FF6B35] bg-[#FF6B35] p-8 shadow-sm transition-all hover:shadow-lg hover:bg-[#E65A2B]"
           >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#FF6B35]/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
             <div className="relative">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#FFE5DC]">
-                <svg className="h-6 w-6 text-[#FF6B35]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-white/20">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="mt-4 text-xl font-semibold text-gray-900">HCP Email</h3>
-              <p className="mt-2 text-sm text-gray-400">
+              <h3 className="mt-4 text-xl font-semibold text-white">HCP Email</h3>
+              <p className="mt-2 text-sm text-white/90">
                 Create professional emails for healthcare providers with proper structure, references, and ISI.
               </p>
-              <div className="mt-4 flex items-center text-sm font-medium text-[#FF6B35]">
+              <div className="mt-4 flex items-center text-sm font-medium text-white">
                 Start creating
                 <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -55,20 +55,20 @@ export default function Home() {
           {/* Social Media Card */}
           <Link
             href="/chat?type=social-media"
-            className="group relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition-all hover:shadow-lg hover:border-[#FF6B35]"
+            className="group relative rounded-2xl border border-[#FF6B35] bg-[#FF6B35] p-8 shadow-sm transition-all hover:shadow-lg hover:bg-[#E65A2B]"
           >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#FF6B35]/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
             <div className="relative">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#FFE5DC]">
-                <svg className="h-6 w-6 text-[#FF6B35]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-white/20">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                 </svg>
               </div>
-              <h3 className="mt-4 text-xl font-semibold text-gray-900">Social Media</h3>
-              <p className="mt-2 text-sm text-gray-400">
+              <h3 className="mt-4 text-xl font-semibold text-white">Social Media</h3>
+              <p className="mt-2 text-sm text-white/90">
                 Generate compliant social media posts for Facebook, Instagram, and X with hashtags and visual prompts.
               </p>
-              <div className="mt-4 flex items-center text-sm font-medium text-[#FF6B35]">
+              <div className="mt-4 flex items-center text-sm font-medium text-white">
                 Start creating
                 <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -80,20 +80,20 @@ export default function Home() {
           {/* Short Video Card */}
           <Link
             href="/chat?type=video"
-            className="group relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition-all hover:shadow-lg hover:border-[#FF6B35]"
+            className="group relative rounded-2xl border border-[#FF6B35] bg-[#FF6B35] p-8 shadow-sm transition-all hover:shadow-lg hover:bg-[#E65A2B]"
           >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#FF6B35]/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
             <div className="relative">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#FFE5DC]">
-                <svg className="h-6 w-6 text-[#FF6B35]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-white/20">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="mt-4 text-xl font-semibold text-gray-900">Short Video</h3>
-              <p className="mt-2 text-sm text-gray-400">
+              <h3 className="mt-4 text-xl font-semibold text-white">Short Video</h3>
+              <p className="mt-2 text-sm text-white/90">
                 Generate scripts and concepts for short video clips and reels for social media.
               </p>
-              <div className="mt-4 flex items-center text-sm font-medium text-[#FF6B35]">
+              <div className="mt-4 flex items-center text-sm font-medium text-white">
                 Start creating
                 <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
