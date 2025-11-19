@@ -7,7 +7,7 @@ export default function Home() {
       <header className="border-b border-gray-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-[#007a80]">Rhythm</h1>
+            <h1 className="text-2xl font-bold text-[#007a80]">3cubed</h1>
             <p className="text-sm text-gray-600">Pharma Content Hub</p>
           </div>
         </div>
@@ -144,7 +144,7 @@ export default function Home() {
       <footer className="mt-24 border-t border-gray-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <p className="text-center text-sm text-gray-500">
-            © 2025 Rhythm Content Hub. Built for pharmaceutical content generation.
+            © 2025 3cubed Content Hub. Built for pharmaceutical content generation.
           </p>
         </div>
       </footer>

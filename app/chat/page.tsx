@@ -89,7 +89,7 @@ function ChatContent() {
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
             <Link href="/" className="text-2xl font-bold text-[#007a80]">
-              Rhythm
+              3cubed
             </Link>
             <div className="h-6 w-px bg-gray-300" />
             <span className="text-sm font-medium text-gray-600">
