@@ -21,14 +21,134 @@ type ConversationState = {
   data: Record<string, any>
 }
 
-function getConversationState(messages: Message[]): ConversationState {
+function getConversationState(messages: Message[], contentType: string): ConversationState {
   // Parse conversation to extract collected information
-  const state: ConversationState = {
-    step: messages.filter(m => m.role === 'user').length,
-    data: {}
+  const userMessages = messages.filter(m => m.role === 'user')
+  const step = userMessages.length
+  const data: Record<string, any> = {}
+
+  // Reconstruct state from message history based on content type
+  if (contentType === 'video' && userMessages.length > 0) {
+    // Step 1: Product name
+    if (userMessages.length >= 1) {
+      data.productName = userMessages[0].content
+    }
+
+    // Step 2: Image source (upload or generate)
+    if (userMessages.length >= 2) {
+      const msg = userMessages[1].content.toLowerCase()
+      if (msg.includes('provide') || msg.includes('url') || msg === '1') {
+        data.imageSource = 'upload'
+      } else if (msg.includes('generate') || msg.includes('prompt') || msg === '2') {
+        data.imageSource = 'generate'
+      }
+    }
+
+    // Step 3: Image URL or prompt
+    if (userMessages.length >= 3) {
+      if (data.imageSource === 'upload') {
+        data.imageUrl = userMessages[2].content
+      } else {
+        data.imagePrompt = userMessages[2].content
+      }
+    }
+
+    // Step 4: Video type
+    if (userMessages.length >= 4) {
+      const msg = userMessages[3].content.toLowerCase()
+      if (msg.includes('patient') || msg.includes('story') || msg.includes('testimonial') || msg === '1') {
+        data.videoType = 'patient-story'
+      } else if (msg.includes('education') || msg.includes('disease') || msg === '2') {
+        data.videoType = 'education'
+      } else if (msg.includes('mechanism') || msg.includes('animation') || msg === '3') {
+        data.videoType = 'mechanism'
+      } else if (msg.includes('reel') || msg.includes('social') || msg === '4') {
+        data.videoType = 'reel'
+      }
+    }
+
+    // Step 5: Target audience
+    if (userMessages.length >= 5) {
+      data.targetAudience = userMessages[4].content
+    }
+
+    // Step 6: Animation description (key message)
+    if (userMessages.length >= 6) {
+      data.keyMessage = userMessages[5].content
+    }
+  } else if (contentType === 'hcp-email' && userMessages.length > 0) {
+    // Step 1: Product name
+    if (userMessages.length >= 1) {
+      data.productName = userMessages[0].content
+    }
+
+    // Step 2: Email type
+    if (userMessages.length >= 2) {
+      const msg = userMessages[1].content.toLowerCase()
+      if (msg.includes('moa') || msg.includes('mechanism') || msg === '1') {
+        data.emailType = 'moa'
+      } else if (msg.includes('summary') || msg === '2') {
+        data.emailType = 'summary'
+      } else if (msg.includes('dosing') || msg === '3') {
+        data.emailType = 'dosing'
+      }
+    }
+
+    // Step 3: Target audience
+    if (userMessages.length >= 3) {
+      data.targetAudience = userMessages[2].content
+    }
+
+    // Step 4: Segment
+    if (userMessages.length >= 4) {
+      data.segment = userMessages[3].content
+    }
+
+    // Step 5: Key message
+    if (userMessages.length >= 5) {
+      data.keyMessage = userMessages[4].content
+    }
+
+    // Step 6: Emphasis
+    if (userMessages.length >= 6) {
+      const msg = userMessages[5].content
+      if (!msg.toLowerCase().includes('generate')) {
+        data.emphasis = [msg]
+      }
+    }
+  } else if (contentType === 'social-media' && userMessages.length > 0) {
+    // Step 1: Product name
+    if (userMessages.length >= 1) {
+      data.productName = userMessages[0].content
+    }
+
+    // Step 2: Platform
+    if (userMessages.length >= 2) {
+      const msg = userMessages[1].content.toLowerCase()
+      if (msg.includes('facebook') || msg === '1') {
+        data.platform = 'facebook'
+      } else if (msg.includes('instagram') || msg === '2') {
+        data.platform = 'instagram'
+      } else if (msg.includes('twitter') || msg.includes('x') || msg === '3') {
+        data.platform = 'twitter'
+      }
+    }
+
+    // Step 3: Target
+    if (userMessages.length >= 3) {
+      const msg = userMessages[2].content.toLowerCase()
+      data.target = msg.includes('patient') ? 'patient' :
+                    msg.includes('caregiver') || msg.includes('family') ? 'caregiver' :
+                    msg.includes('hcp') || msg.includes('professional') ? 'hcp' : 'patient'
+    }
+
+    // Step 4: Message
+    if (userMessages.length >= 4) {
+      data.message = userMessages[3].content
+    }
   }
 
-  return state
+  return { step, data }
 }
 
 function getNextQuestion(contentType: string, state: ConversationState, lastUserMessage: string): { message: string; shouldGenerate: boolean } {
@@ -371,7 +491,9 @@ export async function POST(request: NextRequest) {
     }
 
     const lastUserMessage = messages[messages.length - 1].content
-    const state = getConversationState(messages)
+    const state = getConversationState(messages, contentType)
+
+    console.log('[STATE] Step:', state.step, 'Data:', JSON.stringify(state.data))
 
     // Get next question or generate content
     const { message, shouldGenerate } = getNextQuestion(contentType, state, lastUserMessage)
