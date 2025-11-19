@@ -90,7 +90,7 @@ function ChatContent() {
       <header className="border-b border-gray-200 bg-white">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-2xl font-bold text-[#FF8C42]">
+            <Link href="/" className="text-2xl font-bold text-[#FF6B35]">
               3cubed
             </Link>
             <div className="h-6 w-px bg-gray-300" />
@@ -121,7 +121,7 @@ function ChatContent() {
                   <div
                     className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                       message.role === 'user'
-                        ? 'bg-[#FF8C42] text-white'
+                        ? 'bg-[#FF6B35] text-white'
                         : 'bg-white text-gray-900 shadow-sm'
                     }`}
                   >
@@ -136,9 +136,9 @@ function ChatContent() {
                 <div className="flex justify-start">
                   <div className="max-w-[80%] rounded-2xl bg-white px-4 py-3 shadow-sm">
                     <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#FF8C42]" style={{ animationDelay: '0ms' }} />
-                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#FF8C42]" style={{ animationDelay: '150ms' }} />
-                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#FF8C42]" style={{ animationDelay: '300ms' }} />
+                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#FF6B35]" style={{ animationDelay: '0ms' }} />
+                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#FF6B35]" style={{ animationDelay: '150ms' }} />
+                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#FF6B35]" style={{ animationDelay: '300ms' }} />
                     </div>
                   </div>
                 </div>
@@ -156,12 +156,12 @@ function ChatContent() {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Type your message..."
                   disabled={isLoading}
-                  className="flex-1 rounded-full border border-gray-300 px-4 py-3 text-sm focus:border-[#FF8C42] focus:outline-none focus:ring-2 focus:ring-[#FF8C42]/20 disabled:bg-gray-100"
+                  className="flex-1 rounded-full border border-gray-300 px-4 py-3 text-sm focus:border-[#FF6B35] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/20 disabled:bg-gray-100"
                 />
                 <button
                   type="submit"
                   disabled={isLoading || !input.trim()}
-                  className="rounded-full bg-[#FF8C42] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#FF7A2F] disabled:bg-gray-300"
+                  className="rounded-full bg-[#FF6B35] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#E65A2B] disabled:bg-gray-300"
                 >
                   Send
                 </button>
@@ -180,7 +180,7 @@ function ChatContent() {
                   navigator.clipboard.writeText(generatedContent)
                   alert('Content copied to clipboard!')
                 }}
-                className="text-sm text-[#FF8C42] hover:text-[#FF7A2F]"
+                className="text-sm text-[#FF6B35] hover:text-[#E65A2B]"
               >
                 Copy
               </button>
@@ -201,7 +201,7 @@ export default function ChatPage() {
     <Suspense fallback={
       <div className="flex h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-[#FF8C42] border-t-transparent"></div>
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-[#FF6B35] border-t-transparent"></div>
           <p className="mt-4 text-sm text-gray-600">Loading...</p>
         </div>
       </div>
