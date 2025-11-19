@@ -77,23 +77,30 @@ export default function Home() {
             </div>
           </Link>
 
-          {/* Patient Email Card - Coming Soon */}
-          <div className="group relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm opacity-60">
+          {/* Short Video Card */}
+          <Link
+            href="/chat?type=video"
+            className="group relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition-all hover:shadow-lg hover:border-[#FF8C42]"
+          >
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#FF8C42]/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
             <div className="relative">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100">
-                <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#FF8C42]/10">
+                <svg className="h-6 w-6 text-[#FF8C42]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="mt-4 text-xl font-semibold text-gray-900">Patient Email</h3>
+              <h3 className="mt-4 text-xl font-semibold text-gray-900">Short Video</h3>
               <p className="mt-2 text-sm text-gray-600">
-                Create patient-friendly emails with simple language and supportive tone.
+                Generate scripts and concepts for short video clips and reels for social media.
               </p>
-              <div className="mt-4 flex items-center text-sm font-medium text-gray-400">
-                Coming soon
+              <div className="mt-4 flex items-center text-sm font-medium text-[#FF8C42]">
+                Start creating
+                <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </div>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* Features Section */}

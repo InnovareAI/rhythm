@@ -9,7 +9,7 @@ type Message = {
   content: string
 }
 
-type ContentType = 'hcp-email' | 'social-media' | 'patient-email'
+type ContentType = 'hcp-email' | 'social-media' | 'patient-email' | 'video'
 
 function ChatContent() {
   const searchParams = useSearchParams()
@@ -25,6 +25,7 @@ function ChatContent() {
     const greetings: Record<ContentType, string> = {
       'hcp-email': `Hi! I'll help you create a compliant HCP email for IMCIVREE. Let's start with a few questions.\n\nWhat type of HCP email would you like to create?\n1. Mechanism of Action (MOA)\n2. Clinical Summary\n3. Dosing Information\n\nJust tell me the type or number.`,
       'social-media': `Hi! I'll help you create compliant social media content for IMCIVREE. Let's gather some information.\n\nWhich platform are you creating content for?\n1. Facebook\n2. Instagram\n3. X (Twitter)\n\nJust tell me the platform or number.`,
+      'video': `Hi! I'll help you create a short video script and concept for IMCIVREE.\n\nWhat type of video would you like to create?\n1. Patient Story/Testimonial\n2. Disease Education (BBS Overview)\n3. Product Mechanism Animation\n4. Social Media Reel (15-30 sec)\n\nJust tell me the type or number.`,
       'patient-email': 'Hi! Patient email generation is coming soon. Please select another content type for now.'
     }
 
@@ -77,6 +78,7 @@ function ChatContent() {
     const labels = {
       'hcp-email': 'HCP Email',
       'social-media': 'Social Media',
+      'video': 'Short Video',
       'patient-email': 'Patient Email'
     }
     return labels[type] || type

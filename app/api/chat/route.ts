@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getOpenRouter, defaultModel } from '@/lib/openrouter'
 import { getHCPEmailPrompt } from '@/lib/prompts/hcp-email'
 import { getSocialMediaPrompt } from '@/lib/prompts/social-media'
+import { getVideoPrompt } from '@/lib/prompts/video'
 
 type Message = {
   role: 'user' | 'assistant'
@@ -10,7 +11,7 @@ type Message = {
 
 type ChatRequest = {
   messages: Message[]
-  contentType: 'hcp-email' | 'social-media' | 'patient-email'
+  contentType: 'hcp-email' | 'social-media' | 'patient-email' | 'video'
 }
 
 // Simple state management for conversation context
@@ -164,6 +165,14 @@ async function generateContent(contentType: string, data: Record<string, any>): 
         platform: data.platform || 'instagram',
         target: data.target || 'patient',
         message: data.message || 'Understanding BBS',
+        emphasis: data.emphasis || []
+      })
+    } else if (contentType === 'video') {
+      systemPrompt = getVideoPrompt({
+        videoType: data.videoType || 'education',
+        targetAudience: data.targetAudience || 'patients',
+        duration: data.duration,
+        keyMessage: data.keyMessage || 'Understanding the condition',
         emphasis: data.emphasis || []
       })
     }
