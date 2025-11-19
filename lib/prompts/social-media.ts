@@ -210,10 +210,31 @@ export function getSocialMediaPrompt(params: {
   target: 'patient' | 'hcp' | 'caregiver'
   message: string
   emphasis?: string[]
+  brandInfo?: any
 }) {
   const platformName = params.platform === 'twitter' ? 'X/Twitter' : params.platform.charAt(0).toUpperCase() + params.platform.slice(1)
 
+  let brandContext = ''
+  if (params.brandInfo) {
+    brandContext = `
+
+## PRODUCT BACKGROUND INFORMATION
+
+The following information was found about ${params.productName}:
+
+${params.brandInfo.indication ? `**Indication:** ${params.brandInfo.indication}` : ''}
+${params.brandInfo.mechanism ? `**Mechanism of Action:** ${params.brandInfo.mechanism}` : ''}
+${params.brandInfo.manufacturer ? `**Manufacturer:** ${params.brandInfo.manufacturer}` : ''}
+${params.brandInfo.targetPopulation ? `**Target Population:** ${params.brandInfo.targetPopulation}` : ''}
+${params.brandInfo.approvalStatus ? `**Approval Status:** ${params.brandInfo.approvalStatus}` : ''}
+${params.brandInfo.keyFacts && params.brandInfo.keyFacts.length > 0 ? `**Key Facts:**
+${params.brandInfo.keyFacts.map((fact: string) => `- ${fact}`).join('\n')}` : ''}
+
+Use this information as context for generating accurate, factual content. IMPORTANT: Only use this as background - always follow compliance rules and never invent additional data.`
+  }
+
   return `${SOCIAL_MEDIA_SYSTEM_PROMPT}
+${brandContext}
 
 ## CURRENT REQUEST
 

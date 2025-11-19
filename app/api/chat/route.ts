@@ -4,6 +4,7 @@ import { getHCPEmailPrompt } from '@/lib/prompts/hcp-email'
 import { getSocialMediaPrompt } from '@/lib/prompts/social-media'
 import { getVideoPrompt } from '@/lib/prompts/video'
 import { generateImage, generateVideo } from '@/lib/fal'
+import { searchBrandInfo } from '@/lib/brand-search'
 
 type Message = {
   role: 'user' | 'assistant'
@@ -379,7 +380,8 @@ async function generateContent(contentType: string, data: Record<string, any>): 
           targetAudience: data.targetAudience || 'endocrinologists',
           segment: data.segment,
           keyMessage: data.keyMessage || 'Product mechanism of action',
-          emphasis: data.emphasis || []
+          emphasis: data.emphasis || [],
+          brandInfo: data.brandInfo
         })
       } else if (contentType === 'social-media') {
         systemPrompt = getSocialMediaPrompt({
@@ -387,7 +389,8 @@ async function generateContent(contentType: string, data: Record<string, any>): 
           platform: data.platform || 'instagram',
           target: data.target || 'patient',
           message: data.message || 'Understanding the condition',
-          emphasis: data.emphasis || []
+          emphasis: data.emphasis || [],
+          brandInfo: data.brandInfo
         })
       }
 
@@ -494,6 +497,19 @@ export async function POST(request: NextRequest) {
     const state = getConversationState(messages, contentType)
 
     console.log('[STATE] Step:', state.step, 'Data:', JSON.stringify(state.data))
+
+    // If this is step 1 (product name entry) and we don't have brand info yet, search for it
+    if (state.step === 1 && state.data.productName && !state.data.brandInfo) {
+      console.log('[API] Step 1: Searching for brand info...')
+      try {
+        const brandInfo = await searchBrandInfo(state.data.productName)
+        state.data.brandInfo = brandInfo
+        console.log('[API] Brand info retrieved:', JSON.stringify(brandInfo, null, 2))
+      } catch (error) {
+        console.error('[API] Failed to retrieve brand info:', error)
+        // Continue without brand info
+      }
+    }
 
     // Get next question or generate content
     const { message, shouldGenerate } = getNextQuestion(contentType, state, lastUserMessage)
