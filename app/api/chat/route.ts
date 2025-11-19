@@ -3,6 +3,7 @@ import { getOpenRouter, defaultModel } from '@/lib/openrouter'
 import { getHCPEmailPrompt } from '@/lib/prompts/hcp-email'
 import { getSocialMediaPrompt } from '@/lib/prompts/social-media'
 import { getVideoPrompt } from '@/lib/prompts/video'
+import { generateImage } from '@/lib/fal'
 
 type Message = {
   role: 'user' | 'assistant'
@@ -220,7 +221,7 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
   }
 }
 
-async function generateContent(contentType: string, data: Record<string, any>): Promise<string> {
+async function generateContent(contentType: string, data: Record<string, any>): Promise<{ content: string; imageUrl?: string }> {
   try {
     let systemPrompt = ''
 
@@ -263,7 +264,39 @@ async function generateContent(contentType: string, data: Record<string, any>): 
       max_tokens: 4000,
     })
 
-    return completion.choices[0]?.message?.content || 'Failed to generate content'
+    const content = completion.choices[0]?.message?.content || 'Failed to generate content'
+
+    // For social media, generate an image
+    let imageUrl: string | undefined
+    if (contentType === 'social-media') {
+      try {
+        // Extract image prompt from the generated content
+        const imagePromptMatch = content.match(/## 3\. CREATIVE IMAGE PROMPT[\s\S]*?(?=\n##|\n\*\*|$)/i)
+        let imagePrompt = ''
+
+        if (imagePromptMatch) {
+          // Clean up the extracted section
+          imagePrompt = imagePromptMatch[0]
+            .replace(/## 3\. CREATIVE IMAGE PROMPT/i, '')
+            .replace(/\*\*/g, '')
+            .trim()
+        }
+
+        // Fallback to a generic prompt if extraction fails
+        if (!imagePrompt) {
+          imagePrompt = `Professional pharmaceutical social media image for ${data.productName || 'healthcare product'}, ${data.message || 'healthcare content'}, photorealistic, clean background, medical setting, diverse patient representation, calm and supportive atmosphere, teal color palette`
+        }
+
+        console.log('Generating image with prompt:', imagePrompt.substring(0, 200) + '...')
+        imageUrl = await generateImage(imagePrompt)
+        console.log('Image generated:', imageUrl)
+      } catch (error) {
+        console.error('Error generating image:', error)
+        // Continue without image if generation fails
+      }
+    }
+
+    return { content, imageUrl }
   } catch (error) {
     console.error('Error generating content:', error)
     throw error
@@ -286,14 +319,18 @@ export async function POST(request: NextRequest) {
     const { message, shouldGenerate } = getNextQuestion(contentType, state, lastUserMessage)
 
     let generatedContent = null
+    let imageUrl = null
 
     if (shouldGenerate) {
-      generatedContent = await generateContent(contentType, state.data)
+      const result = await generateContent(contentType, state.data)
+      generatedContent = result.content
+      imageUrl = result.imageUrl || null
     }
 
     return NextResponse.json({
       message,
       generatedContent,
+      imageUrl,
       state: state.data
     })
   } catch (error) {

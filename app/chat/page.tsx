@@ -19,6 +19,7 @@ function ChatContent() {
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [generatedContent, setGeneratedContent] = useState<string | null>(null)
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null)
 
   useEffect(() => {
     // Initialize conversation with greeting
@@ -62,6 +63,10 @@ function ChatContent() {
 
       if (data.generatedContent) {
         setGeneratedContent(data.generatedContent)
+      }
+
+      if (data.imageUrl) {
+        setGeneratedImage(data.imageUrl)
       }
     } catch (error) {
       console.error('Error:', error)
@@ -182,9 +187,31 @@ function ChatContent() {
                 }}
                 className="text-sm text-[#FF6B35] hover:text-[#E65A2B]"
               >
-                Copy
+                Copy Text
               </button>
             </div>
+
+            {/* Generated Image */}
+            {generatedImage && (
+              <div className="mb-6">
+                <img
+                  src={generatedImage}
+                  alt="Generated social media image"
+                  className="w-full rounded-lg shadow-lg"
+                />
+                <a
+                  href={generatedImage}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block text-sm text-[#FF6B35] hover:text-[#E65A2B]"
+                >
+                  Download Image
+                </a>
+              </div>
+            )}
+
+            {/* Generated Text */}
             <div
               className="prose prose-sm prose-invert max-w-none"
               dangerouslySetInnerHTML={{ __html: generatedContent }}

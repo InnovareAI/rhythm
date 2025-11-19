@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@fal-ai/serverless-client": "^0.15.0",
     "@supabase/supabase-js": "^2.83.0",
     "ai": "^5.0.96",
     "next": "16.0.3",
