@@ -2,13 +2,13 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-black via-black to-gray-900">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white">
+      <header className="border-b border-gray-800 bg-black">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-[#FF6B35]">3cubed</h1>
-            <p className="text-sm text-gray-600">Pharma Content Hub</p>
+            <p className="text-sm text-gray-400">Pharma Content Hub</p>
           </div>
         </div>
       </header>
@@ -16,10 +16,10 @@ export default function Home() {
       {/* Hero Section */}
       <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+          <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
             Create Compliant Pharma Content
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-300">
             Generate FDA-compliant marketing materials for rare disease pharmaceuticals.
             From HCP emails to social media posts, all with proper ISI and references.
           </p>
@@ -40,7 +40,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="mt-4 text-xl font-semibold text-gray-900">HCP Email</h3>
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-gray-400">
                 Create professional emails for healthcare providers with proper structure, references, and ISI.
               </p>
               <div className="mt-4 flex items-center text-sm font-medium text-[#FF6B35]">
@@ -65,7 +65,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="mt-4 text-xl font-semibold text-gray-900">Social Media</h3>
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-gray-400">
                 Generate compliant social media posts for Facebook, Instagram, and X with hashtags and visual prompts.
               </p>
               <div className="mt-4 flex items-center text-sm font-medium text-[#FF6B35]">
@@ -90,7 +90,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="mt-4 text-xl font-semibold text-gray-900">Short Video</h3>
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-gray-400">
                 Generate scripts and concepts for short video clips and reels for social media.
               </p>
               <div className="mt-4 flex items-center text-sm font-medium text-[#FF6B35]">
@@ -105,7 +105,7 @@ export default function Home() {
 
         {/* Features Section */}
         <div className="mt-24">
-          <h3 className="text-center text-2xl font-bold text-gray-900">Built for Compliance</h3>
+          <h3 className="text-center text-2xl font-bold text-white">Built for Compliance</h3>
           <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div className="text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#007a80]/10">
@@ -113,8 +113,8 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h4 className="mt-4 font-semibold text-gray-900">FDA Compliant</h4>
-              <p className="mt-2 text-sm text-gray-600">All content includes proper ISI and follows regulations</p>
+              <h4 className="mt-4 font-semibold text-white">FDA Compliant</h4>
+              <p className="mt-2 text-sm text-gray-400">All content includes proper ISI and follows regulations</p>
             </div>
             <div className="text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#FFE5DC]">
@@ -122,8 +122,8 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h4 className="mt-4 font-semibold text-gray-900">AMA References</h4>
-              <p className="mt-2 text-sm text-gray-600">Proper citation formatting for all claims</p>
+              <h4 className="mt-4 font-semibold text-white">AMA References</h4>
+              <p className="mt-2 text-sm text-gray-400">Proper citation formatting for all claims</p>
             </div>
             <div className="text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#FFE5DC]">
@@ -131,8 +131,8 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
                 </svg>
               </div>
-              <h4 className="mt-4 font-semibold text-gray-900">Brand Consistent</h4>
-              <p className="mt-2 text-sm text-gray-600">Maintains visual identity and tone guidelines</p>
+              <h4 className="mt-4 font-semibold text-white">Brand Consistent</h4>
+              <p className="mt-2 text-sm text-gray-400">Maintains visual identity and tone guidelines</p>
             </div>
             <div className="text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#FFE5DC]">
@@ -140,15 +140,15 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h4 className="mt-4 font-semibold text-gray-900">Fast Generation</h4>
-              <p className="mt-2 text-sm text-gray-600">Create content in minutes, not weeks</p>
+              <h4 className="mt-4 font-semibold text-white">Fast Generation</h4>
+              <p className="mt-2 text-sm text-gray-400">Create content in minutes, not weeks</p>
             </div>
           </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="mt-24 border-t border-gray-200 bg-white">
+      <footer className="mt-24 border-t border-gray-800 bg-black">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <p className="text-center text-sm text-gray-500">
             © 2025 3cubed Content Hub. Built for pharmaceutical content generation.

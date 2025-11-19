@@ -85,22 +85,22 @@ function ChatContent() {
   }
 
   return (
-    <div className="flex h-screen flex-col bg-gray-50">
+    <div className="flex h-screen flex-col bg-black">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white">
+      <header className="border-b border-gray-800 bg-black">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
             <Link href="/" className="text-2xl font-bold text-[#FF6B35]">
               3cubed
             </Link>
-            <div className="h-6 w-px bg-gray-300" />
-            <span className="text-sm font-medium text-gray-600">
+            <div className="h-6 w-px bg-gray-700" />
+            <span className="text-sm font-medium text-gray-400">
               {getContentTypeLabel(contentType)}
             </span>
           </div>
           <Link
             href="/"
-            className="text-sm text-gray-600 hover:text-gray-900"
+            className="text-sm text-gray-400 hover:text-white"
           >
             ← Back
           </Link>
@@ -122,7 +122,7 @@ function ChatContent() {
                     className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                       message.role === 'user'
                         ? 'bg-[#FF6B35] text-white'
-                        : 'bg-white text-gray-900 shadow-sm'
+                        : 'bg-gray-800 text-white shadow-sm'
                     }`}
                   >
                     <p className="whitespace-pre-wrap text-sm leading-relaxed">
@@ -134,7 +134,7 @@ function ChatContent() {
 
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="max-w-[80%] rounded-2xl bg-white px-4 py-3 shadow-sm">
+                  <div className="max-w-[80%] rounded-2xl bg-gray-800 px-4 py-3 shadow-sm">
                     <div className="flex items-center gap-2">
                       <div className="h-2 w-2 animate-bounce rounded-full bg-[#FF6B35]" style={{ animationDelay: '0ms' }} />
                       <div className="h-2 w-2 animate-bounce rounded-full bg-[#FF6B35]" style={{ animationDelay: '150ms' }} />
@@ -147,7 +147,7 @@ function ChatContent() {
           </div>
 
           {/* Input */}
-          <div className="border-t border-gray-200 bg-white p-4">
+          <div className="border-t border-gray-800 bg-black p-4">
             <form onSubmit={sendMessage} className="mx-auto max-w-3xl">
               <div className="flex gap-2">
                 <input
@@ -156,7 +156,7 @@ function ChatContent() {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Type your message..."
                   disabled={isLoading}
-                  className="flex-1 rounded-full border border-gray-300 px-4 py-3 text-sm focus:border-[#FF6B35] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/20 disabled:bg-gray-100"
+                  className="flex-1 rounded-full border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white placeholder-gray-500 focus:border-[#FF6B35] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]/20 disabled:bg-gray-800"
                 />
                 <button
                   type="submit"
@@ -172,9 +172,9 @@ function ChatContent() {
 
         {/* Preview Panel */}
         {generatedContent && (
-          <div className="w-1/2 border-l border-gray-200 bg-white p-6 overflow-y-auto">
+          <div className="w-1/2 border-l border-gray-800 bg-gray-900 p-6 overflow-y-auto">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">Preview</h3>
+              <h3 className="text-lg font-semibold text-white">Preview</h3>
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(generatedContent)
@@ -186,7 +186,7 @@ function ChatContent() {
               </button>
             </div>
             <div
-              className="prose prose-sm max-w-none"
+              className="prose prose-sm prose-invert max-w-none"
               dangerouslySetInnerHTML={{ __html: generatedContent }}
             />
           </div>
@@ -199,10 +199,10 @@ function ChatContent() {
 export default function ChatPage() {
   return (
     <Suspense fallback={
-      <div className="flex h-screen items-center justify-center bg-gray-50">
+      <div className="flex h-screen items-center justify-center bg-black">
         <div className="text-center">
           <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-[#FF6B35] border-t-transparent"></div>
-          <p className="mt-4 text-sm text-gray-600">Loading...</p>
+          <p className="mt-4 text-sm text-gray-400">Loading...</p>
         </div>
       </div>
     }>
