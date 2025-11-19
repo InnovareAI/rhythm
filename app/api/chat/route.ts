@@ -248,47 +248,45 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
 async function generateContent(contentType: string, data: Record<string, any>): Promise<{ content: string; imageUrl?: string; videoUrl?: string }> {
   try {
     let systemPrompt = ''
+    let content = ''
 
-    if (contentType === 'hcp-email') {
-      systemPrompt = getHCPEmailPrompt({
-        productName: data.productName || 'Product Name',
-        emailType: data.emailType || 'moa',
-        targetAudience: data.targetAudience || 'endocrinologists',
-        segment: data.segment,
-        keyMessage: data.keyMessage || 'Product mechanism of action',
-        emphasis: data.emphasis || []
+    // For video, we don't need LLM text content, just the video
+    if (contentType !== 'video') {
+      if (contentType === 'hcp-email') {
+        systemPrompt = getHCPEmailPrompt({
+          productName: data.productName || 'Product Name',
+          emailType: data.emailType || 'moa',
+          targetAudience: data.targetAudience || 'endocrinologists',
+          segment: data.segment,
+          keyMessage: data.keyMessage || 'Product mechanism of action',
+          emphasis: data.emphasis || []
+        })
+      } else if (contentType === 'social-media') {
+        systemPrompt = getSocialMediaPrompt({
+          productName: data.productName || 'Product Name',
+          platform: data.platform || 'instagram',
+          target: data.target || 'patient',
+          message: data.message || 'Understanding the condition',
+          emphasis: data.emphasis || []
+        })
+      }
+
+      const openrouter = getOpenRouter()
+      const completion = await openrouter.chat.completions.create({
+        model: defaultModel,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: 'Please generate the content now following all compliance rules.' }
+        ],
+        temperature: 0.7,
+        max_tokens: 4000,
       })
-    } else if (contentType === 'social-media') {
-      systemPrompt = getSocialMediaPrompt({
-        productName: data.productName || 'Product Name',
-        platform: data.platform || 'instagram',
-        target: data.target || 'patient',
-        message: data.message || 'Understanding the condition',
-        emphasis: data.emphasis || []
-      })
-    } else if (contentType === 'video') {
-      systemPrompt = getVideoPrompt({
-        productName: data.productName || 'Product Name',
-        videoType: data.videoType || 'education',
-        targetAudience: data.targetAudience || 'patients',
-        duration: data.duration,
-        keyMessage: data.keyMessage || 'Understanding the condition',
-        emphasis: data.emphasis || []
-      })
+
+      content = completion.choices[0]?.message?.content || 'Failed to generate content'
+    } else {
+      // For video, just provide basic info
+      content = `**Video Generated**\n\nProduct: ${data.productName}\nType: ${data.videoType}\nAudience: ${data.targetAudience}\nAnimation: ${data.keyMessage}`
     }
-
-    const openrouter = getOpenRouter()
-    const completion = await openrouter.chat.completions.create({
-      model: defaultModel,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: 'Please generate the content now following all compliance rules.' }
-      ],
-      temperature: 0.7,
-      max_tokens: 4000,
-    })
-
-    const content = completion.choices[0]?.message?.content || 'Failed to generate content'
 
     // For social media, generate an image
     let imageUrl: string | undefined
@@ -324,29 +322,34 @@ async function generateContent(contentType: string, data: Record<string, any>): 
 
     // For video, use provided image or generate one, then animate it with Sora 2
     if (contentType === 'video') {
+      console.log('[VIDEO] Starting video generation. Data:', JSON.stringify(data))
       try {
         // Check if user provided an image URL or we need to generate one
         if (data.imageSource === 'upload' && data.imageUrl) {
           // User provided an image URL
           imageUrl = data.imageUrl
-          console.log('Using provided image URL:', imageUrl)
+          console.log('[VIDEO] Using provided image URL:', imageUrl)
         } else if (data.imageSource === 'generate' && data.imagePrompt) {
           // Generate image from user's prompt
-          console.log('Generating image for video with prompt:', data.imagePrompt)
+          console.log('[VIDEO] Generating image for video with prompt:', data.imagePrompt)
           imageUrl = await generateImage(data.imagePrompt)
-          console.log('Image generated for video:', imageUrl)
+          console.log('[VIDEO] Image generated for video:', imageUrl)
+        } else {
+          console.error('[VIDEO] No valid image source! imageSource:', data.imageSource, 'imageUrl:', data.imageUrl, 'imagePrompt:', data.imagePrompt)
         }
 
         // Now generate video from the image
         if (imageUrl) {
           const videoPrompt = `${data.keyMessage || 'smooth camera movement'}, professional pharmaceutical content for ${data.productName || 'product'}, ${data.targetAudience} audience, calm atmosphere`
 
-          console.log('Generating video with Sora 2...')
+          console.log('[VIDEO] Generating video with Sora 2. Prompt:', videoPrompt)
           videoUrl = await generateVideo(imageUrl, videoPrompt)
-          console.log('Video generated:', videoUrl)
+          console.log('[VIDEO] Video generated successfully:', videoUrl)
+        } else {
+          console.error('[VIDEO] No imageUrl available for video generation!')
         }
       } catch (error) {
-        console.error('Error generating video:', error)
+        console.error('[VIDEO] Error generating video:', error)
         // Continue without video if generation fails
       }
     }
