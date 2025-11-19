@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { openrouter, defaultModel } from '@/lib/openrouter'
+import { getOpenRouter, defaultModel } from '@/lib/openrouter'
 import { getHCPEmailPrompt } from '@/lib/prompts/hcp-email'
 import { getSocialMediaPrompt } from '@/lib/prompts/social-media'
 
@@ -168,6 +168,7 @@ async function generateContent(contentType: string, data: Record<string, any>): 
       })
     }
 
+    const openrouter = getOpenRouter()
     const completion = await openrouter.chat.completions.create({
       model: defaultModel,
       messages: [
