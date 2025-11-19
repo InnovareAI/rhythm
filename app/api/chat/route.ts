@@ -140,6 +140,57 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
         shouldGenerate: true
       }
     }
+  } else if (contentType === 'video') {
+    if (step === 1) {
+      // Determine video type
+      let videoType = ''
+      if (message.includes('patient') || message.includes('story') || message.includes('testimonial') || message === '1') {
+        videoType = 'patient-story'
+        data.videoType = 'patient-story'
+      } else if (message.includes('education') || message.includes('bbs') || message.includes('disease') || message === '2') {
+        videoType = 'education'
+        data.videoType = 'education'
+      } else if (message.includes('mechanism') || message.includes('animation') || message === '3') {
+        videoType = 'mechanism'
+        data.videoType = 'mechanism'
+      } else if (message.includes('reel') || message.includes('social') || message === '4') {
+        videoType = 'reel'
+        data.videoType = 'reel'
+      }
+
+      if (videoType) {
+        return {
+          message: `Great! ${videoType.replace('-', ' ')} video it is.\n\nWhat duration would you like?\n• 15-30 seconds (Social media reel)\n• 60 seconds (Short explainer)\n• 90 seconds (Full story)\n\nOr specify your preferred length.`,
+          shouldGenerate: false
+        }
+      } else {
+        return {
+          message: 'Please select 1, 2, 3, or 4, or type the video type.',
+          shouldGenerate: false
+        }
+      }
+    } else if (step === 2) {
+      // Store duration
+      data.duration = lastUserMessage
+      return {
+        message: `Perfect! Who is the target audience?\n• Patients\n• Caregivers/Family\n• Healthcare Professionals\n• General Awareness`,
+        shouldGenerate: false
+      }
+    } else if (step === 3) {
+      // Store target
+      data.targetAudience = lastUserMessage
+      return {
+        message: `Great! What's the key message or story you want to tell?\n\nFor example:\n• Understanding the genetic condition\n• Living with the condition\n• How the treatment works\n• Patient support resources`,
+        shouldGenerate: false
+      }
+    } else if (step >= 4) {
+      // Generate content
+      data.keyMessage = lastUserMessage
+      return {
+        message: 'Generating your video script and concept now...',
+        shouldGenerate: true
+      }
+    }
   }
 
   return {
