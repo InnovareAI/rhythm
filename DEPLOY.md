@@ -24,7 +24,7 @@ The site should auto-detect Next.js settings, but verify:
 Before deploying, click **"Add environment variables"**:
 
 ```
-OPENROUTER_API_KEY = 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
+OPENROUTER_API_KEY = [YOUR_OPENROUTER_API_KEY_HERE]
 OPENROUTER_MODEL = openai/gpt-4-turbo-preview
 ```
 
