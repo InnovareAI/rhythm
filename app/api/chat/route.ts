@@ -465,17 +465,24 @@ async function generateContent(contentType: string, data: Record<string, any>): 
 
         // Now generate video from the image
         if (imageUrl) {
-          const videoPrompt = `${data.keyMessage || 'smooth camera movement'}, professional pharmaceutical content for ${data.productName || 'product'}, ${data.targetAudience} audience, calm atmosphere`
+          const videoPrompt = `${data.keyMessage || 'smooth camera movement'}, professional pharmaceutical content for ${data.productName || 'product'}, ${data.targetAudience || 'general'} audience, calm atmosphere`
 
-          console.log('[VIDEO] Generating video with Sora 2. Prompt:', videoPrompt)
-          videoUrl = await generateVideo(imageUrl, videoPrompt)
-          console.log('[VIDEO] Video generated successfully:', videoUrl)
+          console.log('[VIDEO] Generating video with Minimax Video-01. Prompt:', videoPrompt)
+          try {
+            videoUrl = await generateVideo(imageUrl, videoPrompt)
+            console.log('[VIDEO] Video generated successfully:', videoUrl)
+          } catch (videoError: any) {
+            console.error('[VIDEO] Video generation failed:', videoError)
+            // Return error info in content
+            content += `\n\n**Video Generation Error:**\n${videoError.message || 'Failed to generate video'}\n\nPlease try again or contact support if the issue persists.`
+          }
         } else {
           console.error('[VIDEO] No imageUrl available for video generation!')
+          content += `\n\n**Error:** No image available for video generation. Please ensure an image URL was provided or image generation succeeded.`
         }
-      } catch (error) {
-        console.error('[VIDEO] Error generating video:', error)
-        // Continue without video if generation fails
+      } catch (error: any) {
+        console.error('[VIDEO] Error in video generation workflow:', error)
+        content += `\n\n**Error:** ${error.message || 'Video generation failed'}`
       }
     }
 

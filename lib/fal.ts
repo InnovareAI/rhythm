@@ -56,35 +56,44 @@ export async function generateVideo(imageUrl: string, prompt: string): Promise<s
   initializeFal()
 
   try {
-    console.log('Generating video with Sora 2 from image:', imageUrl.substring(0, 50) + '...')
+    console.log('[FAL VIDEO] Starting video generation with Minimax Video-01')
+    console.log('[FAL VIDEO] Image URL:', imageUrl)
+    console.log('[FAL VIDEO] Prompt:', prompt)
 
-    const result = await fal.subscribe('fal-ai/sora', {
+    const result = await fal.subscribe('fal-ai/minimax/video-01', {
       input: {
         image_url: imageUrl,
         prompt,
-        duration: 5, // 5 seconds
-        aspect_ratio: '16:9',
-        loop: false
       },
-      logs: false,
+      logs: true, // Enable logs to see what's happening
       onQueueUpdate: (update) => {
+        console.log('[FAL VIDEO] Queue update:', JSON.stringify(update))
         if (update.status === 'IN_PROGRESS') {
-          console.log('Video generation in progress...')
+          console.log('[FAL VIDEO] Video generation in progress...')
         }
       },
     })
 
+    console.log('[FAL VIDEO] Raw result:', JSON.stringify(result, null, 2))
+
     // @ts-ignore - fal.ai types are not perfect
-    const videoUrl = result.data?.video?.url
+    const videoUrl = result.video?.url || result.data?.video?.url
 
     if (!videoUrl) {
+      console.error('[FAL VIDEO] No video URL in result. Full result:', JSON.stringify(result))
       throw new Error('No video URL returned from fal.ai')
     }
 
-    console.log('Video generated:', videoUrl)
+    console.log('[FAL VIDEO] Video generated successfully:', videoUrl)
     return videoUrl
-  } catch (error) {
-    console.error('Error generating video with fal.ai:', error)
+  } catch (error: any) {
+    console.error('[FAL VIDEO] Error generating video:', error)
+    console.error('[FAL VIDEO] Error details:', {
+      message: error.message,
+      status: error.status,
+      body: error.body,
+      stack: error.stack
+    })
     throw error
   }
 }
