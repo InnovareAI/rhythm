@@ -8,7 +8,18 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-[#FF6B35]">3cubed</h1>
-            <p className="text-sm text-gray-400">Pharma Content Hub</p>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/history"
+                className="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                History
+              </Link>
+              <p className="text-sm text-gray-400">Pharma Content Hub</p>
+            </div>
           </div>
         </div>
       </header>

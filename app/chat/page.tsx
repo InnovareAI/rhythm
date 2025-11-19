@@ -21,6 +21,7 @@ function ChatContent() {
   const [generatedContent, setGeneratedContent] = useState<string | null>(null)
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [generatedVideo, setGeneratedVideo] = useState<string | null>(null)
+  const [conversationId, setConversationId] = useState<string | null>(null)
 
   useEffect(() => {
     // Initialize conversation with greeting
@@ -52,13 +53,20 @@ function ChatContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: [...messages, userMessage],
-          contentType
+          contentType,
+          conversationId
         })
       })
 
       if (!response.ok) throw new Error('Failed to get response')
 
       const data = await response.json()
+
+      // Update conversation ID if we got one back
+      if (data.conversationId && !conversationId) {
+        setConversationId(data.conversationId)
+        console.log('[CHAT] Got conversation ID:', data.conversationId)
+      }
 
       setMessages(prev => [...prev, { role: 'assistant', content: data.message }])
 

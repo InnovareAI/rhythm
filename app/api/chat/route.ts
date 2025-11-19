@@ -5,6 +5,7 @@ import { getSocialMediaPrompt } from '@/lib/prompts/social-media'
 import { getVideoPrompt } from '@/lib/prompts/video'
 import { generateImage, generateVideo } from '@/lib/fal'
 import { searchBrandInfo } from '@/lib/brand-search'
+import { createConversation, updateConversation, saveMessage, saveGeneratedContent } from '@/lib/conversation-storage'
 
 type Message = {
   role: 'user' | 'assistant'
@@ -14,6 +15,7 @@ type Message = {
 type ChatRequest = {
   messages: Message[]
   contentType: 'hcp-email' | 'social-media' | 'patient-email' | 'video'
+  conversationId?: string
 }
 
 // Simple state management for conversation context
@@ -487,7 +489,7 @@ async function generateContent(contentType: string, data: Record<string, any>): 
 export async function POST(request: NextRequest) {
   try {
     const body: ChatRequest = await request.json()
-    const { messages, contentType } = body
+    const { messages, contentType, conversationId: providedConversationId } = body
 
     if (!messages || messages.length === 0) {
       return NextResponse.json({ error: 'No messages provided' }, { status: 400 })
@@ -498,6 +500,29 @@ export async function POST(request: NextRequest) {
 
     console.log('[STATE] Step:', state.step, 'Data:', JSON.stringify(state.data))
 
+    // Handle conversation ID - create new or use existing
+    let conversationId = providedConversationId
+
+    if (!conversationId && state.step === 1) {
+      // Create new conversation on first message
+      console.log('[API] Creating new conversation...')
+      conversationId = await createConversation({
+        contentType,
+        productName: state.data.productName,
+        stateData: state.data
+      })
+      console.log('[API] Created conversation ID:', conversationId)
+    }
+
+    // Save the user message if we have a conversation ID
+    if (conversationId) {
+      await saveMessage({
+        conversationId,
+        role: 'user',
+        content: lastUserMessage
+      })
+    }
+
     // If this is step 1 (product name entry) and we don't have brand info yet, search for it
     if (state.step === 1 && state.data.productName && !state.data.brandInfo) {
       console.log('[API] Step 1: Searching for brand info...')
@@ -505,10 +530,28 @@ export async function POST(request: NextRequest) {
         const brandInfo = await searchBrandInfo(state.data.productName)
         state.data.brandInfo = brandInfo
         console.log('[API] Brand info retrieved:', JSON.stringify(brandInfo, null, 2))
+
+        // Update conversation with brand info
+        if (conversationId) {
+          await updateConversation({
+            conversationId,
+            productName: state.data.productName,
+            brandInfo,
+            stateData: state.data
+          })
+        }
       } catch (error) {
         console.error('[API] Failed to retrieve brand info:', error)
         // Continue without brand info
       }
+    }
+
+    // Update conversation state data
+    if (conversationId && state.step > 1) {
+      await updateConversation({
+        conversationId,
+        stateData: state.data
+      })
     }
 
     // Get next question or generate content
@@ -523,6 +566,25 @@ export async function POST(request: NextRequest) {
       generatedContent = result.content
       imageUrl = result.imageUrl || null
       videoUrl = result.videoUrl || null
+
+      // Save generated content to database
+      if (conversationId && generatedContent) {
+        await saveGeneratedContent({
+          conversationId,
+          content: generatedContent,
+          imageUrl: imageUrl || undefined,
+          videoUrl: videoUrl || undefined
+        })
+      }
+    }
+
+    // Save assistant message if we have a conversation ID
+    if (conversationId) {
+      await saveMessage({
+        conversationId,
+        role: 'assistant',
+        content: message
+      })
     }
 
     return NextResponse.json({
@@ -530,7 +592,8 @@ export async function POST(request: NextRequest) {
       generatedContent,
       imageUrl,
       videoUrl,
-      state: state.data
+      state: state.data,
+      conversationId
     })
   } catch (error) {
     console.error('API Error:', error)
