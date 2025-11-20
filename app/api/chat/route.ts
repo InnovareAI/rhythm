@@ -517,7 +517,7 @@ export async function POST(request: NextRequest) {
         contentType,
         productName: state.data.productName,
         stateData: state.data
-      })
+      }) ?? undefined
       console.log('[API] Created conversation ID:', conversationId)
     }
 
