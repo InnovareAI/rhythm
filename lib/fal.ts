@@ -19,19 +19,20 @@ export async function generateImage(prompt: string, aspectRatio: 'square' | 'por
   initializeFal()
 
   try {
-    // Use Flux Pro for high-quality image generation
-    console.log('[FAL IMAGE] Generating image with Flux Pro')
+    // Use Flux Dev (active model - flux-pro is deprecated)
+    console.log('[FAL IMAGE] Generating image with Flux Dev')
     console.log('[FAL IMAGE] Aspect ratio:', aspectRatio)
     console.log('[FAL IMAGE] Prompt:', prompt.substring(0, 150) + '...')
 
-    const result: any = await fal.subscribe('fal-ai/flux-pro', {
+    const result: any = await fal.subscribe('fal-ai/flux/dev', {
       input: {
         prompt,
         image_size: aspectRatio === 'portrait' ? 'portrait_4_3' : 'square_hd',
-        num_inference_steps: 28,
-        guidance_scale: 3.5,
+        num_inference_steps: 28, // Default for flux/dev
+        guidance_scale: 3.5, // Default CFG scale
         num_images: 1,
-        enable_safety_checker: true
+        enable_safety_checker: true,
+        output_format: 'jpeg' // jpeg or png
       },
       logs: true,
       onQueueUpdate: (update: any) => {
