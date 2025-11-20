@@ -24,33 +24,32 @@ export async function generateImage(prompt: string, aspectRatio: 'square' | 'por
     console.log('[FAL IMAGE] Aspect ratio:', aspectRatio)
     console.log('[FAL IMAGE] Prompt:', prompt.substring(0, 150) + '...')
 
-    const result = await fal.subscribe('fal-ai/flux-pro', {
+    const result: any = await fal.subscribe('fal-ai/flux-pro', {
       input: {
         prompt,
         image_size: aspectRatio === 'portrait' ? 'portrait_4_3' : 'square_hd',
         num_inference_steps: 28,
         guidance_scale: 3.5,
         num_images: 1,
-        enable_safety_checker: true,
-        output_format: 'jpeg'
+        enable_safety_checker: true
       },
       logs: true,
-      pollInterval: 1000,
-      onQueueUpdate: (update) => {
+      onQueueUpdate: (update: any) => {
         console.log('[FAL IMAGE] Queue status:', update.status)
-        if (update.status === 'IN_PROGRESS') {
-          console.log('[FAL IMAGE] Image generation in progress...')
-        }
       },
     })
 
-    console.log('[FAL IMAGE] Result received:', JSON.stringify(result).substring(0, 200))
+    console.log('[FAL IMAGE] Full result:', JSON.stringify(result, null, 2))
 
     // @ts-ignore - fal.ai types are not perfect
-    const imageUrl = result.data?.images?.[0]?.url
+    // Try multiple possible response structures
+    const imageUrl = result.images?.[0]?.url ||
+                     result.data?.images?.[0]?.url ||
+                     result.image?.url ||
+                     result.data?.image?.url
 
     if (!imageUrl) {
-      console.error('[FAL IMAGE] No image URL in result:', JSON.stringify(result))
+      console.error('[FAL IMAGE] No image URL found. Full result:', JSON.stringify(result, null, 2))
       throw new Error('No image URL returned from fal.ai')
     }
 
