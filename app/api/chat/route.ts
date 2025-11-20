@@ -7,6 +7,9 @@ import { generateImage, generateVideo } from '@/lib/fal'
 import { searchBrandInfo } from '@/lib/brand-search'
 import { createConversation, updateConversation, saveMessage, saveGeneratedContent } from '@/lib/conversation-storage'
 
+// Set maximum execution time for this API route (Netlify Pro supports up to 60s)
+export const maxDuration = 60
+
 type Message = {
   role: 'user' | 'assistant'
   content: string
