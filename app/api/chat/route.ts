@@ -419,28 +419,44 @@ async function generateContent(contentType: string, data: Record<string, any>): 
 
     if (contentType === 'social-media') {
       try {
-        // Extract image prompt from the generated content
-        const imagePromptMatch = content.match(/## 3\. CREATIVE IMAGE PROMPT[\s\S]*?(?=\n##|\n\*\*|$)/i)
+        // Extract image prompt from the generated content - try multiple patterns
         let imagePrompt = ''
+
+        // Try pattern 1: ### 4. VISUAL PROMPT
+        let imagePromptMatch = content.match(/###?\s*4\.?\s*VISUAL PROMPT[\s\S]*?(?=\n###?\s*\d|$)/i)
+
+        // Try pattern 2: ## VISUAL PROMPT or ### VISUAL PROMPT
+        if (!imagePromptMatch) {
+          imagePromptMatch = content.match(/###?\s*VISUAL PROMPT[\s\S]*?(?=\n###?\s*\d|$)/i)
+        }
+
+        // Try pattern 3: Creative prompt or Image prompt
+        if (!imagePromptMatch) {
+          imagePromptMatch = content.match(/###?\s*\d?\.?\s*(CREATIVE|IMAGE) PROMPT[\s\S]*?(?=\n###?|$)/i)
+        }
 
         if (imagePromptMatch) {
           // Clean up the extracted section
           imagePrompt = imagePromptMatch[0]
-            .replace(/## 3\. CREATIVE IMAGE PROMPT/i, '')
+            .replace(/###?\s*\d?\.?\s*(VISUAL|CREATIVE|IMAGE) PROMPT:?/gi, '')
             .replace(/\*\*/g, '')
+            .replace(/^[\s\n]+/, '')
             .trim()
         }
 
         // Fallback to a generic prompt if extraction fails
         if (!imagePrompt) {
           imagePrompt = `Professional pharmaceutical social media image for ${data.productName || 'healthcare product'}, ${data.message || 'healthcare content'}, photorealistic, clean background, medical setting, diverse patient representation, calm and supportive atmosphere, teal color palette`
+          console.log('[IMAGE] Using fallback prompt')
+        } else {
+          console.log('[IMAGE] Extracted prompt from content')
         }
 
-        console.log('Generating image with prompt:', imagePrompt.substring(0, 200) + '...')
+        console.log('[IMAGE] Generating image with prompt:', imagePrompt.substring(0, 200) + '...')
         imageUrl = await generateImage(imagePrompt)
-        console.log('Image generated:', imageUrl)
+        console.log('[IMAGE] Image generated successfully:', imageUrl)
       } catch (error) {
-        console.error('Error generating image:', error)
+        console.error('[IMAGE] Error generating image:', error)
         // Continue without image if generation fails
       }
     }
