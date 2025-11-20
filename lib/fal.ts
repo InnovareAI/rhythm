@@ -19,22 +19,24 @@ export async function generateImage(prompt: string, aspectRatio: 'square' | 'por
   initializeFal()
 
   try {
-    // Use Flux Dev (schnell) for faster generation (2-4 seconds vs 10-15 seconds for Pro)
+    // Use Flux Schnell for faster generation (2-4 seconds vs 10-15 seconds for Pro)
     console.log('[FAL IMAGE] Generating image with Flux Schnell (fast mode)')
     console.log('[FAL IMAGE] Aspect ratio:', aspectRatio)
     console.log('[FAL IMAGE] Prompt:', prompt.substring(0, 150) + '...')
 
-    const result = await fal.subscribe('fal-ai/flux/schnell', {
+    const result = await fal.subscribe('fal-ai/flux-pro/v1.1', {
       input: {
         prompt,
         image_size: aspectRatio === 'portrait' ? 'portrait_4_3' : 'square',
-        num_inference_steps: 4, // Schnell only needs 1-4 steps
+        num_inference_steps: 20, // Optimized for speed while maintaining quality
+        guidance_scale: 3.5,
         num_images: 1,
         enable_safety_checker: true,
-        output_format: 'jpeg'
+        output_format: 'jpeg',
+        safety_tolerance: '2'
       },
       logs: true,
-      timeout: 30000, // 30 second timeout
+      timeout: 45000, // 45 second timeout
       onQueueUpdate: (update) => {
         if (update.status === 'IN_PROGRESS') {
           console.log('[FAL IMAGE] Image generation in progress...')

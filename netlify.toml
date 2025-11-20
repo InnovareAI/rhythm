@@ -2,13 +2,13 @@
   command = "npm run build"
   publish = ".next"
 
-[functions]
-  # Increase timeout for API functions (max 60s on Pro plan, 26s on Starter)
-  # Image generation can take 20-30 seconds
-  node_bundler = "esbuild"
-
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-[functions."api/*"]
-  timeout = 60
+# Next.js API routes need background function configuration
+[functions]
+  included_files = ["node_modules/**"]
+
+[[functions]]
+  path = "/.netlify/functions/*"
+  included_files = ["**"]

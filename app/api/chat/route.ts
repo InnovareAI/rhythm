@@ -418,47 +418,11 @@ async function generateContent(contentType: string, data: Record<string, any>): 
     let videoUrl: string | undefined
 
     if (contentType === 'social-media') {
-      try {
-        // Extract image prompt from the generated content - try multiple patterns
-        let imagePrompt = ''
+      // Skip image generation to avoid timeout - add note to content
+      console.log('[IMAGE] Skipping automatic image generation to avoid timeout')
+      content += `\n\n---\n\n**Note:** Use the visual prompt above with your preferred AI image generator (DALL-E, Midjourney, Flux, etc.) to create the image for this post.`
 
-        // Try pattern 1: ### 4. VISUAL PROMPT
-        let imagePromptMatch = content.match(/###?\s*4\.?\s*VISUAL PROMPT[\s\S]*?(?=\n###?\s*\d|$)/i)
-
-        // Try pattern 2: ## VISUAL PROMPT or ### VISUAL PROMPT
-        if (!imagePromptMatch) {
-          imagePromptMatch = content.match(/###?\s*VISUAL PROMPT[\s\S]*?(?=\n###?\s*\d|$)/i)
-        }
-
-        // Try pattern 3: Creative prompt or Image prompt
-        if (!imagePromptMatch) {
-          imagePromptMatch = content.match(/###?\s*\d?\.?\s*(CREATIVE|IMAGE) PROMPT[\s\S]*?(?=\n###?|$)/i)
-        }
-
-        if (imagePromptMatch) {
-          // Clean up the extracted section
-          imagePrompt = imagePromptMatch[0]
-            .replace(/###?\s*\d?\.?\s*(VISUAL|CREATIVE|IMAGE) PROMPT:?/gi, '')
-            .replace(/\*\*/g, '')
-            .replace(/^[\s\n]+/, '')
-            .trim()
-        }
-
-        // Fallback to a generic prompt if extraction fails
-        if (!imagePrompt) {
-          imagePrompt = `Professional pharmaceutical social media image for ${data.productName || 'healthcare product'}, ${data.message || 'healthcare content'}, photorealistic, clean background, medical setting, diverse patient representation, calm and supportive atmosphere, teal color palette`
-          console.log('[IMAGE] Using fallback prompt')
-        } else {
-          console.log('[IMAGE] Extracted prompt from content')
-        }
-
-        console.log('[IMAGE] Generating image with prompt:', imagePrompt.substring(0, 200) + '...')
-        imageUrl = await generateImage(imagePrompt, 'portrait')
-        console.log('[IMAGE] Image generated successfully:', imageUrl)
-      } catch (error) {
-        console.error('[IMAGE] Error generating image:', error)
-        // Continue without image if generation fails
-      }
+      // TODO: Re-enable image generation after implementing async generation or separate endpoint
     }
 
     // For video, use provided image or generate one, then animate it with Sora 2
