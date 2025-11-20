@@ -15,14 +15,18 @@ function initializeFal() {
   }
 }
 
-export async function generateImage(prompt: string): Promise<string> {
+export async function generateImage(prompt: string, aspectRatio: 'square' | 'portrait' = 'portrait'): Promise<string> {
   initializeFal()
 
   try {
+    console.log('[FAL IMAGE] Generating image with Flux Pro')
+    console.log('[FAL IMAGE] Aspect ratio:', aspectRatio)
+    console.log('[FAL IMAGE] Prompt:', prompt.substring(0, 150) + '...')
+
     const result = await fal.subscribe('fal-ai/flux-pro', {
       input: {
         prompt,
-        image_size: 'square',
+        image_size: aspectRatio === 'portrait' ? 'portrait_4_3' : 'square',
         num_inference_steps: 28,
         guidance_scale: 3.5,
         num_images: 1,
@@ -30,24 +34,28 @@ export async function generateImage(prompt: string): Promise<string> {
         output_format: 'jpeg',
         safety_tolerance: '2'
       },
-      logs: false,
+      logs: true,
       onQueueUpdate: (update) => {
         if (update.status === 'IN_PROGRESS') {
-          console.log('Image generation in progress...')
+          console.log('[FAL IMAGE] Image generation in progress...')
         }
       },
     })
+
+    console.log('[FAL IMAGE] Result received:', JSON.stringify(result).substring(0, 200))
 
     // @ts-ignore - fal.ai types are not perfect
     const imageUrl = result.data?.images?.[0]?.url
 
     if (!imageUrl) {
+      console.error('[FAL IMAGE] No image URL in result:', JSON.stringify(result))
       throw new Error('No image URL returned from fal.ai')
     }
 
+    console.log('[FAL IMAGE] Image generated successfully:', imageUrl)
     return imageUrl
   } catch (error) {
-    console.error('Error generating image with fal.ai:', error)
+    console.error('[FAL IMAGE] Error generating image with fal.ai:', error)
     throw error
   }
 }

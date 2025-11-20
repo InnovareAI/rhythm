@@ -453,7 +453,7 @@ async function generateContent(contentType: string, data: Record<string, any>): 
         }
 
         console.log('[IMAGE] Generating image with prompt:', imagePrompt.substring(0, 200) + '...')
-        imageUrl = await generateImage(imagePrompt)
+        imageUrl = await generateImage(imagePrompt, 'portrait')
         console.log('[IMAGE] Image generated successfully:', imageUrl)
       } catch (error) {
         console.error('[IMAGE] Error generating image:', error)
@@ -473,7 +473,7 @@ async function generateContent(contentType: string, data: Record<string, any>): 
         } else if (data.imageSource === 'generate' && data.imagePrompt) {
           // Generate image from user's prompt
           console.log('[VIDEO] Generating image for video with prompt:', data.imagePrompt)
-          imageUrl = await generateImage(data.imagePrompt)
+          imageUrl = await generateImage(data.imagePrompt, 'square')
           console.log('[VIDEO] Image generated for video:', imageUrl)
         } else {
           console.error('[VIDEO] No valid image source! imageSource:', data.imageSource, 'imageUrl:', data.imageUrl, 'imagePrompt:', data.imagePrompt)

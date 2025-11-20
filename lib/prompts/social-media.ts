@@ -208,7 +208,15 @@ When asked to generate a social media post, provide ALL FIVE sections in this EX
 [List of @ mentions, one per line or comma-separated]
 
 ### 4. VISUAL PROMPT
-[Detailed image generation prompt describing the visual in natural language. This will be used by AI to generate the image. Example: "Teal gradient background with soft rounded shapes forming a supportive arch, diverse hands reaching toward a glowing heart symbol in the center, clean modern aesthetic, 1080x1350 portrait orientation, soft shadows, warm and hopeful atmosphere"]
+[Detailed image generation prompt describing the visual in natural language. This will be used by AI to generate the image. Be VERY descriptive and specific.]
+
+**Good Example:**
+"Professional pharmaceutical marketing image with teal gradient background (#1c7b80 to lighter teal), featuring abstract DNA helix made of soft glowing particles in the center, surrounded by floating rounded geometric shapes, diverse hands of different skin tones gently reaching toward the DNA from the edges, modern minimalist style, portrait orientation, soft diffused lighting, hopeful and scientific atmosphere, high quality digital illustration, clean composition"
+
+**Bad Example:**
+"People feeling hopeful" (too vague!)
+
+Your visual prompt should be 2-3 sentences with specific details about colors, composition, subjects, style, and mood.
 
 ### 5. POSTING GUIDANCE
 [Best times and context for posting]
@@ -234,12 +242,12 @@ export function getSocialMediaPrompt(params: {
   const platformName = params.platform === 'twitter' ? 'X/Twitter' : params.platform.charAt(0).toUpperCase() + params.platform.slice(1)
 
   let brandContext = ''
-  if (params.brandInfo) {
+  if (params.brandInfo && (params.brandInfo.indication || params.brandInfo.mechanism)) {
     brandContext = `
 
-## PRODUCT BACKGROUND INFORMATION
+## PRODUCT BACKGROUND INFORMATION FOR ${params.productName.toUpperCase()}
 
-The following information was found about ${params.productName}:
+YOU MUST use this verified product information in your post:
 
 ${params.brandInfo.indication ? `**Indication:** ${params.brandInfo.indication}` : ''}
 ${params.brandInfo.mechanism ? `**Mechanism of Action:** ${params.brandInfo.mechanism}` : ''}
@@ -249,7 +257,23 @@ ${params.brandInfo.approvalStatus ? `**Approval Status:** ${params.brandInfo.app
 ${params.brandInfo.keyFacts && params.brandInfo.keyFacts.length > 0 ? `**Key Facts:**
 ${params.brandInfo.keyFacts.map((fact: string) => `- ${fact}`).join('\n')}` : ''}
 
-Use this information as context for generating accurate, factual content. IMPORTANT: Only use this as background - always follow compliance rules and never invent additional data.`
+MANDATORY REQUIREMENTS:
+- You MUST mention "${params.productName}" by name in the post
+- You MUST incorporate the specific indication and key facts into the caption
+- You MUST create specific, factual content - NO generic health journey posts
+- You MUST include the full ISI block after the caption if this is patient-facing
+- Use this verified information confidently to create valuable, specific content`
+  } else {
+    brandContext = `
+
+## IMPORTANT NOTE
+
+Limited information was found for "${params.productName}". Create a compliant post that:
+- Focuses on general disease awareness for the condition
+- Does NOT make specific product claims
+- Directs users to consult healthcare providers
+- Uses educational, supportive messaging
+- Avoids mentioning the product name without full ISI`
   }
 
   return `${SOCIAL_MEDIA_SYSTEM_PROMPT}
@@ -265,10 +289,11 @@ ${params.emphasis ? `**Areas to Emphasize:** ${params.emphasis.join(', ')}` : ''
 
 Please generate a complete social media post following all rules and the mandatory 5-part output sequence.
 
-Remember to:
+CRITICAL REMINDERS:
 - Follow ${platformName}-specific character limits and rules
-- Include full ISI block if this is patient-facing content
+- Include full ISI block if this is patient-facing content (${params.target === 'patient' ? 'THIS IS PATIENT-FACING - ISI REQUIRED' : 'HCP-facing - ISI not required'})
 - Provide all 5 mandatory sections in order
 - Use appropriate tone for ${params.target} audience
-- Use the product name "${params.productName}" where appropriate`
+- Be SPECIFIC and use the product information provided above
+- Create a DETAILED visual prompt that will generate an engaging image`
 }
