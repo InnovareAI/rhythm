@@ -232,16 +232,32 @@ When asked to generate a social media post, provide ALL FIVE sections in this EX
 - Studio lighting or clean medical setting
 - High detail and photorealistic quality
 
-**GOOD Examples:**
-- "Professional pharmaceutical marketing photograph, close-up of researcher's hands holding a petri dish with pink breast cancer cells visible under blue laboratory lighting, soft focus medical laboratory background with modern equipment, teal accent lighting (#1c7b80), clean and scientific aesthetic, high-resolution professional photography, 4:3 portrait orientation"
-- "Professional medical illustration showing abstract representation of cellular pathway, teal and pink gradient spheres (#1c7b80, #FF6B9D) representing targeted therapy mechanism, modern 3D rendered style, clean white background, scientific accuracy, professional pharmaceutical marketing quality"
+**REQUIRED: Choose ONE professional category and create detailed prompt:**
 
-**BAD Examples:**
-- "Serene landscape at sunrise with path and flowers" ❌
-- "Journey imagery with ribbons" ❌
-- "People feeling hopeful" ❌
+**CATEGORY A - Laboratory Research:**
+"Professional pharmaceutical marketing photograph, [specific lab action], modern medical laboratory setting, [teal/pink/blue] accent lighting with hex codes, shallow depth of field, 4:3 portrait, professional photography"
+Example: scientist's gloved hands pipetting into multi-well plate, teal backlight (#1c7b80)
 
-Write 2-3 sentences describing a PROFESSIONAL PHARMACEUTICAL IMAGE.
+**CATEGORY B - Cellular/Molecular Imagery:**
+"Professional medical illustration, [specific cellular element], microscopic view or 3D render, [specific colors with hex], scientific accuracy, clean background, pharmaceutical marketing quality"
+Example: breast cancer cells with CDK4/6 pathway highlighted, pink (#FF6B9D) and teal (#1c7b80) color scheme
+
+**CATEGORY C - Abstract Medical Concept:**
+"Professional 3D medical illustration, abstract [mechanism/concept], modern minimalist style, [specific colors hex], clean white or gradient background, photorealistic rendering, pharmaceutical marketing aesthetic"
+Example: spheres representing targeted therapy binding to receptor, gradient teal to pink
+
+**CATEGORY D - Medical Technology:**
+"Professional pharmaceutical marketing photograph, [medical device/technology], clean clinical setting, professional lighting, [brand colors hex], modern healthcare aesthetic, 4:3 portrait"
+Example: modern medication packaging with teal highlights, minimal clean background
+
+**CATEGORY E - Patient-Centered (Subtle):**
+"Professional pharmaceutical marketing photograph, [subtle patient element NO FACES], soft clinical or home setting, warm teal lighting (#1c7b80), compassionate healthcare aesthetic, professionally lit, 4:3 portrait"
+Example: diverse hands holding medication card, soft focus supportive environment
+
+**FORBIDDEN IN ALL CATEGORIES:**
+❌ Landscapes, sunrises, paths, flowers, ribbons, generic hope imagery, stock photo vibes
+
+Write your prompt following ONE category structure above.
 
 ### 5. POSTING GUIDANCE
 [Best times and context for posting]
@@ -333,10 +349,15 @@ CRITICAL REMINDERS:
 - Use appropriate tone for ${params.target} audience
 - Be SPECIFIC and use the product information provided above
 
-**VISUAL PROMPT IS CRITICAL:**
-This image will represent a pharmaceutical brand. DO NOT use generic landscapes, sunrises, or inspirational stock imagery.
-MUST use: "Professional pharmaceutical marketing photograph..." or "Professional medical illustration..."
-MUST include: scientific elements (cells, molecules, lab imagery) OR abstract medical concepts (3D spheres, particles)
-MUST specify: exact colors with hex codes, professional lighting, technical photography details
-The image must look like it belongs in professional pharmaceutical marketing, not a generic inspiration account.`
+**VISUAL PROMPT IS CRITICAL - CHOOSE A PROFESSIONAL CATEGORY:**
+This image will represent a pharmaceutical brand. You MUST choose ONE of the 5 professional categories:
+A) Laboratory Research (pipetting, lab equipment, research setting)
+B) Cellular/Molecular (cells, DNA, pathways, microscopic)
+C) Abstract Medical (3D spheres, particles, mechanism visualization)
+D) Medical Technology (packaging, devices, clinical tools)
+E) Patient-Centered (hands, subtle patient elements, NO faces closeup)
+
+DO NOT create landscapes, sunrises, paths, flowers, ribbons, or generic inspiration imagery.
+MUST follow the category structure with specific details, hex codes, and professional quality descriptors.
+Variety comes from choosing different categories for different posts, not from vague prompts.`
 }
