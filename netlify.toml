@@ -5,10 +5,12 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Next.js API routes need background function configuration
+# Netlify Pro timeout configuration
 [functions]
-  included_files = ["node_modules/**"]
+  # Set timeout to 60 seconds for Pro plan (image generation takes 10-15s)
+  node_bundler = "esbuild"
 
-[[functions]]
-  path = "/.netlify/functions/*"
-  included_files = ["**"]
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
