@@ -458,10 +458,12 @@ async function generateContent(contentType: string, data: Record<string, any>): 
         console.log('[IMAGE] Generating image with prompt:', imagePrompt.substring(0, 200) + '...')
         imageUrl = await generateImage(imagePrompt, 'portrait')
         console.log('[IMAGE] Image generated successfully:', imageUrl)
-      } catch (error) {
+      } catch (error: any) {
         console.error('[IMAGE] Error generating image:', error)
+        const errorMsg = error.message || 'Unknown error'
+        console.error('[IMAGE] Error message:', errorMsg)
         // Continue without image if generation fails
-        content += `\n\n---\n\n**Note:** Image generation failed. Use the visual prompt above with your preferred AI image generator.`
+        content += `\n\n---\n\n**Note:** Image generation failed (${errorMsg}). Use the visual prompt above with your preferred AI image generator.`
       }
     }
 

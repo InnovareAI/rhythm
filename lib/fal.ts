@@ -27,17 +27,17 @@ export async function generateImage(prompt: string, aspectRatio: 'square' | 'por
     const result = await fal.subscribe('fal-ai/flux-pro', {
       input: {
         prompt,
-        image_size: aspectRatio === 'portrait' ? 'portrait_4_3' : 'square',
-        num_inference_steps: 25, // Balanced for quality and speed
+        image_size: aspectRatio === 'portrait' ? 'portrait_4_3' : 'square_hd',
+        num_inference_steps: 28,
         guidance_scale: 3.5,
         num_images: 1,
         enable_safety_checker: true,
-        output_format: 'jpeg',
-        safety_tolerance: '2'
+        output_format: 'jpeg'
       },
       logs: true,
-      timeout: 45000, // 45 second timeout
+      pollInterval: 1000,
       onQueueUpdate: (update) => {
+        console.log('[FAL IMAGE] Queue status:', update.status)
         if (update.status === 'IN_PROGRESS') {
           console.log('[FAL IMAGE] Image generation in progress...')
         }
@@ -56,9 +56,15 @@ export async function generateImage(prompt: string, aspectRatio: 'square' | 'por
 
     console.log('[FAL IMAGE] Image generated successfully:', imageUrl)
     return imageUrl
-  } catch (error) {
+  } catch (error: any) {
     console.error('[FAL IMAGE] Error generating image with fal.ai:', error)
-    throw error
+    console.error('[FAL IMAGE] Error details:', {
+      message: error.message,
+      status: error.status,
+      body: error.body,
+      response: error.response
+    })
+    throw new Error(`Image generation failed: ${error.message || 'Unknown error'}`)
   }
 }
 
