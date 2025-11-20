@@ -550,26 +550,14 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // If this is step 1 (product name entry) and we don't have brand info yet, search for it
+    // Skip brand search for now - disabled temporarily
+    // TODO: Re-enable when web search is implemented
     if (state.step === 1 && state.data.productName && !state.data.brandInfo) {
-      console.log('[API] Step 1: Searching for brand info...')
-      try {
-        const brandInfo = await searchBrandInfo(state.data.productName)
-        state.data.brandInfo = brandInfo
-        console.log('[API] Brand info retrieved:', JSON.stringify(brandInfo, null, 2))
-
-        // Update conversation with brand info
-        if (conversationId) {
-          await updateConversation({
-            conversationId,
-            productName: state.data.productName,
-            brandInfo,
-            stateData: state.data
-          })
-        }
-      } catch (error) {
-        console.error('[API] Failed to retrieve brand info:', error)
-        // Continue without brand info
+      console.log('[API] Step 1: Skipping brand info search (disabled)')
+      // Set empty brand info so we don't try to search again
+      state.data.brandInfo = {
+        productName: state.data.productName,
+        searchSkipped: true
       }
     }
 

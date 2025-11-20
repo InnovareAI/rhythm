@@ -241,40 +241,35 @@ export function getSocialMediaPrompt(params: {
 }) {
   const platformName = params.platform === 'twitter' ? 'X/Twitter' : params.platform.charAt(0).toUpperCase() + params.platform.slice(1)
 
-  let brandContext = ''
-  if (params.brandInfo && (params.brandInfo.indication || params.brandInfo.mechanism)) {
-    brandContext = `
+  // For now, work without detailed brand info (web search disabled)
+  const brandContext = `
 
-## PRODUCT BACKGROUND INFORMATION FOR ${params.productName.toUpperCase()}
+## PRODUCT INFORMATION
 
-YOU MUST use this verified product information in your post:
+Product Name: ${params.productName.toUpperCase()}
 
-${params.brandInfo.indication ? `**Indication:** ${params.brandInfo.indication}` : ''}
-${params.brandInfo.mechanism ? `**Mechanism of Action:** ${params.brandInfo.mechanism}` : ''}
-${params.brandInfo.manufacturer ? `**Manufacturer:** ${params.brandInfo.manufacturer}` : ''}
-${params.brandInfo.targetPopulation ? `**Target Population:** ${params.brandInfo.targetPopulation}` : ''}
-${params.brandInfo.approvalStatus ? `**Approval Status:** ${params.brandInfo.approvalStatus}` : ''}
-${params.brandInfo.keyFacts && params.brandInfo.keyFacts.length > 0 ? `**Key Facts:**
-${params.brandInfo.keyFacts.map((fact: string) => `- ${fact}`).join('\n')}` : ''}
+Since detailed product information is not available, create a compliant pharmaceutical social media post that:
 
-MANDATORY REQUIREMENTS:
-- You MUST mention "${params.productName}" by name in the post
-- You MUST incorporate the specific indication and key facts into the caption
-- You MUST create specific, factual content - NO generic health journey posts
-- You MUST include the full ISI block after the caption if this is patient-facing
-- Use this verified information confidently to create valuable, specific content`
-  } else {
-    brandContext = `
+**APPROACH:**
+- Focus on the condition/disease area this product treats (use your knowledge of ${params.productName})
+- Create educational, disease awareness content
+- Emphasize patient support and consulting healthcare providers
+- Use compassionate, supportive messaging
+- Include general information about treatment options
 
-## IMPORTANT NOTE
+**COMPLIANCE RULES:**
+- DO mention the product name "${params.productName}" if you know it's a real pharmaceutical product
+- DO include relevant hashtags for the condition
+- DO direct people to "talk to your doctor" or "consult your healthcare provider"
+- DO NOT make specific efficacy claims without data
+- DO NOT use before/after imagery language
+- DO use supportive, patient-first language
 
-Limited information was found for "${params.productName}". Create a compliant post that:
-- Focuses on general disease awareness for the condition
-- Does NOT make specific product claims
-- Directs users to consult healthcare providers
-- Uses educational, supportive messaging
-- Avoids mentioning the product name without full ISI`
-  }
+**IF THIS IS PATIENT-FACING:**
+- You MUST include a simplified ISI block or clear disclaimer
+- Example: "Talk to your doctor to see if ${params.productName} is right for you. Please see full Prescribing Information at [website]"
+
+Create a REAL, SPECIFIC post - not generic "health journey" content.`
 
   return `${SOCIAL_MEDIA_SYSTEM_PROMPT}
 ${brandContext}
