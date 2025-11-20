@@ -56,7 +56,7 @@ Professional pharmaceutical marketing image - MUST follow these guidelines:
 - Subtle patient representation: hands, diverse representation in clinical setting (NO faces closeup)
 
 **TECHNICAL SPECS:**
-- **Color Palette:** Teal primary (#1c7b80, #007a80), complementary medical colors (soft pink, white, blue)
+- **Color Palette:** Use brand-appropriate medical colors - adapt to product/condition (e.g., teal for general, pink for breast cancer, blue for diabetes, purple for immunology, green for respiratory). MUST include specific hex codes.
 - **Lighting:** Professional studio lighting OR clean medical setting lighting
 - **Quality:** High-resolution, photorealistic OR clean 3D illustration
 - **Dimensions:** 4:3 portrait orientation
@@ -235,24 +235,43 @@ When asked to generate a social media post, provide ALL FIVE sections in this EX
 **REQUIRED: Choose ONE professional category and create detailed prompt:**
 
 **CATEGORY A - Laboratory Research:**
-"Professional pharmaceutical marketing photograph, [specific lab action], modern medical laboratory setting, [teal/pink/blue] accent lighting with hex codes, shallow depth of field, 4:3 portrait, professional photography"
-Example: scientist's gloved hands pipetting into multi-well plate, teal backlight (#1c7b80)
+"Professional pharmaceutical marketing photograph, [specific lab action related to research/development], modern medical laboratory setting, [brand colors] accent lighting with hex codes, shallow depth of field, 4:3 portrait, professional photography"
+Examples:
+- pipetting into multi-well plate with blue backlight
+- researcher examining samples under microscope
+- lab equipment in clean modern setting
 
 **CATEGORY B - Cellular/Molecular Imagery:**
-"Professional medical illustration, [specific cellular element], microscopic view or 3D render, [specific colors with hex], scientific accuracy, clean background, pharmaceutical marketing quality"
-Example: breast cancer cells with CDK4/6 pathway highlighted, pink (#FF6B9D) and teal (#1c7b80) color scheme
+"Professional medical illustration, [cells/molecules/pathways relevant to the product's mechanism and therapeutic area], microscopic view or 3D render, [brand colors with hex codes], scientific accuracy, clean background, pharmaceutical marketing quality"
+Examples:
+- cancer cells with pathway highlighted
+- immune cells interacting with target
+- molecular structure of compound
+- DNA/RNA sequences with highlighted regions
 
 **CATEGORY C - Abstract Medical Concept:**
-"Professional 3D medical illustration, abstract [mechanism/concept], modern minimalist style, [specific colors hex], clean white or gradient background, photorealistic rendering, pharmaceutical marketing aesthetic"
-Example: spheres representing targeted therapy binding to receptor, gradient teal to pink
+"Professional 3D medical illustration, abstract [therapy mechanism or biological process], modern minimalist style, [brand colors hex], clean white or gradient background, photorealistic rendering, pharmaceutical marketing aesthetic"
+Examples:
+- spheres representing targeted therapy
+- particles showing drug delivery mechanism
+- abstract visualization of immune response
+- cellular signaling pathway illustration
 
 **CATEGORY D - Medical Technology:**
-"Professional pharmaceutical marketing photograph, [medical device/technology], clean clinical setting, professional lighting, [brand colors hex], modern healthcare aesthetic, 4:3 portrait"
-Example: modern medication packaging with teal highlights, minimal clean background
+"Professional pharmaceutical marketing photograph, [medication/device/delivery system], clean clinical setting, professional lighting, [brand colors hex], modern healthcare aesthetic, 4:3 portrait"
+Examples:
+- medication packaging on clean surface
+- injection device/inhaler close-up
+- pill organizer with modern design
+- medical monitoring device
 
 **CATEGORY E - Patient-Centered (Subtle):**
-"Professional pharmaceutical marketing photograph, [subtle patient element NO FACES], soft clinical or home setting, warm teal lighting (#1c7b80), compassionate healthcare aesthetic, professionally lit, 4:3 portrait"
-Example: diverse hands holding medication card, soft focus supportive environment
+"Professional pharmaceutical marketing photograph, [subtle patient element NO FACES CLOSEUP], soft clinical or home setting, warm [brand color] lighting with hex, compassionate healthcare aesthetic, professionally lit, 4:3 portrait"
+Examples:
+- diverse hands holding medication
+- patient checking medication guide
+- supportive caregiver hands
+- medication routine in home setting
 
 **FORBIDDEN IN ALL CATEGORIES:**
 ❌ Landscapes, sunrises, paths, flowers, ribbons, generic hope imagery, stock photo vibes
@@ -350,14 +369,15 @@ CRITICAL REMINDERS:
 - Be SPECIFIC and use the product information provided above
 
 **VISUAL PROMPT IS CRITICAL - CHOOSE A PROFESSIONAL CATEGORY:**
-This image will represent a pharmaceutical brand. You MUST choose ONE of the 5 professional categories:
+This image will represent ${params.productName} - a pharmaceutical brand. You MUST choose ONE of the 5 professional categories:
 A) Laboratory Research (pipetting, lab equipment, research setting)
-B) Cellular/Molecular (cells, DNA, pathways, microscopic)
+B) Cellular/Molecular (cells, DNA, pathways, microscopic - adapt to ${params.productName}'s therapy area)
 C) Abstract Medical (3D spheres, particles, mechanism visualization)
-D) Medical Technology (packaging, devices, clinical tools)
+D) Medical Technology (packaging, devices, clinical tools appropriate for ${params.productName})
 E) Patient-Centered (hands, subtle patient elements, NO faces closeup)
 
+Choose the category that best fits ${params.productName}'s therapeutic area and the post message.
 DO NOT create landscapes, sunrises, paths, flowers, ribbons, or generic inspiration imagery.
 MUST follow the category structure with specific details, hex codes, and professional quality descriptors.
-Variety comes from choosing different categories for different posts, not from vague prompts.`
+ADAPT the imagery to ${params.productName}'s specific indication (e.g., cancer cells for oncology, immune cells for immunology, neurons for neurology, etc.).`
 }
