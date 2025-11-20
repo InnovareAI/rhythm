@@ -19,16 +19,16 @@ export async function generateImage(prompt: string, aspectRatio: 'square' | 'por
   initializeFal()
 
   try {
-    // Use Flux Schnell for faster generation (2-4 seconds vs 10-15 seconds for Pro)
-    console.log('[FAL IMAGE] Generating image with Flux Schnell (fast mode)')
+    // Use Flux Pro for high-quality image generation
+    console.log('[FAL IMAGE] Generating image with Flux Pro')
     console.log('[FAL IMAGE] Aspect ratio:', aspectRatio)
     console.log('[FAL IMAGE] Prompt:', prompt.substring(0, 150) + '...')
 
-    const result = await fal.subscribe('fal-ai/flux-pro/v1.1', {
+    const result = await fal.subscribe('fal-ai/flux-pro', {
       input: {
         prompt,
         image_size: aspectRatio === 'portrait' ? 'portrait_4_3' : 'square',
-        num_inference_steps: 20, // Optimized for speed while maintaining quality
+        num_inference_steps: 25, // Balanced for quality and speed
         guidance_scale: 3.5,
         num_images: 1,
         enable_safety_checker: true,
