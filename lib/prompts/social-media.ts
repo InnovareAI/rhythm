@@ -49,18 +49,26 @@ Professional pharmaceutical marketing image - MUST follow these guidelines:
 - Scientific accuracy and credibility
 - NO generic stock photo vibes, NO landscapes, NO inspirational sunset imagery
 
-**SUBJECT MATTER (Choose ONE):**
-- Scientific/cellular imagery: molecules, cells, pathways, DNA, proteins
-- Medical/clinical (tasteful): lab equipment, microscopy, research imagery
-- Abstract/conceptual: 3D rendered spheres, particles, waves representing therapy
-- Subtle patient representation: hands, diverse representation in clinical setting (NO faces closeup)
+**SUBJECT MATTER (Choose ONE based on therapeutic area):**
+- Scientific/cellular imagery: molecules, cells, pathways, DNA, proteins (common diseases)
+- Medical/clinical (tasteful): lab equipment, microscopy, research imagery (general pharma)
+- Abstract/conceptual: 3D rendered spheres, particles, waves representing therapy (mechanism focus)
+- Subtle patient representation: hands, diverse representation in clinical setting (general patient focus, NO faces closeup)
+- **Rare disease humanistic:** family bonds, supportive relationships, patients living fully, warm authentic moments (ONLY for rare/genetic diseases)
 
 **TECHNICAL SPECS:**
-- **Color Palette:** Use brand-appropriate medical colors - adapt to product/condition (e.g., teal for general, pink for breast cancer, blue for diabetes, purple for immunology, green for respiratory). MUST include specific hex codes.
-- **Lighting:** Professional studio lighting OR clean medical setting lighting
+- **Color Palette:** Use brand-appropriate medical colors - adapt to product/condition:
+  - Teal (#1c7b80, #007a80) for general/multiple indications
+  - Pink (#FF6B9D, #FFC0CB) for breast cancer
+  - Blue (#4A90E2, #0066CC) for diabetes
+  - Purple (#8B5CF6, #9333EA) for immunology
+  - Green (#10B981, #059669) for respiratory
+  - Navy/warm neutrals (#1B3A57, #8B7355) for rare disease
+  MUST include specific hex codes in prompt.
+- **Lighting:** Professional studio lighting OR clean medical setting lighting (Categories A-E) / Soft natural lighting (Category F rare disease)
 - **Quality:** High-resolution, photorealistic OR clean 3D illustration
 - **Dimensions:** 4:3 portrait orientation
-- **Forbidden:** NO sunrises, NO paths/journeys, NO ribbons, NO generic hope imagery, NO before/after
+- **Forbidden (Categories A-E):** NO sunrises, NO paths/journeys, NO ribbons, NO generic hope imagery, NO before/after
 
 **MUST include:** Specific details about composition, colors with hex codes, lighting setup, photographic/illustration style
 
@@ -273,8 +281,30 @@ Examples:
 - supportive caregiver hands
 - medication routine in home setting
 
-**FORBIDDEN IN ALL CATEGORIES:**
-❌ Landscapes, sunrises, paths, flowers, ribbons, generic hope imagery, stock photo vibes
+**CATEGORY F - Rare Disease (Humanistic & Hopeful):**
+"Professional pharmaceutical marketing photograph emphasizing dignity and normalcy, [family connection or patient living fully], warm natural home or outdoor setting, soft natural lighting, [navy blue #1B3A57 or warm neutrals] color accents, authentic and compassionate aesthetic, professionally composed, 4:3 portrait"
+**RARE DISEASE VISUAL PHILOSOPHY:**
+- Show patients LIVING LIFE, not suffering
+- Emphasize family bonds, relationships, support systems
+- Capture moments of joy, connection, normalcy
+- Warm, hopeful, authentic (NOT clinical or sterile)
+- Dignity-focused: patients as whole people, not conditions
+Examples:
+- parent and child hands together holding hope symbol
+- family silhouettes in warm sunset light (blurred, respectful distance)
+- supportive hands on shoulder in soft home lighting
+- generational connection through clasped hands
+- patient's personal items (journal, photos) showing full life
+**FORBIDDEN for rare disease:** Clinical settings, medical procedures, suffering imagery, pity-focused visuals
+
+**FORBIDDEN IN CATEGORIES A-E:**
+❌ Generic landscapes, paths, flowers, ribbons, stock photo vibes
+
+**ALLOWED ONLY IN CATEGORY F (Rare Disease):**
+✓ Warm natural outdoor settings (when showing dignity and family bonds)
+✓ Soft sunset/golden hour lighting (when emphasizing hope and normalcy)
+✓ Home environments showing full lives
+BUT MUST AVOID: clinical imagery, suffering, pity, medical procedures
 
 Write your prompt following ONE category structure above.
 
@@ -369,15 +399,22 @@ CRITICAL REMINDERS:
 - Be SPECIFIC and use the product information provided above
 
 **VISUAL PROMPT IS CRITICAL - CHOOSE A PROFESSIONAL CATEGORY:**
-This image will represent ${params.productName} - a pharmaceutical brand. You MUST choose ONE of the 5 professional categories:
+This image will represent ${params.productName} - a pharmaceutical brand. You MUST choose ONE of the 6 professional categories:
 A) Laboratory Research (pipetting, lab equipment, research setting)
 B) Cellular/Molecular (cells, DNA, pathways, microscopic - adapt to ${params.productName}'s therapy area)
 C) Abstract Medical (3D spheres, particles, mechanism visualization)
 D) Medical Technology (packaging, devices, clinical tools appropriate for ${params.productName})
 E) Patient-Centered (hands, subtle patient elements, NO faces closeup)
+F) Rare Disease (humanistic, family bonds, dignity-focused, living life fully - USE THIS for rare diseases like BBS, genetic obesity, etc.)
+
+**IMPORTANT CATEGORY SELECTION:**
+- Use Category F for RARE DISEASES (BBS, genetic conditions, ultra-rare diseases) - emphasizes dignity, family, normalcy
+- Use Categories A-C for common/large market conditions (cancer, diabetes, heart disease) - emphasizes science
+- Use Category D for delivery systems/devices (inhalers, injections, etc.)
+- Use Category E for general patient-focused messaging
 
 Choose the category that best fits ${params.productName}'s therapeutic area and the post message.
-DO NOT create landscapes, sunrises, paths, flowers, ribbons, or generic inspiration imagery.
+DO NOT create generic landscapes, sunrises, paths, flowers, or ribbons (EXCEPTION: Category F rare disease may use warm natural settings respectfully).
 MUST follow the category structure with specific details, hex codes, and professional quality descriptors.
-ADAPT the imagery to ${params.productName}'s specific indication (e.g., cancer cells for oncology, immune cells for immunology, neurons for neurology, etc.).`
+ADAPT the imagery to ${params.productName}'s specific indication.`
 }
