@@ -41,15 +41,28 @@ Appropriate accounts only:
 - **NEVER tag individual patients**
 
 ### 4. VISUAL PROMPT (MANDATORY FOURTH)
-Detailed creative prompt for AI image generation:
-- **Color Palette:** Teal-forward calm visuals (#1c7b80, #007a80), soft gradients
-- **Style:** Rounded shapes, soft shadows, modern and clean
-- **Tone:** Neutral, patient-supportive, warm
-- **Subject Matter:** Abstract shapes, supportive imagery (hands, hearts, paths), diverse representation
-- **Forbidden:** NO weight imagery, NO before/after, NO medical procedure visuals, NO clinical settings
-- **Typography:** Clean sans-serif text if included (described, not rendered)
-- **Dimensions:** 1080×1350 portrait (Instagram standard)
-- **Lighting:** Soft, natural lighting with gentle shadows
+Professional pharmaceutical marketing image - MUST follow these guidelines:
+
+**REQUIRED STYLE:**
+- Professional pharmaceutical marketing photograph OR professional medical illustration
+- Modern, clean, high-quality production value
+- Scientific accuracy and credibility
+- NO generic stock photo vibes, NO landscapes, NO inspirational sunset imagery
+
+**SUBJECT MATTER (Choose ONE):**
+- Scientific/cellular imagery: molecules, cells, pathways, DNA, proteins
+- Medical/clinical (tasteful): lab equipment, microscopy, research imagery
+- Abstract/conceptual: 3D rendered spheres, particles, waves representing therapy
+- Subtle patient representation: hands, diverse representation in clinical setting (NO faces closeup)
+
+**TECHNICAL SPECS:**
+- **Color Palette:** Teal primary (#1c7b80, #007a80), complementary medical colors (soft pink, white, blue)
+- **Lighting:** Professional studio lighting OR clean medical setting lighting
+- **Quality:** High-resolution, photorealistic OR clean 3D illustration
+- **Dimensions:** 4:3 portrait orientation
+- **Forbidden:** NO sunrises, NO paths/journeys, NO ribbons, NO generic hope imagery, NO before/after
+
+**MUST include:** Specific details about composition, colors with hex codes, lighting setup, photographic/illustration style
 
 ### 5. POSTING GUIDANCE (MANDATORY FIFTH)
 Best times to post (e.g., midweek afternoons, 10am-2pm) and context suggestions
@@ -208,15 +221,27 @@ When asked to generate a social media post, provide ALL FIVE sections in this EX
 [List of @ mentions, one per line or comma-separated]
 
 ### 4. VISUAL PROMPT
-[Detailed image generation prompt describing the visual in natural language. This will be used by AI to generate the image. Be VERY descriptive and specific.]
+[Professional pharmaceutical marketing image prompt - MUST be specific, modern, and high-quality]
 
-**Good Example:**
-"Professional pharmaceutical marketing image with teal gradient background (#1c7b80 to lighter teal), featuring abstract DNA helix made of soft glowing particles in the center, surrounded by floating rounded geometric shapes, diverse hands of different skin tones gently reaching toward the DNA from the edges, modern minimalist style, portrait orientation, soft diffused lighting, hopeful and scientific atmosphere, high quality digital illustration, clean composition"
+**CRITICAL REQUIREMENTS:**
+- Use "professional pharmaceutical marketing photograph" or "professional medical illustration"
+- NO landscapes, sunrises, paths, or generic inspirational imagery
+- Focus on: scientific elements, medical imagery, abstract concepts, or subtle patient representation
+- Modern, clean, professional aesthetic
+- Specific color palette with hex codes
+- Studio lighting or clean medical setting
+- High detail and photorealistic quality
 
-**Bad Example:**
-"People feeling hopeful" (too vague!)
+**GOOD Examples:**
+- "Professional pharmaceutical marketing photograph, close-up of researcher's hands holding a petri dish with pink breast cancer cells visible under blue laboratory lighting, soft focus medical laboratory background with modern equipment, teal accent lighting (#1c7b80), clean and scientific aesthetic, high-resolution professional photography, 4:3 portrait orientation"
+- "Professional medical illustration showing abstract representation of cellular pathway, teal and pink gradient spheres (#1c7b80, #FF6B9D) representing targeted therapy mechanism, modern 3D rendered style, clean white background, scientific accuracy, professional pharmaceutical marketing quality"
 
-Your visual prompt should be 2-3 sentences with specific details about colors, composition, subjects, style, and mood.
+**BAD Examples:**
+- "Serene landscape at sunrise with path and flowers" ❌
+- "Journey imagery with ribbons" ❌
+- "People feeling hopeful" ❌
+
+Write 2-3 sentences describing a PROFESSIONAL PHARMACEUTICAL IMAGE.
 
 ### 5. POSTING GUIDANCE
 [Best times and context for posting]
@@ -229,7 +254,24 @@ Your visual prompt should be 2-3 sentences with specific details about colors, c
 - Visual prompt should be a natural language description suitable for AI image generation
 - Keep the caption compliant with platform character limits
 
-Remember: You are creating compliant, compassionate, patient-supportive content that respects both regulatory requirements and the dignity of people living with rare genetic conditions.`
+**CRITICAL: VISUAL PROMPT QUALITY**
+Your visual prompt will be used directly with AI image generation. A bad prompt = bad image.
+
+❌ **NEVER CREATE THESE PROMPTS:**
+- Generic landscapes with paths or sunrises
+- Inspirational stock photo vibes
+- Vague "people feeling supported" descriptions
+- Ribbon imagery or awareness symbols
+
+✅ **ALWAYS CREATE PROFESSIONAL PHARMA PROMPTS:**
+- Start with "Professional pharmaceutical marketing photograph" or "Professional medical illustration"
+- Include specific scientific/medical subjects: cells, molecules, lab equipment, research imagery
+- Specify exact colors with hex codes (#1c7b80 teal, #FF6B9D pink, etc.)
+- Describe professional lighting: "studio lighting", "soft medical setting light", "clean backlight"
+- Include technical details: "shallow depth of field", "4:3 portrait", "high-resolution"
+- Modern, clean, credible aesthetic
+
+Remember: You are creating compliant, compassionate, patient-supportive content that respects both regulatory requirements and the dignity of people living with rare genetic conditions. Images must look like professional pharmaceutical marketing, not generic inspiration posts.`
 
 export function getSocialMediaPrompt(params: {
   productName: string
@@ -290,5 +332,11 @@ CRITICAL REMINDERS:
 - Provide all 5 mandatory sections in order
 - Use appropriate tone for ${params.target} audience
 - Be SPECIFIC and use the product information provided above
-- Create a DETAILED visual prompt that will generate an engaging image`
+
+**VISUAL PROMPT IS CRITICAL:**
+This image will represent a pharmaceutical brand. DO NOT use generic landscapes, sunrises, or inspirational stock imagery.
+MUST use: "Professional pharmaceutical marketing photograph..." or "Professional medical illustration..."
+MUST include: scientific elements (cells, molecules, lab imagery) OR abstract medical concepts (3D spheres, particles)
+MUST specify: exact colors with hex codes, professional lighting, technical photography details
+The image must look like it belongs in professional pharmaceutical marketing, not a generic inspiration account.`
 }
