@@ -89,7 +89,10 @@ Give me a moment...`
         })
       })
 
-      if (!response.ok) throw new Error('Failed to get response')
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || errorData.details || 'Failed to get response')
+      }
 
       const data = await response.json()
 
@@ -102,11 +105,11 @@ Give me a moment...`
       if (data.generatedContent) {
         setGeneratedContent(data.generatedContent)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error:', error)
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'Sorry, I encountered an error generating the email. Please try again.'
+        content: `Sorry, I encountered an error: ${error.message || 'Unknown error'}. Please try again.`
       }])
     } finally {
       setIsLoading(false)
@@ -136,7 +139,10 @@ Give me a moment...`
         })
       })
 
-      if (!response.ok) throw new Error('Failed to get response')
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || errorData.details || 'Failed to get response')
+      }
 
       const data = await response.json()
 
@@ -149,11 +155,11 @@ Give me a moment...`
       if (data.generatedContent) {
         setGeneratedContent(data.generatedContent)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error:', error)
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.'
+        content: `Sorry, I encountered an error: ${error.message || 'Unknown error'}. Please try again.`
       }])
     } finally {
       setIsLoading(false)

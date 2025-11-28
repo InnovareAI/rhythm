@@ -545,35 +545,67 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No messages provided' }, { status: 400 })
     }
 
-    // Handle IMCIVREE email generation directly (no Q&A flow)
+    // Handle IMCIVREE email generation with streaming
     if (contentType === 'imcivree-email') {
-      console.log('[IMCIVREE] Generating email:', { audience, emailType, keyMessage })
+      console.log('[IMCIVREE] Generating email with streaming:', { audience, emailType, keyMessage })
 
-      const data = {
-        audience: audience || 'hcp',
-        emailType: emailType || 'moa',
-        keyMessage: keyMessage || ''
+      try {
+        const data = {
+          audience: audience || 'hcp',
+          emailType: emailType || 'moa',
+          keyMessage: keyMessage || ''
+        }
+
+        const systemPrompt = getImcivreeEmailPrompt({
+          audience: data.audience,
+          emailType: data.emailType,
+          keyMessage: data.keyMessage
+        })
+
+        const openrouter = getOpenRouter()
+        // Use Claude 3.5 Sonnet for faster response times
+        const fastModel = 'anthropic/claude-3-5-sonnet-latest'
+        console.log('[IMCIVREE] Using fast model:', fastModel)
+
+        const stream = await openrouter.chat.completions.create({
+          model: fastModel,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: 'Please generate the content now following all compliance rules.' }
+          ],
+          temperature: 0.7,
+          max_tokens: 4000,
+          stream: true,
+        })
+
+        // Collect the full response
+        let fullContent = ''
+        for await (const chunk of stream) {
+          const content = chunk.choices[0]?.delta?.content || ''
+          fullContent += content
+        }
+
+        // Extract HTML from the response
+        let htmlContent = fullContent
+        const htmlMatch = fullContent.match(/```html\s*([\s\S]*?)\s*```/i)
+        if (htmlMatch && htmlMatch[1]) {
+          htmlContent = htmlMatch[1].trim()
+        } else if (fullContent.includes('<!DOCTYPE html>') || fullContent.includes('<table')) {
+          htmlContent = fullContent
+        }
+
+        return NextResponse.json({
+          message: 'Your IMCIVREE email has been generated. You can preview it on the right, make changes by chatting below, or download the HTML.',
+          generatedContent: htmlContent,
+          conversationId: providedConversationId
+        })
+      } catch (emailError: any) {
+        console.error('[IMCIVREE EMAIL ERROR]', emailError.message || emailError)
+        return NextResponse.json({
+          error: `Email generation failed: ${emailError.message || 'Unknown error'}`,
+          details: emailError.toString()
+        }, { status: 500 })
       }
-
-      const result = await generateContent('imcivree-email', data)
-
-      // Extract HTML from the response (look for HTML content)
-      let htmlContent = result.content
-
-      // If the response contains HTML, extract it
-      const htmlMatch = result.content.match(/```html\s*([\s\S]*?)\s*```/i)
-      if (htmlMatch && htmlMatch[1]) {
-        htmlContent = htmlMatch[1].trim()
-      } else if (result.content.includes('<!DOCTYPE html>') || result.content.includes('<table')) {
-        // Content is already HTML
-        htmlContent = result.content
-      }
-
-      return NextResponse.json({
-        message: 'Your IMCIVREE email has been generated. You can preview it on the right, make changes by chatting below, or download the HTML.',
-        generatedContent: htmlContent,
-        conversationId: providedConversationId
-      })
     }
 
     // Handle IMCIVREE banner generation directly (no Q&A flow)
@@ -590,17 +622,31 @@ export async function POST(request: NextRequest) {
       const systemPrompt = getImcivreeBannerPrompt(data)
 
       const openrouter = getOpenRouter()
-      const completion = await openrouter.chat.completions.create({
-        model: defaultModel,
+      // Use Claude 3.5 Sonnet for faster response times
+      const fastModel = 'anthropic/claude-3-5-sonnet-latest'
+      console.log('[IMCIVREE BANNER] Using fast model:', fastModel)
+
+      const stream = await openrouter.chat.completions.create({
+        model: fastModel,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: 'Please generate the complete 5-frame IMCIVREE banner ad concept and HTML code now following all rules and structure requirements.' }
         ],
         temperature: 0.7,
         max_tokens: 8000,
+        stream: true,
       })
 
-      const result = completion.choices[0]?.message?.content || 'Failed to generate banner'
+      // Collect the full response
+      let result = ''
+      for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content || ''
+        result += content
+      }
+
+      if (!result) {
+        result = 'Failed to generate banner'
+      }
 
       // Extract HTML from the response
       let htmlContent = result

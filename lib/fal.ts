@@ -28,15 +28,18 @@ export async function generateImage(prompt: string, aspectRatio: 'square' | 'por
       input: {
         prompt,
         image_size: aspectRatio === 'portrait' ? 'portrait_4_3' : 'square_hd',
-        num_inference_steps: 28, // Default for flux/dev
+        num_inference_steps: 20, // Reduced from 28 for faster generation (still good quality)
         guidance_scale: 3.5, // Default CFG scale
         num_images: 1,
         enable_safety_checker: true,
-        output_format: 'jpeg' // jpeg or png
+        output_format: 'jpeg' // jpeg is faster than png
       },
       logs: true,
       onQueueUpdate: (update: any) => {
         console.log('[FAL IMAGE] Queue status:', update.status)
+        if (update.status === 'IN_PROGRESS') {
+          console.log('[FAL IMAGE] Image generation in progress...')
+        }
       },
     })
 
@@ -72,36 +75,66 @@ export async function generateVideo(imageUrl: string, prompt: string): Promise<s
   initializeFal()
 
   try {
-    console.log('[FAL VIDEO] Starting video generation with Minimax Video-01')
+    console.log('[FAL VIDEO] Starting video generation with Kling 2.5 Turbo Pro')
     console.log('[FAL VIDEO] Image URL:', imageUrl)
     console.log('[FAL VIDEO] Prompt:', prompt)
 
-    const result = await fal.subscribe('fal-ai/minimax/video-01', {
+    // Use queue instead of subscribe for better timeout handling
+    const result = await fal.queue.submit('fal-ai/kling-video/v2.5-turbo/pro/image-to-video', {
       input: {
         image_url: imageUrl,
         prompt,
-      },
-      logs: true, // Enable logs to see what's happening
-      onQueueUpdate: (update) => {
-        console.log('[FAL VIDEO] Queue update:', JSON.stringify(update))
-        if (update.status === 'IN_PROGRESS') {
-          console.log('[FAL VIDEO] Video generation in progress...')
-        }
-      },
+        duration: '5', // 5 seconds
+        aspect_ratio: '16:9',
+        cfg_scale: 0.5,
+        negative_prompt: 'blur, distortion, low quality, artifacts, watermark, text'
+      }
     })
 
-    console.log('[FAL VIDEO] Raw result:', JSON.stringify(result, null, 2))
+    console.log('[FAL VIDEO] Queued video generation. Request ID:', result.request_id)
 
-    // @ts-ignore - fal.ai types are not perfect
-    const videoUrl = result.video?.url || result.data?.video?.url
+    // Poll for result with timeout
+    const maxAttempts = 90 // 90 attempts * 2 seconds = 3 minutes max
+    let attempts = 0
 
-    if (!videoUrl) {
-      console.error('[FAL VIDEO] No video URL in result. Full result:', JSON.stringify(result))
-      throw new Error('No video URL returned from fal.ai')
+    while (attempts < maxAttempts) {
+      const status: any = await fal.queue.status('fal-ai/kling-video/v2.5-turbo/pro/image-to-video', {
+        requestId: result.request_id,
+        logs: true
+      })
+
+      console.log(`[FAL VIDEO] Status check ${attempts + 1}:`, status.status)
+
+      if (status.status === 'COMPLETED') {
+        const finalResult = await fal.queue.result('fal-ai/kling-video/v2.5-turbo/pro/image-to-video', {
+          requestId: result.request_id
+        })
+
+        console.log('[FAL VIDEO] Raw result:', JSON.stringify(finalResult, null, 2))
+
+        // @ts-ignore
+        const videoUrl = finalResult.data?.video?.url || finalResult.video?.url
+
+        if (!videoUrl) {
+          console.error('[FAL VIDEO] No video URL in result:', JSON.stringify(finalResult))
+          throw new Error('No video URL returned from Kling')
+        }
+
+        console.log('[FAL VIDEO] Video generated successfully:', videoUrl)
+        return videoUrl
+      }
+
+      if (status.status === 'FAILED') {
+        console.error('[FAL VIDEO] Video generation failed:', status)
+        throw new Error('Video generation failed')
+      }
+
+      // Wait 2 seconds before next check
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      attempts++
     }
 
-    console.log('[FAL VIDEO] Video generated successfully:', videoUrl)
-    return videoUrl
+    throw new Error('Video generation timed out after 3 minutes')
   } catch (error: any) {
     console.error('[FAL VIDEO] Error generating video:', error)
     console.error('[FAL VIDEO] Error details:', {

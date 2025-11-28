@@ -12,6 +12,7 @@
     "@fal-ai/serverless-client": "^0.15.0",
     "@supabase/supabase-js": "^2.83.0",
     "ai": "^5.0.96",
+    "html2canvas": "^1.4.1",
     "next": "16.0.3",
     "openai": "^6.9.1",
     "react": "19.2.0",
