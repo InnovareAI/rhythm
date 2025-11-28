@@ -121,7 +121,11 @@ Give me a moment...`
           for (const line of lines) {
             if (line.startsWith('data: ')) {
               try {
-                const data = JSON.parse(line.slice(6))
+                const jsonStr = line.slice(6)
+                if (!jsonStr.trim()) continue
+
+                const data = JSON.parse(jsonStr)
+                console.log('[STREAM] Received:', data.done ? 'DONE' : 'chunk', data.chunk?.length || 0)
 
                 if (data.chunk) {
                   fullContent += data.chunk
@@ -129,10 +133,11 @@ Give me a moment...`
                 }
 
                 if (data.done) {
+                  console.log('[STREAM] Done! Content length:', data.generatedContent?.length)
                   if (data.conversationId && !conversationId) {
                     setConversationId(data.conversationId)
                   }
-                  setMessages(prev => [...prev, { role: 'assistant', content: data.message }])
+                  setMessages(prev => [...prev, { role: 'assistant', content: data.message || 'Email generated!' }])
                   if (data.generatedContent) {
                     setGeneratedContent(data.generatedContent)
                   }
@@ -142,11 +147,27 @@ Give me a moment...`
                 if (data.error) {
                   throw new Error(data.error)
                 }
-              } catch (e) {
+              } catch (e: any) {
+                console.log('[STREAM] Parse error:', e.message, 'Line:', line.substring(0, 100))
                 // Ignore parse errors for incomplete chunks
               }
             }
           }
+        }
+
+        // Fallback: If we have content but no generatedContent was set, extract HTML from fullContent
+        if (fullContent && !generatedContent) {
+          console.log('[STREAM] Using fallback HTML extraction')
+          let htmlContent = fullContent
+          const htmlMatch = fullContent.match(/```html\s*([\s\S]*?)\s*```/i)
+          if (htmlMatch && htmlMatch[1]) {
+            htmlContent = htmlMatch[1].trim()
+          }
+          if (htmlContent.includes('<table') || htmlContent.includes('<!DOCTYPE')) {
+            setGeneratedContent(htmlContent)
+            setMessages(prev => [...prev, { role: 'assistant', content: 'Email generated!' }])
+          }
+          setStreamingContent('')
         }
       }
     } catch (error: any) {
