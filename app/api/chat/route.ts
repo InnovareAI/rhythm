@@ -563,9 +563,9 @@ export async function POST(request: NextRequest) {
         })
 
         const openrouter = getOpenRouter()
-        // Use GPT-4o for faster response times
-        const fastModel = 'openai/gpt-4o'
-        console.log('[IMCIVREE] Using fast model:', fastModel)
+        // Use Claude Opus 4.5
+        const fastModel = 'anthropic/claude-opus-4-5-20251101'
+        console.log('[IMCIVREE] Using model:', fastModel)
 
         const stream = await openrouter.chat.completions.create({
           model: fastModel,
@@ -622,9 +622,9 @@ export async function POST(request: NextRequest) {
       const systemPrompt = getImcivreeBannerPrompt(data)
 
       const openrouter = getOpenRouter()
-      // Use GPT-4o for faster response times
-      const fastModel = 'openai/gpt-4o'
-      console.log('[IMCIVREE BANNER] Using fast model:', fastModel)
+      // Use Claude Opus 4.5
+      const fastModel = 'anthropic/claude-opus-4-5-20251101'
+      console.log('[IMCIVREE BANNER] Using model:', fastModel)
 
       const stream = await openrouter.chat.completions.create({
         model: fastModel,
