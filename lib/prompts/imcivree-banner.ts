@@ -59,9 +59,12 @@ export const IMCIVREE_BANNER_SYSTEM_PROMPT = `You are an AI creative engine that
 - White ISI text on black/dark teal bar
 
 ### Typography
-- Headlines: Bold, large, white
-- CTA: Bright green pill button
-- ISI: Small, tight, clean sans-serif
+- Font family: 'Jost', Verdana, Arial, sans-serif (use Google Fonts import)
+- Headlines: 24-28px, bold, white, uppercase
+- Subheads: 14-16px, semibold (600 weight)
+- Body text: 12-14px, normal weight
+- CTA button: 14px, bold, uppercase
+- ISI text: 9-10px, normal weight, white on black
 
 ### Graphics
 - Floating bubble-like circles
@@ -180,15 +183,45 @@ ${params.keyMessage ? `**Key Message Emphasis:** ${params.keyMessage}` : ''}
 
 **Tone:** ${toneNote}
 
-Please generate a complete 5-frame IMCIVREE banner ad concept following all rules and structure requirements above. Include all three sections: A. Creative Plan, B. Image Generation Prompts, and C. Developer Assembly Instructions.
+Generate ONLY the HTML code for a 5-frame animated IMCIVREE banner ad. No explanations, no creative plan - just the code.
 
-After the creative plan, also generate the COMPLETE HTML/CSS/JavaScript code for an animated banner that:
-- Is 728x250 pixels (leaderboard format)
-- Uses the IMCIVREE color palette
-- Has floating bubble animations
-- Cycles through 5 frames with fade transitions
-- Has continuously scrolling ISI at the bottom
-- Has a "Learn more" CTA button on the final frame
+Requirements:
+- Single self-contained HTML file with inline CSS and JavaScript
+- TOTAL container: exactly 728px wide x 300px tall, overflow: hidden
+- Main banner area: 728x250px at top with teal gradient
+- ISI bar: exactly 50px tall, positioned at bottom, black background (#000), white text
+- ISI text scrolls upward inside the 50px bar using CSS animation (translateY)
+- IMCIVREE colors: teal gradient (#0F7C8F → #0C5F73), CTA green (#8CD038)
+- Use Google Fonts: @import url for 'Jost' font
+- 5 frames cycling with fade transitions (4 seconds each)
+- "Learn more" CTA button on frame 5 only
+- ALL content must stay within 728x300 boundary - no overflow
 
-Wrap the HTML code in a code block with \`\`\`html tags.`
+\`\`\`html
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 728px;
+      height: 300px;
+      overflow: hidden;
+      font-family: 'Jost', Verdana, Arial, sans-serif;
+      position: relative;
+    }
+    .banner-content { width: 728px; height: 250px; position: relative; overflow: hidden; }
+    .isi-bar { width: 728px; height: 50px; background: #000; position: absolute; bottom: 0; overflow: hidden; }
+    .isi-text { color: #fff; font-size: 9px; line-height: 1.3; animation: scrollUp 20s linear infinite; }
+    @keyframes scrollUp { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
+  </style>
+</head>
+<body>
+  <div class="banner-content"><!-- frames here --></div>
+  <div class="isi-bar"><div class="isi-text"><!-- ISI content --></div></div>
+  <script>/* frame animation */</script>
+</body>
+</html>
+\`\`\``
 }

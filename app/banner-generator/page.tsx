@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import Link from 'next/link'
 
 type Message = {
@@ -67,8 +67,20 @@ Give me a moment...`
     }
   }, [step])
 
+  const [streamingContent, setStreamingContent] = useState('')
+  const [processingBanner, setProcessingBanner] = useState(false)
+  const streamingRef = useRef<HTMLDivElement>(null)
+
+  // Auto-scroll streaming content
+  useEffect(() => {
+    if (streamingRef.current) {
+      streamingRef.current.scrollTop = streamingRef.current.scrollHeight
+    }
+  }, [streamingContent])
+
   const generateBanner = async () => {
     setIsLoading(true)
+    setStreamingContent('')
 
     try {
       const response = await fetch('/api/chat', {
@@ -87,25 +99,83 @@ Give me a moment...`
         })
       })
 
-      if (!response.ok) throw new Error('Failed to get response')
-
-      const data = await response.json()
-
-      if (data.conversationId && !conversationId) {
-        setConversationId(data.conversationId)
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Failed to get response')
       }
 
-      setMessages(prev => [...prev, { role: 'assistant', content: data.message }])
+      // Handle SSE streaming response
+      const reader = response.body?.getReader()
+      const decoder = new TextDecoder()
+      let fullContent = ''
 
-      if (data.generatedContent) {
-        setGeneratedContent(data.generatedContent)
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+
+          const text = decoder.decode(value)
+          const lines = text.split('\n')
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const jsonStr = line.slice(6)
+                if (!jsonStr.trim()) continue
+
+                const data = JSON.parse(jsonStr)
+
+                if (data.chunk) {
+                  fullContent += data.chunk
+                  setStreamingContent(fullContent)
+                }
+
+                if (data.done) {
+                  if (data.conversationId && !conversationId) {
+                    setConversationId(data.conversationId)
+                  }
+                  setMessages(prev => [...prev, { role: 'assistant', content: data.message || 'Banner generated!' }])
+                  if (data.generatedContent) {
+                    setGeneratedContent(data.generatedContent)
+                  }
+                  setStreamingContent('')
+                }
+
+                if (data.error) {
+                  throw new Error(data.error)
+                }
+              } catch (e) {
+                // Ignore parse errors
+              }
+            }
+          }
+        }
+
+        // Fallback extraction
+        if (fullContent) {
+          setStreamingContent('')
+          setProcessingBanner(true)
+          await new Promise(resolve => setTimeout(resolve, 500))
+
+          let htmlContent = fullContent
+          const htmlMatch = fullContent.match(/```html\s*([\s\S]*?)\s*```/i)
+          if (htmlMatch && htmlMatch[1]) {
+            htmlContent = htmlMatch[1].trim()
+          }
+          if (htmlContent.includes('<') && htmlContent.includes('>')) {
+            setGeneratedContent(htmlContent)
+            setMessages(prev => [...prev, { role: 'assistant', content: 'Your banner is ready!' }])
+          }
+          setProcessingBanner(false)
+        }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error:', error)
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'Sorry, I encountered an error generating the banner. Please try again.'
+        content: `Sorry, I encountered an error: ${error.message || 'Unknown error'}. Please try again.`
       }])
+      setStreamingContent('')
     } finally {
       setIsLoading(false)
     }
@@ -183,6 +253,10 @@ Give me a moment...`
                 alt="IMCIVREE"
                 className="h-8"
               />
+              <div className="h-6 w-px bg-[#007a80]/20" />
+              <span className="text-lg font-medium text-[#007a80]">
+                Let's create a banner
+              </span>
             </div>
             <Link
               href="/"
@@ -324,8 +398,11 @@ Give me a moment...`
               className="h-8"
             />
             <div className="h-6 w-px bg-[#007a80]/20" />
-            <span className="text-sm font-medium text-[#4a4f55]">
-              {audience === 'hcp' ? 'HCP' : 'Patient'} Banner • {BANNER_FOCUS[audience].find(f => f.id === bannerFocus)?.name}
+            <span className="text-lg font-medium text-[#007a80]">
+              Let's create a banner
+            </span>
+            <span className="text-sm text-[#4a4f55]">
+              • {audience === 'hcp' ? 'HCP' : 'Patient'} • {BANNER_FOCUS[audience].find(f => f.id === bannerFocus)?.name}
             </span>
           </div>
           <div className="flex items-center gap-4">
@@ -340,7 +417,7 @@ Give me a moment...`
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Chat Area */}
+        {/* Chat Area - Left side */}
         <div className="flex flex-1 flex-col">
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-6">
@@ -364,7 +441,38 @@ Give me a moment...`
                 </div>
               ))}
 
-              {isLoading && (
+              {/* Streaming Code Display */}
+              {streamingContent && (
+                <div className="flex justify-start">
+                  <div
+                    ref={streamingRef}
+                    className="max-w-[80%] rounded-2xl bg-white border border-[#007a80]/10 text-[#4a4f55] px-4 py-3 font-mono text-xs max-h-96 overflow-y-auto scroll-smooth shadow-sm"
+                  >
+                    <div className="flex items-center gap-2 mb-2 text-[#007a80] text-[10px]">
+                      <div className="h-2 w-2 animate-pulse rounded-full bg-[#007a80]" />
+                      Generating banner code...
+                    </div>
+                    <pre className="whitespace-pre-wrap break-words">{streamingContent}</pre>
+                  </div>
+                </div>
+              )}
+
+              {/* Processing Banner Message */}
+              {processingBanner && (
+                <div className="flex justify-center">
+                  <div className="rounded-2xl bg-[#007a80] text-white px-6 py-4 shadow-lg animate-pulse">
+                    <div className="flex items-center gap-3">
+                      <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span className="font-medium">Please wait, your banner is being prepared...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {isLoading && !streamingContent && !processingBanner && (
                 <div className="flex justify-start">
                   <div className="max-w-[80%] rounded-2xl bg-white px-4 py-3 shadow-sm border border-[#007a80]/10">
                     <div className="flex items-center gap-2">
@@ -402,11 +510,11 @@ Give me a moment...`
           </div>
         </div>
 
-        {/* Preview Panel */}
-        {generatedContent && (
-          <div className="w-1/2 border-l border-[#007a80]/10 bg-white p-6 overflow-y-auto">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-[#007a80]">Banner Preview</h3>
+        {/* Preview Panel - Right side (always visible) */}
+        <div className="w-1/2 border-l border-[#007a80]/10 bg-white p-6 overflow-y-auto">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-[#007a80]">Banner Preview</h3>
+            {generatedContent && (
               <div className="flex gap-2">
                 <button
                   onClick={() => {
@@ -432,36 +540,93 @@ Give me a moment...`
                   Download HTML
                 </button>
               </div>
-            </div>
-
-            {/* Banner Preview */}
-            <div className="mb-4 p-2 bg-gray-100 rounded-lg flex justify-center">
-              <div className="shadow-lg">
-                <iframe
-                  srcDoc={generatedContent}
-                  className="w-[728px] h-[250px] border-0"
-                  title="Banner Preview"
-                  style={{ maxWidth: '100%' }}
-                />
-              </div>
-            </div>
-
-            {/* Banner Specs */}
-            <div className="mb-4 text-xs text-[#4a4f55] text-center">
-              728 × 250 pixels (Leaderboard) • Animated HTML Banner
-            </div>
-
-            {/* Raw HTML (collapsed) */}
-            <details className="mt-4">
-              <summary className="text-sm text-[#4a4f55] cursor-pointer hover:text-[#007a80]">
-                View HTML Code
-              </summary>
-              <pre className="mt-2 p-4 bg-gray-900 text-gray-100 text-xs rounded-lg overflow-x-auto max-h-96">
-                {generatedContent}
-              </pre>
-            </details>
+            )}
           </div>
-        )}
+
+          {/* Banner Preview */}
+          <div className="mb-4 p-4 bg-gray-100 rounded-lg overflow-auto">
+            {generatedContent ? (
+              <div className="flex justify-center p-2">
+                <div className="shadow-lg bg-white rounded overflow-hidden">
+                  <iframe
+                    srcDoc={generatedContent}
+                    width="760"
+                    height="320"
+                    className="border-0 block"
+                    title="Banner Preview"
+                    style={{ margin: 0, padding: 0 }}
+                  />
+                </div>
+              </div>
+            ) : streamingContent || isLoading ? (
+              <div className="text-center text-[#4a4f55] py-16">
+                <div className="mb-4 relative">
+                  {/* Stopwatch animation */}
+                  <svg className="w-20 h-20 mx-auto" viewBox="0 0 100 100">
+                    {/* Outer circle */}
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#007a80" strokeWidth="2" opacity="0.2" />
+                    {/* Progress circle */}
+                    <circle
+                      cx="50" cy="50" r="45"
+                      fill="none"
+                      stroke="#007a80"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeDasharray="283"
+                      strokeDashoffset="283"
+                      className="animate-[dash_2s_ease-in-out_infinite]"
+                      style={{ transformOrigin: 'center', transform: 'rotate(-90deg)' }}
+                    />
+                    {/* Center dot */}
+                    <circle cx="50" cy="50" r="4" fill="#007a80" />
+                    {/* Second hand */}
+                    <line
+                      x1="50" y1="50" x2="50" y2="15"
+                      stroke="#007a80"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      className="animate-spin"
+                      style={{ transformOrigin: 'center', animationDuration: '2s' }}
+                    />
+                    {/* Top button */}
+                    <rect x="46" y="2" width="8" height="6" rx="1" fill="#007a80" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium text-[#007a80]">Generating banner...</p>
+                <p className="text-xs text-[#4a4f55]/60 mt-1">This may take a moment</p>
+              </div>
+            ) : (
+              <div className="text-center text-[#4a4f55] py-20">
+                <div className="mb-3">
+                  <svg className="w-16 h-16 mx-auto text-[#007a80]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <p className="text-sm">Your banner will appear here</p>
+                <p className="text-xs text-[#4a4f55]/60 mt-1">728 × 300 pixels</p>
+              </div>
+            )}
+          </div>
+
+          {/* Banner Specs */}
+          {generatedContent && (
+            <>
+              <div className="mb-4 text-xs text-[#4a4f55] text-center">
+                728 × 300 pixels (Leaderboard + ISI Bar) • Animated HTML Banner
+              </div>
+
+              {/* Raw HTML (collapsed) */}
+              <details className="mt-4">
+                <summary className="text-sm text-[#4a4f55] cursor-pointer hover:text-[#007a80]">
+                  View HTML Code
+                </summary>
+                <pre className="mt-2 p-4 bg-white border border-[#007a80]/20 text-[#4a4f55] text-xs rounded-lg overflow-x-auto max-h-96">
+                  {generatedContent}
+                </pre>
+              </details>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )

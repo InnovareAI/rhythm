@@ -11,6 +11,23 @@ type Message = {
 
 type Audience = 'hcp' | 'patient'
 
+// HCP Segments for personalization
+const HCP_SEGMENTS = [
+  { id: 'loyalist', name: 'Loyalist', description: 'Already prescribing IMCIVREE, reinforce value' },
+  { id: 'champion', name: 'Champion', description: 'Advocate who actively promotes IMCIVREE' },
+  { id: 'non-loyalist', name: 'Non-Loyalist', description: 'Prescribes competitors, needs persuasion' },
+  { id: 'aware', name: 'Aware', description: 'Knows about IMCIVREE but hasn\'t prescribed' },
+  { id: 'unaware', name: 'Unaware', description: 'New to IMCIVREE, needs education' },
+]
+
+// Variable fields for personalization
+type VariableFields = {
+  doctorName: string
+  practiceName: string
+  specialty: string
+  city: string
+}
+
 // Email types by audience
 const EMAIL_TYPES = {
   hcp: [
@@ -41,24 +58,41 @@ function ChatContent() {
   const [step, setStep] = useState<'select' | 'chat'>('select')
   const [keyMessage, setKeyMessage] = useState<string>('')
 
+  // HCP Segmentation
+  const [hcpSegment, setHcpSegment] = useState<string>('aware')
+
+  // Variable fields for personalization
+  const [variableFields, setVariableFields] = useState<VariableFields>({
+    doctorName: '',
+    practiceName: '',
+    specialty: '',
+    city: ''
+  })
+
   // Initialize greeting when entering chat
   useEffect(() => {
     if (step === 'chat') {
       const audienceLabel = audience === 'hcp' ? 'HCP' : 'Patient/Caregiver'
       const emailTypeObj = EMAIL_TYPES[audience].find(t => t.id === emailType)
+      const segmentObj = audience === 'hcp' ? HCP_SEGMENTS.find(s => s.id === hcpSegment) : null
+
+      const hasVariables = variableFields.doctorName || variableFields.practiceName
 
       setMessages([
         {
           role: 'assistant',
           content: `Great! I'll create an IMCIVREE ${audienceLabel} email focused on **${emailTypeObj?.name}**.
 
-${keyMessage ? `Your key message focus: "${keyMessage}"` : ''}
+${audience === 'hcp' && segmentObj ? `**HCP Segment:** ${segmentObj.name} - ${segmentObj.description}` : ''}
+${keyMessage ? `**Key Message:** "${keyMessage}"` : ''}
+${hasVariables ? `**Personalization:** ${variableFields.doctorName ? `Dr. ${variableFields.doctorName}` : ''}${variableFields.practiceName ? ` at ${variableFields.practiceName}` : ''}` : ''}
 
 I'm generating your compliant HTML email now with:
 - Proper brand styling and colors
 - Complete ISI (Important Safety Information)
 - AMA-formatted references
 - Approved messaging from the IMCIVREE message bank
+${hasVariables ? '- Personalized variable fields ({{doctor_name}}, {{practice_name}}, etc.)' : ''}
 
 Give me a moment...`
         }
@@ -84,6 +118,16 @@ Give me a moment...`
     setIsLoading(true)
     setStreamingContent('')
 
+    // Build segment context for HCP
+    const segmentContext = audience === 'hcp'
+      ? `HCP Segment: ${HCP_SEGMENTS.find(s => s.id === hcpSegment)?.name} (${HCP_SEGMENTS.find(s => s.id === hcpSegment)?.description})`
+      : ''
+
+    // Build variable fields instruction
+    const variableContext = (variableFields.doctorName || variableFields.practiceName)
+      ? `Include these personalization placeholders: ${variableFields.doctorName ? '{{doctor_name}} for "Dr. ' + variableFields.doctorName + '"' : ''} ${variableFields.practiceName ? '{{practice_name}} for "' + variableFields.practiceName + '"' : ''} ${variableFields.specialty ? '{{specialty}} for "' + variableFields.specialty + '"' : ''} ${variableFields.city ? '{{city}} for "' + variableFields.city + '"' : ''}`
+      : ''
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -91,12 +135,14 @@ Give me a moment...`
         body: JSON.stringify({
           messages: [{
             role: 'user',
-            content: `Generate an IMCIVREE email for ${audience === 'hcp' ? 'healthcare professionals' : 'patients/caregivers'} about ${emailType}. ${keyMessage ? `Focus on: ${keyMessage}` : ''}`
+            content: `Generate an IMCIVREE email for ${audience === 'hcp' ? 'healthcare professionals' : 'patients/caregivers'} about ${emailType}. ${segmentContext} ${keyMessage ? `Focus on: ${keyMessage}` : ''} ${variableContext}`
           }],
           contentType: 'imcivree-email',
           audience,
           emailType,
           keyMessage,
+          hcpSegment: audience === 'hcp' ? hcpSegment : undefined,
+          variableFields: (variableFields.doctorName || variableFields.practiceName) ? variableFields : undefined,
           conversationId
         })
       })
@@ -198,6 +244,7 @@ Give me a moment...`
     setMessages(prev => [...prev, userMessage])
     setInput('')
     setIsLoading(true)
+    setStreamingContent('')
 
     try {
       const response = await fetch('/api/chat', {
@@ -217,16 +264,70 @@ Give me a moment...`
         throw new Error(errorData.error || errorData.details || 'Failed to get response')
       }
 
-      const data = await response.json()
+      // Handle SSE streaming response
+      const reader = response.body?.getReader()
+      const decoder = new TextDecoder()
+      let fullContent = ''
 
-      if (data.conversationId && !conversationId) {
-        setConversationId(data.conversationId)
-      }
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
 
-      setMessages(prev => [...prev, { role: 'assistant', content: data.message }])
+          const text = decoder.decode(value)
+          const lines = text.split('\n')
 
-      if (data.generatedContent) {
-        setGeneratedContent(data.generatedContent)
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const jsonStr = line.slice(6)
+                if (!jsonStr.trim()) continue
+
+                const data = JSON.parse(jsonStr)
+
+                if (data.chunk) {
+                  fullContent += data.chunk
+                  setStreamingContent(fullContent)
+                }
+
+                if (data.done) {
+                  if (data.conversationId && !conversationId) {
+                    setConversationId(data.conversationId)
+                  }
+                  setMessages(prev => [...prev, { role: 'assistant', content: data.message || 'Email updated!' }])
+                  if (data.generatedContent) {
+                    setGeneratedContent(data.generatedContent)
+                  }
+                  setStreamingContent('')
+                }
+
+                if (data.error) {
+                  throw new Error(data.error)
+                }
+              } catch (parseError) {
+                // Ignore parse errors for partial chunks
+              }
+            }
+          }
+        }
+
+        // Fallback extraction if done message wasn't received
+        if (fullContent && !generatedContent) {
+          setStreamingContent('')
+          setProcessingEmail(true)
+          await new Promise(resolve => setTimeout(resolve, 500))
+
+          let htmlContent = fullContent
+          const htmlMatch = fullContent.match(/```html\s*([\s\S]*?)\s*```/i)
+          if (htmlMatch && htmlMatch[1]) {
+            htmlContent = htmlMatch[1].trim()
+          }
+          if (htmlContent.includes('<') && htmlContent.includes('>')) {
+            setGeneratedContent(htmlContent)
+            setMessages(prev => [...prev, { role: 'assistant', content: 'Email updated!' }])
+          }
+          setProcessingEmail(false)
+        }
       }
     } catch (error: any) {
       console.error('Error:', error)
@@ -234,6 +335,7 @@ Give me a moment...`
         role: 'assistant',
         content: `Sorry, I encountered an error: ${error.message || 'Unknown error'}. Please try again.`
       }])
+      setStreamingContent('')
     } finally {
       setIsLoading(false)
     }
@@ -245,6 +347,13 @@ Give me a moment...`
     setGeneratedContent(null)
     setConversationId(null)
     setKeyMessage('')
+    setHcpSegment('aware')
+    setVariableFields({
+      doctorName: '',
+      practiceName: '',
+      specialty: '',
+      city: ''
+    })
   }
 
   // Selection screen
@@ -345,6 +454,103 @@ Give me a moment...`
             ))}
           </div>
 
+          {/* HCP Segmentation (only for HCP audience) */}
+          {audience === 'hcp' && (
+            <div className="mb-8">
+              <label className="block text-sm font-medium text-[#4a4f55] mb-2">
+                HCP Segment
+              </label>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {HCP_SEGMENTS.map((segment) => (
+                  <button
+                    key={segment.id}
+                    onClick={() => setHcpSegment(segment.id)}
+                    className={`text-left p-3 rounded-lg border transition-all ${
+                      hcpSegment === segment.id
+                        ? 'border-[#007a80] bg-[#007a80]/5 ring-1 ring-[#007a80]'
+                        : 'border-gray-200 hover:border-[#007a80]/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${
+                        hcpSegment === segment.id ? 'bg-[#007a80]' : 'bg-gray-300'
+                      }`} />
+                      <span className="font-medium text-[#007a80] text-sm">{segment.name}</span>
+                    </div>
+                    <p className="text-xs text-[#4a4f55] mt-1 ml-5">{segment.description}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Variable Fields (Optional - for personalization) */}
+          {audience === 'hcp' && (
+            <div className="mb-8 p-5 bg-[#f6fbfb] rounded-xl border border-[#007a80]/10">
+              <div className="flex items-center gap-2 mb-4">
+                <svg className="w-5 h-5 text-[#007a80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <label className="text-sm font-medium text-[#007a80]">
+                  Personalization Fields (Optional)
+                </label>
+              </div>
+              <p className="text-xs text-[#4a4f55] mb-4">
+                Add values to include merge variables like {'{{doctor_name}}'} in your email
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-medium text-[#4a4f55] mb-1">
+                    Doctor Name
+                  </label>
+                  <input
+                    type="text"
+                    value={variableFields.doctorName}
+                    onChange={(e) => setVariableFields(prev => ({ ...prev, doctorName: e.target.value }))}
+                    placeholder="e.g., Smith"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[#4a4f55] mb-1">
+                    Practice Name
+                  </label>
+                  <input
+                    type="text"
+                    value={variableFields.practiceName}
+                    onChange={(e) => setVariableFields(prev => ({ ...prev, practiceName: e.target.value }))}
+                    placeholder="e.g., Bay Area Endocrinology"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[#4a4f55] mb-1">
+                    Specialty
+                  </label>
+                  <input
+                    type="text"
+                    value={variableFields.specialty}
+                    onChange={(e) => setVariableFields(prev => ({ ...prev, specialty: e.target.value }))}
+                    placeholder="e.g., Endocrinology"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-[#4a4f55] mb-1">
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    value={variableFields.city}
+                    onChange={(e) => setVariableFields(prev => ({ ...prev, city: e.target.value }))}
+                    placeholder="e.g., San Francisco"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Key Message Input (Optional) */}
           <div className="mb-8">
             <label className="block text-sm font-medium text-[#4a4f55] mb-2">
@@ -395,18 +601,10 @@ Give me a moment...`
             <div className="h-6 w-px bg-[#007a80]/20" />
             <span className="text-sm font-medium text-[#4a4f55]">
               {audience === 'hcp' ? 'HCP' : 'Patient'} Email • {EMAIL_TYPES[audience].find(t => t.id === emailType)?.name}
+              {audience === 'hcp' && ` • ${HCP_SEGMENTS.find(s => s.id === hcpSegment)?.name}`}
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <Link
-              href="/content-history"
-              className="flex items-center gap-2 text-sm text-[#4a4f55] hover:text-[#007a80]"
-            >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              History
-            </Link>
             <button
               onClick={startOver}
               className="text-sm text-[#4a4f55] hover:text-[#007a80]"
@@ -418,7 +616,7 @@ Give me a moment...`
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Chat Area */}
+        {/* Chat Area - Left side */}
         <div className="flex flex-1 flex-col">
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-6">
@@ -459,10 +657,10 @@ Give me a moment...`
                 <div className="flex justify-start">
                   <div
                     ref={streamingRef}
-                    className="w-full rounded-2xl bg-gray-900 text-green-400 p-4 shadow-sm border border-[#007a80]/10 font-mono text-xs overflow-x-auto max-h-96 overflow-y-auto scroll-smooth"
+                    className="max-w-[80%] rounded-2xl bg-white border border-[#007a80]/10 text-[#4a4f55] px-4 py-3 font-mono text-xs max-h-96 overflow-y-auto scroll-smooth shadow-sm"
                   >
-                    <div className="flex items-center gap-2 mb-2 text-gray-400 text-[10px]">
-                      <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
+                    <div className="flex items-center gap-2 mb-2 text-[#007a80] text-[10px]">
+                      <div className="h-2 w-2 animate-pulse rounded-full bg-[#007a80]" />
                       Generating code...
                     </div>
                     <pre className="whitespace-pre-wrap break-words">{streamingContent}</pre>
@@ -511,11 +709,11 @@ Give me a moment...`
           </div>
         </div>
 
-        {/* Preview Panel */}
-        {generatedContent && (
-          <div className="w-1/2 border-l border-[#007a80]/10 bg-white p-6 overflow-y-auto">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-[#007a80]">Email Preview</h3>
+        {/* Preview Panel - Right side (always visible) */}
+        <div className="w-1/2 border-l border-[#007a80]/10 bg-white p-6 overflow-y-auto">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-[#007a80]">Email Preview</h3>
+            {generatedContent && (
               <div className="flex gap-2">
                 <button
                   onClick={() => {
@@ -541,28 +739,83 @@ Give me a moment...`
                   Download HTML
                 </button>
               </div>
-            </div>
+            )}
+          </div>
 
-            {/* HTML Preview */}
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
+          {/* Email Preview */}
+          <div className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50 min-h-[500px]">
+            {generatedContent ? (
               <iframe
                 srcDoc={generatedContent}
                 className="w-full h-[600px]"
                 title="Email Preview"
               />
-            </div>
+            ) : streamingContent || isLoading ? (
+              <div className="flex items-center justify-center h-[500px] text-center text-[#4a4f55]">
+                <div>
+                  <div className="mb-4 relative">
+                    {/* Stopwatch animation */}
+                    <svg className="w-20 h-20 mx-auto" viewBox="0 0 100 100">
+                      {/* Outer circle */}
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="#007a80" strokeWidth="2" opacity="0.2" />
+                      {/* Progress circle */}
+                      <circle
+                        cx="50" cy="50" r="45"
+                        fill="none"
+                        stroke="#007a80"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeDasharray="283"
+                        strokeDashoffset="283"
+                        className="animate-[dash_2s_ease-in-out_infinite]"
+                        style={{ transformOrigin: 'center', transform: 'rotate(-90deg)' }}
+                      />
+                      {/* Center dot */}
+                      <circle cx="50" cy="50" r="4" fill="#007a80" />
+                      {/* Second hand */}
+                      <line
+                        x1="50" y1="50" x2="50" y2="15"
+                        stroke="#007a80"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        className="animate-spin"
+                        style={{ transformOrigin: 'center', animationDuration: '2s' }}
+                      />
+                      {/* Top button */}
+                      <rect x="46" y="2" width="8" height="6" rx="1" fill="#007a80" />
+                    </svg>
+                  </div>
+                  <p className="text-sm font-medium text-[#007a80]">Generating email...</p>
+                  <p className="text-xs text-[#4a4f55]/60 mt-1">This may take a moment</p>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center h-[500px] text-center text-[#4a4f55]">
+                <div>
+                  <div className="mb-3">
+                    <svg className="w-16 h-16 mx-auto text-[#007a80]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <p className="text-sm">Your email will appear here</p>
+                  <p className="text-xs text-[#4a4f55]/60 mt-1">HTML Email Preview</p>
+                </div>
+              </div>
+            )}
+          </div>
 
-            {/* Raw HTML (collapsed) */}
+          {/* Raw HTML (collapsed) */}
+          {generatedContent && (
             <details className="mt-4">
               <summary className="text-sm text-[#4a4f55] cursor-pointer hover:text-[#007a80]">
                 View HTML Code
               </summary>
-              <pre className="mt-2 p-4 bg-gray-900 text-gray-100 text-xs rounded-lg overflow-x-auto max-h-96">
+              <pre className="mt-2 p-4 bg-white border border-[#007a80]/20 text-[#4a4f55] text-xs rounded-lg overflow-x-auto max-h-96">
                 {generatedContent}
               </pre>
             </details>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )

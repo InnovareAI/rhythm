@@ -547,7 +547,7 @@ export async function POST(request: NextRequest) {
 
     // Handle IMCIVREE email generation with true streaming to client
     if (contentType === 'imcivree-email') {
-      console.log('[IMCIVREE] Generating email with streaming:', { audience, emailType, keyMessage })
+      console.log('[IMCIVREE] Generating email with streaming:', { audience, emailType, keyMessage, messageCount: messages.length })
 
       try {
         const data = {
@@ -565,12 +565,28 @@ export async function POST(request: NextRequest) {
         const openrouter = getOpenRouter()
         console.log('[IMCIVREE] Using model:', defaultModel)
 
+        // Build messages array - include conversation history for refinements
+        const apiMessages: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
+          { role: 'system', content: systemPrompt }
+        ]
+
+        // If this is a follow-up (refinement), include conversation context
+        if (messages.length > 1) {
+          // Add all messages from the conversation
+          for (const msg of messages) {
+            apiMessages.push({
+              role: msg.role as 'user' | 'assistant',
+              content: msg.content
+            })
+          }
+        } else {
+          // First generation
+          apiMessages.push({ role: 'user', content: 'Please generate the content now following all compliance rules.' })
+        }
+
         const stream = await openrouter.chat.completions.create({
           model: defaultModel,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: 'Please generate the content now following all compliance rules.' }
-          ],
+          messages: apiMessages,
           temperature: 0.7,
           max_tokens: 4000,
           stream: true,
@@ -631,64 +647,87 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Handle IMCIVREE banner generation directly (no Q&A flow)
+    // Handle IMCIVREE banner generation with streaming
     if (contentType === 'imcivree-banner') {
-      console.log('[IMCIVREE BANNER] Generating banner:', { audience, bannerFocus, keyMessage })
+      console.log('[IMCIVREE BANNER] Generating banner with streaming:', { audience, bannerFocus, keyMessage })
 
-      const data = {
-        audience: audience || 'hcp',
-        focus: bannerFocus || 'moa',
-        keyMessage: keyMessage || ''
-      }
-
-      // Generate banner using the prompt
-      const systemPrompt = getImcivreeBannerPrompt(data)
-
-      const openrouter = getOpenRouter()
-      console.log('[IMCIVREE BANNER] Using model:', defaultModel)
-
-      const stream = await openrouter.chat.completions.create({
-        model: defaultModel,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: 'Please generate the complete 5-frame IMCIVREE banner ad concept and HTML code now following all rules and structure requirements.' }
-        ],
-        temperature: 0.7,
-        max_tokens: 8000,
-        stream: true,
-      })
-
-      // Collect the full response
-      let result = ''
-      for await (const chunk of stream) {
-        const content = chunk.choices[0]?.delta?.content || ''
-        result += content
-      }
-
-      if (!result) {
-        result = 'Failed to generate banner'
-      }
-
-      // Extract HTML from the response
-      let htmlContent = result
-
-      // Look for HTML code block
-      const htmlMatch = result.match(/```html\s*([\s\S]*?)\s*```/i)
-      if (htmlMatch && htmlMatch[1]) {
-        htmlContent = htmlMatch[1].trim()
-      } else if (result.includes('<!DOCTYPE html>') || result.includes('<div')) {
-        // Extract HTML if inline
-        const docTypeIndex = result.indexOf('<!DOCTYPE html>')
-        if (docTypeIndex >= 0) {
-          htmlContent = result.substring(docTypeIndex)
+      try {
+        const data = {
+          audience: audience || 'hcp',
+          focus: bannerFocus || 'moa',
+          keyMessage: keyMessage || ''
         }
-      }
 
-      return NextResponse.json({
-        message: 'Your IMCIVREE animated banner has been generated. You can preview it on the right, make changes by chatting below, or download the HTML.',
-        generatedContent: htmlContent,
-        conversationId: providedConversationId
-      })
+        const systemPrompt = getImcivreeBannerPrompt(data)
+
+        const openrouter = getOpenRouter()
+        console.log('[IMCIVREE BANNER] Using model:', defaultModel)
+
+        const stream = await openrouter.chat.completions.create({
+          model: defaultModel,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: 'Generate the HTML banner code now.' }
+          ],
+          temperature: 0.7,
+          max_tokens: 8000,
+          stream: true,
+        })
+
+        // Create SSE streaming response
+        const encoder = new TextEncoder()
+        const readable = new ReadableStream({
+          async start(controller) {
+            let fullContent = ''
+            try {
+              for await (const chunk of stream) {
+                const content = chunk.choices[0]?.delta?.content || ''
+                if (content) {
+                  fullContent += content
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ chunk: content })}\n\n`))
+                }
+              }
+
+              // Extract HTML
+              let htmlContent = fullContent
+              const htmlMatch = fullContent.match(/```html\s*([\s\S]*?)\s*```/i)
+              if (htmlMatch && htmlMatch[1]) {
+                htmlContent = htmlMatch[1].trim()
+              } else if (fullContent.includes('<!DOCTYPE html>')) {
+                const docTypeIndex = fullContent.indexOf('<!DOCTYPE html>')
+                if (docTypeIndex >= 0) {
+                  htmlContent = fullContent.substring(docTypeIndex)
+                }
+              }
+
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+                done: true,
+                message: 'Your banner is ready!',
+                generatedContent: htmlContent,
+                conversationId: providedConversationId
+              })}\n\n`))
+              controller.close()
+            } catch (error: any) {
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: error.message })}\n\n`))
+              controller.close()
+            }
+          }
+        })
+
+        return new Response(readable, {
+          headers: {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+          },
+        })
+      } catch (bannerError: any) {
+        console.error('[IMCIVREE BANNER ERROR]', bannerError.message || bannerError)
+        return NextResponse.json({
+          error: `Banner generation failed: ${bannerError.message || 'Unknown error'}`,
+          details: bannerError.toString()
+        }, { status: 500 })
+      }
     }
 
     const lastUserMessage = messages[messages.length - 1].content

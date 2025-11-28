@@ -89,7 +89,7 @@ Each subject line gets a complementary preheader that:
   </tr>
 </table>
 
-<!-- Hero Block -->
+<!-- Hero Block (TEXT ONLY - no images) -->
 <table role="presentation" width="100%" cellspacing="0" cellpadding="40" style="background:#f6fbfb;">
   <tr>
     <td align="center">
@@ -98,8 +98,7 @@ Each subject line gets a complementary preheader that:
           <td style="text-align:left;">
             <div style="color:#007a80;font-size:12px;text-transform:uppercase;font-weight:bold;margin-bottom:8px;">[EYEBROW]</div>
             <div style="color:#007a80;font-size:24px;font-weight:bold;margin-bottom:16px;">[HEADLINE]</div>
-            <p style="margin:0 0 20px 0;line-height:1.6;color:#4a4f55;">[INTRO PARAGRAPH WITH SUPERSCRIPTS]</p>
-            <img src="[HERO_IMAGE_URL]" alt="[ALT TEXT]" style="width:100%;max-width:500px;border-radius:8px;">
+            <p style="margin:0;line-height:1.6;color:#4a4f55;">[INTRO PARAGRAPH WITH SUPERSCRIPTS]</p>
           </td>
         </tr>
       </table>
@@ -117,8 +116,14 @@ Each subject line gets a complementary preheader that:
           <p style="line-height:1.6;margin:0 0 16px 0;">[BODY WITH REFERENCES]</p>
 
           <ul style="padding-left:20px;margin:0 0 24px 0;line-height:1.6;">
-            <li><img src="https://www.imcivree.com/static/learning-16a302a10874bd1676177c6ebe63cf9a.svg" alt="" width="18" style="vertical-align:middle;margin-right:6px;">[BULLET POINT]</li>
+            <li style="margin-bottom:8px;">[BULLET POINT 1]</li>
+            <li style="margin-bottom:8px;">[BULLET POINT 2]</li>
           </ul>
+
+          <!-- Supporting Image (placed AFTER body content, not at top) -->
+          <div style="text-align:center;margin:24px 0;">
+            <img src="[HERO_IMAGE_URL]" alt="[ALT TEXT]" style="width:100%;max-width:400px;border-radius:8px;">
+          </div>
 
           <div style="text-align:center;margin:32px 0;">
             <a href="[CTA_URL]" style="background:#007a80;color:#ffffff;padding:14px 28px;border-radius:30px;text-decoration:none;font-size:16px;display:inline-block;">Learn more</a>
@@ -219,6 +224,50 @@ Use these inline with bullet points:
 </table>
 \`\`\`
 
+## HCP SEGMENTATION MESSAGING
+
+Adjust your messaging tone based on the HCP segment:
+
+### Loyalist (Already prescribing IMCIVREE)
+- Reinforce their decision with new data or dosing reminders
+- Thank them implicitly for their trust
+- Focus on patient success stories and long-term outcomes
+- Tone: Collegial, supportive, informative
+
+### Champion (Advocate who promotes IMCIVREE)
+- Provide shareable resources and key talking points
+- Highlight peer recognition or thought leadership
+- Include content they can share with colleagues
+- Tone: Collaborative, appreciative, empowering
+
+### Non-Loyalist (Prescribes competitors)
+- Lead with differentiation and unique MOA
+- Present compelling comparative efficacy (if approved)
+- Address common objections with data
+- Tone: Respectful, evidence-based, persuasive
+
+### Aware (Knows about IMCIVREE but hasn't prescribed)
+- Remove barriers to first prescription
+- Emphasize ease of use and patient support programs
+- Provide clear dosing guidance
+- Tone: Encouraging, practical, supportive
+
+### Unaware (New to IMCIVREE)
+- Focus on disease state education first
+- Introduce IMCIVREE as the solution
+- Explain the MC4R pathway clearly
+- Tone: Educational, foundational, informative
+
+## PERSONALIZATION VARIABLES
+
+When personalization fields are provided, include these merge tags in the email:
+- {{doctor_name}} - The physician's name (use with "Dear Dr. {{doctor_name}},")
+- {{practice_name}} - The practice or institution name
+- {{specialty}} - The physician's specialty
+- {{city}} - The physician's city/location
+
+Place variables naturally in the greeting and body where appropriate.
+
 ## TONE & STYLE
 
 ### For HCP Audiences:
@@ -250,11 +299,7 @@ Use these inline with bullet points:
 
 ## OUTPUT FORMAT
 
-When generating an email, provide:
-
-1. **Three Subject Lines** (numbered 1-3)
-2. **Three Preheaders** (numbered 1-3)
-3. **Complete HTML Email Body** (fully rendered, production-ready)
+Generate ONLY the HTML email code. No explanations, no subject lines, no preheaders - just the raw HTML starting with <!DOCTYPE html> or the first <table> tag.
 
 The HTML must be valid, render correctly, and include the complete ISI block.`
 
@@ -293,5 +338,15 @@ export function getImcivreeEmailPrompt(params: {
 **CTA URL:** ${ctaUrl}
 ${params.keyMessage ? `**Key Message Focus:** ${params.keyMessage}` : ''}
 
-Please generate a complete IMCIVREE email following all rules and structure requirements above. The email must be production-ready with valid HTML that renders correctly.`
+Generate ONLY the HTML code now. Start immediately with <!DOCTYPE html> - no explanations, no subject lines, no markdown.
+
+\`\`\`html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMCIVREE</title>
+</head>
+<body style="margin:0;padding:0;font-family:Arial,sans-serif;">`
 }

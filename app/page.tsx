@@ -64,7 +64,7 @@ export default function Home() {
                 Create professional HTML emails for healthcare providers and patients/caregivers with proper structure, references, and ISI.
               </p>
               <div className="mt-6 inline-flex items-center rounded-full bg-[#007a80] px-6 py-3 text-sm font-semibold text-white transition-colors group-hover:bg-[#1c7b80]">
-                Start Now
+                Let's create an email
                 <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -88,7 +88,7 @@ export default function Home() {
                 Generate animated banner ads with scrolling ISI for healthcare providers and patients/caregivers.
               </p>
               <div className="mt-6 inline-flex items-center rounded-full bg-[#007a80] px-6 py-3 text-sm font-semibold text-white transition-colors group-hover:bg-[#1c7b80]">
-                Start Now
+                Let's create a banner
                 <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
