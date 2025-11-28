@@ -576,7 +576,7 @@ export async function POST(request: NextRequest) {
           stream: true,
         })
 
-        // Create a streaming response to keep connection alive
+        // Create a streaming response that shows content as it arrives
         const encoder = new TextEncoder()
         const readable = new ReadableStream({
           async start(controller) {
@@ -584,9 +584,11 @@ export async function POST(request: NextRequest) {
             try {
               for await (const chunk of stream) {
                 const content = chunk.choices[0]?.delta?.content || ''
-                fullContent += content
-                // Send heartbeat to keep connection alive
-                controller.enqueue(encoder.encode(' '))
+                if (content) {
+                  fullContent += content
+                  // Send each chunk as SSE data
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ chunk: content })}\n\n`))
+                }
               }
 
               // Extract HTML from the response
@@ -598,16 +600,16 @@ export async function POST(request: NextRequest) {
                 htmlContent = fullContent
               }
 
-              // Send final JSON response
-              const result = JSON.stringify({
-                message: 'Your IMCIVREE email has been generated. You can preview it on the right, make changes by chatting below, or download the HTML.',
+              // Send final done message with the HTML
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({
+                done: true,
+                message: 'Your IMCIVREE email has been generated.',
                 generatedContent: htmlContent,
                 conversationId: providedConversationId
-              })
-              controller.enqueue(encoder.encode(result))
+              })}\n\n`))
               controller.close()
             } catch (error: any) {
-              controller.enqueue(encoder.encode(JSON.stringify({ error: error.message })))
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: error.message })}\n\n`))
               controller.close()
             }
           }
@@ -615,8 +617,9 @@ export async function POST(request: NextRequest) {
 
         return new Response(readable, {
           headers: {
-            'Content-Type': 'text/plain; charset=utf-8',
-            'Transfer-Encoding': 'chunked',
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
           },
         })
       } catch (emailError: any) {

@@ -69,8 +69,11 @@ Give me a moment...`
     }
   }, [step])
 
+  const [streamingContent, setStreamingContent] = useState('')
+
   const generateEmail = async () => {
     setIsLoading(true)
+    setStreamingContent('')
 
     try {
       const response = await fetch('/api/chat', {
@@ -94,40 +97,49 @@ Give me a moment...`
         throw new Error(errorData.error || errorData.details || 'Failed to get response')
       }
 
-      // Handle streaming response - read until we get the JSON
-      const text = await response.text()
-      console.log('[DEBUG] Response text length:', text.length)
+      // Handle SSE streaming response
+      const reader = response.body?.getReader()
+      const decoder = new TextDecoder()
+      let fullContent = ''
 
-      // Find the JSON object in the response (after spaces)
-      const trimmed = text.trim()
-      let data
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
 
-      // Try to find JSON starting with { and ending with }
-      const jsonMatch = trimmed.match(/\{[\s\S]*\}$/)
-      if (jsonMatch) {
-        try {
-          data = JSON.parse(jsonMatch[0])
-        } catch (e) {
-          console.error('[DEBUG] JSON parse error:', e, 'Text:', jsonMatch[0].substring(0, 200))
-          throw new Error('Failed to parse response')
+          const text = decoder.decode(value)
+          const lines = text.split('\n')
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6))
+
+                if (data.chunk) {
+                  fullContent += data.chunk
+                  setStreamingContent(fullContent)
+                }
+
+                if (data.done) {
+                  if (data.conversationId && !conversationId) {
+                    setConversationId(data.conversationId)
+                  }
+                  setMessages(prev => [...prev, { role: 'assistant', content: data.message }])
+                  if (data.generatedContent) {
+                    setGeneratedContent(data.generatedContent)
+                  }
+                  setStreamingContent('')
+                }
+
+                if (data.error) {
+                  throw new Error(data.error)
+                }
+              } catch (e) {
+                // Ignore parse errors for incomplete chunks
+              }
+            }
+          }
         }
-      } else {
-        console.error('[DEBUG] No JSON found in response:', trimmed.substring(0, 200))
-        throw new Error('Invalid response format')
-      }
-
-      if (data.error) {
-        throw new Error(data.error)
-      }
-
-      if (data.conversationId && !conversationId) {
-        setConversationId(data.conversationId)
-      }
-
-      setMessages(prev => [...prev, { role: 'assistant', content: data.message }])
-
-      if (data.generatedContent) {
-        setGeneratedContent(data.generatedContent)
       }
     } catch (error: any) {
       console.error('Error:', error)
@@ -135,6 +147,7 @@ Give me a moment...`
         role: 'assistant',
         content: `Sorry, I encountered an error: ${error.message || 'Unknown error'}. Please try again.`
       }])
+      setStreamingContent('')
     } finally {
       setIsLoading(false)
     }
@@ -393,7 +406,7 @@ Give me a moment...`
                 </div>
               ))}
 
-              {isLoading && (
+              {isLoading && !streamingContent && (
                 <div className="flex justify-start">
                   <div className="max-w-[80%] rounded-2xl bg-white px-4 py-3 shadow-sm border border-[#007a80]/10">
                     <div className="flex items-center gap-2">
@@ -401,6 +414,19 @@ Give me a moment...`
                       <div className="h-2 w-2 animate-bounce rounded-full bg-[#007a80]" style={{ animationDelay: '150ms' }} />
                       <div className="h-2 w-2 animate-bounce rounded-full bg-[#007a80]" style={{ animationDelay: '300ms' }} />
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Streaming content display */}
+              {streamingContent && (
+                <div className="flex justify-start">
+                  <div className="w-full rounded-2xl bg-gray-900 text-green-400 p-4 shadow-sm border border-[#007a80]/10 font-mono text-xs overflow-x-auto max-h-96 overflow-y-auto">
+                    <div className="flex items-center gap-2 mb-2 text-gray-400 text-[10px]">
+                      <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
+                      Generating code...
+                    </div>
+                    <pre className="whitespace-pre-wrap break-words">{streamingContent}</pre>
                   </div>
                 </div>
               )}
