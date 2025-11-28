@@ -96,10 +96,25 @@ Give me a moment...`
 
       // Handle streaming response - read until we get the JSON
       const text = await response.text()
-      // The response is spaces followed by JSON at the end
-      const jsonStart = text.lastIndexOf('{')
-      const jsonStr = text.substring(jsonStart)
-      const data = JSON.parse(jsonStr)
+      console.log('[DEBUG] Response text length:', text.length)
+
+      // Find the JSON object in the response (after spaces)
+      const trimmed = text.trim()
+      let data
+
+      // Try to find JSON starting with { and ending with }
+      const jsonMatch = trimmed.match(/\{[\s\S]*\}$/)
+      if (jsonMatch) {
+        try {
+          data = JSON.parse(jsonMatch[0])
+        } catch (e) {
+          console.error('[DEBUG] JSON parse error:', e, 'Text:', jsonMatch[0].substring(0, 200))
+          throw new Error('Failed to parse response')
+        }
+      } else {
+        console.error('[DEBUG] No JSON found in response:', trimmed.substring(0, 200))
+        throw new Error('Invalid response format')
+      }
 
       if (data.error) {
         throw new Error(data.error)
