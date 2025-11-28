@@ -70,6 +70,7 @@ Give me a moment...`
   }, [step])
 
   const [streamingContent, setStreamingContent] = useState('')
+  const [processingEmail, setProcessingEmail] = useState(false)
   const streamingRef = useRef<HTMLDivElement>(null)
 
   // Auto-scroll streaming content
@@ -155,9 +156,15 @@ Give me a moment...`
           }
         }
 
-        // Fallback: If we have content but no generatedContent was set, extract HTML from fullContent
-        if (fullContent && !generatedContent) {
-          console.log('[STREAM] Using fallback HTML extraction')
+        // Show processing message while extracting HTML
+        if (fullContent) {
+          setStreamingContent('')
+          setProcessingEmail(true)
+
+          // Small delay for UX
+          await new Promise(resolve => setTimeout(resolve, 500))
+
+          console.log('[STREAM] Extracting HTML from content...')
           let htmlContent = fullContent
           const htmlMatch = fullContent.match(/```html\s*([\s\S]*?)\s*```/i)
           if (htmlMatch && htmlMatch[1]) {
@@ -165,9 +172,9 @@ Give me a moment...`
           }
           if (htmlContent.includes('<table') || htmlContent.includes('<!DOCTYPE')) {
             setGeneratedContent(htmlContent)
-            setMessages(prev => [...prev, { role: 'assistant', content: 'Email generated!' }])
+            setMessages(prev => [...prev, { role: 'assistant', content: 'Your email is ready!' }])
           }
-          setStreamingContent('')
+          setProcessingEmail(false)
         }
       }
     } catch (error: any) {
@@ -459,6 +466,21 @@ Give me a moment...`
                       Generating code...
                     </div>
                     <pre className="whitespace-pre-wrap break-words">{streamingContent}</pre>
+                  </div>
+                </div>
+              )}
+
+              {/* Processing email message */}
+              {processingEmail && (
+                <div className="flex justify-center">
+                  <div className="rounded-2xl bg-[#007a80] text-white px-6 py-4 shadow-lg animate-pulse">
+                    <div className="flex items-center gap-3">
+                      <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span className="font-medium">Please wait, your email is being prepared...</span>
+                    </div>
                   </div>
                 </div>
               )}
