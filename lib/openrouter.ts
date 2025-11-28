@@ -20,4 +20,4 @@ export function getOpenRouter() {
   return _openrouter
 }
 
-export const defaultModel = process.env.OPENROUTER_MODEL || 'anthropic/claude-3-5-haiku'
+export const defaultModel = process.env.OPENROUTER_MODEL || 'anthropic/claude-sonnet-4.5'
