@@ -563,12 +563,10 @@ export async function POST(request: NextRequest) {
         })
 
         const openrouter = getOpenRouter()
-        // Use Claude Opus 4.5
-        const fastModel = 'anthropic/claude-opus-4-5-20251101'
-        console.log('[IMCIVREE] Using model:', fastModel)
+        console.log('[IMCIVREE] Using model:', defaultModel)
 
         const stream = await openrouter.chat.completions.create({
-          model: fastModel,
+          model: defaultModel,
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: 'Please generate the content now following all compliance rules.' }
@@ -622,12 +620,10 @@ export async function POST(request: NextRequest) {
       const systemPrompt = getImcivreeBannerPrompt(data)
 
       const openrouter = getOpenRouter()
-      // Use Claude Opus 4.5
-      const fastModel = 'anthropic/claude-opus-4-5-20251101'
-      console.log('[IMCIVREE BANNER] Using model:', fastModel)
+      console.log('[IMCIVREE BANNER] Using model:', defaultModel)
 
       const stream = await openrouter.chat.completions.create({
-        model: fastModel,
+        model: defaultModel,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: 'Please generate the complete 5-frame IMCIVREE banner ad concept and HTML code now following all rules and structure requirements.' }

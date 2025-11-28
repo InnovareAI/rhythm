@@ -20,4 +20,4 @@ export function getOpenRouter() {
   return _openrouter
 }
 
-export const defaultModel = process.env.OPENROUTER_MODEL || 'openai/gpt-4-turbo-preview'
+export const defaultModel = process.env.OPENROUTER_MODEL || 'anthropic/claude-opus-4-5-20251101'
