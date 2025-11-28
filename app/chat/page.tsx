@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
@@ -70,6 +70,14 @@ Give me a moment...`
   }, [step])
 
   const [streamingContent, setStreamingContent] = useState('')
+  const streamingRef = useRef<HTMLDivElement>(null)
+
+  // Auto-scroll streaming content
+  useEffect(() => {
+    if (streamingRef.current) {
+      streamingRef.current.scrollTop = streamingRef.current.scrollHeight
+    }
+  }, [streamingContent])
 
   const generateEmail = async () => {
     setIsLoading(true)
@@ -421,7 +429,10 @@ Give me a moment...`
               {/* Streaming content display */}
               {streamingContent && (
                 <div className="flex justify-start">
-                  <div className="w-full rounded-2xl bg-gray-900 text-green-400 p-4 shadow-sm border border-[#007a80]/10 font-mono text-xs overflow-x-auto max-h-96 overflow-y-auto">
+                  <div
+                    ref={streamingRef}
+                    className="w-full rounded-2xl bg-gray-900 text-green-400 p-4 shadow-sm border border-[#007a80]/10 font-mono text-xs overflow-x-auto max-h-96 overflow-y-auto scroll-smooth"
+                  >
                     <div className="flex items-center gap-2 mb-2 text-gray-400 text-[10px]">
                       <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
                       Generating code...
