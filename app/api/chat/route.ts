@@ -3,9 +3,13 @@ import { getOpenRouter, defaultModel } from '@/lib/openrouter'
 import { getHCPEmailPrompt } from '@/lib/prompts/hcp-email'
 import { getSocialMediaPrompt } from '@/lib/prompts/social-media'
 import { getVideoPrompt } from '@/lib/prompts/video'
+import { getImcivreeEmailPrompt } from '@/lib/prompts/imcivree-email'
+import { getImcivreeBannerPrompt } from '@/lib/prompts/imcivree-banner'
 import { generateImage, generateVideo } from '@/lib/fal'
 import { searchBrandInfo } from '@/lib/brand-search'
 import { createConversation, updateConversation, saveMessage, saveGeneratedContent } from '@/lib/conversation-storage'
+// Temporarily disabled - canvas library has issues in serverless environment
+// import { generateSocialMockup } from '@/lib/social-mockup'
 
 // Set maximum execution time for this API route (Netlify Pro supports up to 60s)
 export const maxDuration = 60
@@ -17,8 +21,13 @@ type Message = {
 
 type ChatRequest = {
   messages: Message[]
-  contentType: 'hcp-email' | 'social-media' | 'patient-email' | 'video'
+  contentType: 'hcp-email' | 'social-media' | 'patient-email' | 'video' | 'imcivree-email' | 'imcivree-banner'
   conversationId?: string
+  // IMCIVREE-specific fields
+  audience?: 'hcp' | 'patient'
+  emailType?: string
+  bannerFocus?: string
+  keyMessage?: string
 }
 
 // Simple state management for conversation context
@@ -371,14 +380,21 @@ function getNextQuestion(contentType: string, state: ConversationState, lastUser
   }
 }
 
-async function generateContent(contentType: string, data: Record<string, any>): Promise<{ content: string; imageUrl?: string; videoUrl?: string }> {
+async function generateContent(contentType: string, data: Record<string, any>): Promise<{ content: string; imageUrl?: string; videoUrl?: string; mockupUrl?: string }> {
   try {
     let systemPrompt = ''
     let content = ''
 
     // For video, we don't need LLM text content, just the video
     if (contentType !== 'video') {
-      if (contentType === 'hcp-email') {
+      if (contentType === 'imcivree-email') {
+        // IMCIVREE-specific email generation
+        systemPrompt = getImcivreeEmailPrompt({
+          audience: data.audience || 'hcp',
+          emailType: data.emailType || 'moa',
+          keyMessage: data.keyMessage
+        })
+      } else if (contentType === 'hcp-email') {
         systemPrompt = getHCPEmailPrompt({
           productName: data.productName || 'Product Name',
           emailType: data.emailType || 'moa',
@@ -416,54 +432,59 @@ async function generateContent(contentType: string, data: Record<string, any>): 
       content = `**Video Generated**\n\nProduct: ${data.productName}\nType: ${data.videoType}\nAudience: ${data.targetAudience}\nAnimation: ${data.keyMessage}`
     }
 
-    // For social media, generate an image
+    // For social media, generate an image and mockup
     let imageUrl: string | undefined
     let videoUrl: string | undefined
+    let mockupUrl: string | undefined
 
     if (contentType === 'social-media') {
       try {
-        // Extract image prompt from the generated content - try multiple patterns
-        let imagePrompt = ''
+        console.log('[IMAGE] Starting image generation with fal.ai')
+        console.log('[IMAGE] Extracting visual prompt from content...')
 
-        // Try pattern 1: ### 4. VISUAL PROMPT
-        let imagePromptMatch = content.match(/###?\s*4\.?\s*VISUAL PROMPT[\s\S]*?(?=\n###?\s*\d|$)/i)
+        // Extract the visual prompt from the generated content
+        const visualPromptMatch = content.match(/### 4\. VISUAL PROMPT\s*([\s\S]*?)(?=\s*###|$)/i)
+        if (visualPromptMatch && visualPromptMatch[1]) {
+          const visualPrompt = visualPromptMatch[1].trim()
+          console.log('[IMAGE] Visual prompt extracted:', visualPrompt.substring(0, 150) + '...')
 
-        // Try pattern 2: ## VISUAL PROMPT or ### VISUAL PROMPT
-        if (!imagePromptMatch) {
-          imagePromptMatch = content.match(/###?\s*VISUAL PROMPT[\s\S]*?(?=\n###?\s*\d|$)/i)
-        }
+          // Generate image with portrait aspect ratio (4:3) as specified in prompts
+          console.log('[IMAGE] Calling generateImage...')
+          imageUrl = await generateImage(visualPrompt, 'portrait')
+          console.log('[IMAGE] Image generated successfully:', imageUrl)
 
-        // Try pattern 3: Creative prompt or Image prompt
-        if (!imagePromptMatch) {
-          imagePromptMatch = content.match(/###?\s*\d?\.?\s*(CREATIVE|IMAGE) PROMPT[\s\S]*?(?=\n###?|$)/i)
-        }
+          // Mockup generation temporarily disabled - canvas library has issues in serverless
+          // TODO: Implement client-side mockup generation or use a different approach
+          console.log('[MOCKUP] Mockup generation disabled - using image only')
+          content += `\n\n---\n\n**Generated Image:**\n${imageUrl}`
 
-        if (imagePromptMatch) {
-          // Clean up the extracted section
-          imagePrompt = imagePromptMatch[0]
-            .replace(/###?\s*\d?\.?\s*(VISUAL|CREATIVE|IMAGE) PROMPT:?/gi, '')
-            .replace(/\*\*/g, '')
-            .replace(/^[\s\n]+/, '')
-            .trim()
-        }
-
-        // Fallback to a generic prompt if extraction fails
-        if (!imagePrompt) {
-          imagePrompt = `Professional pharmaceutical social media image for ${data.productName || 'healthcare product'}, ${data.message || 'healthcare content'}, photorealistic, clean background, medical setting, diverse patient representation, calm and supportive atmosphere, teal color palette`
-          console.log('[IMAGE] Using fallback prompt')
+          /* DISABLED - Canvas library issues in Netlify serverless
+          try {
+            console.log('[MOCKUP] Starting mockup generation')
+            const captionMatch = content.match(/### 1\. CAPTION\s*([\s\S]*?)(?=\s*###|$)/i)
+            const caption = captionMatch ? captionMatch[1].trim() : 'Check out this post!'
+            const mockupBuffer = await generateSocialMockup({
+              platform: data.platform as 'instagram' | 'facebook' | 'twitter',
+              imageUrl,
+              caption,
+              profileName: 'Rhythm Pharmaceuticals',
+              username: 'rhythmpharma'
+            })
+            mockupUrl = `data:image/png;base64,${mockupBuffer.toString('base64')}`
+            console.log('[MOCKUP] Mockup generated successfully')
+            content += `\n\n---\n\n**Generated Image:**\n${imageUrl}\n\n**Social Media Mockup:**\n${mockupUrl}`
+          } catch (mockupError: any) {
+            console.error('[MOCKUP] Error generating mockup:', mockupError)
+            content += `\n\n---\n\n**Generated Image:**\n${imageUrl}`
+          }
+          */
         } else {
-          console.log('[IMAGE] Extracted prompt from content')
+          console.log('[IMAGE] No visual prompt found in content, skipping image generation')
+          content += `\n\n---\n\n**Note:** Visual prompt not found. Please use the prompt above to generate an image.`
         }
-
-        console.log('[IMAGE] Generating image with prompt:', imagePrompt.substring(0, 200) + '...')
-        imageUrl = await generateImage(imagePrompt, 'portrait')
-        console.log('[IMAGE] Image generated successfully:', imageUrl)
       } catch (error: any) {
         console.error('[IMAGE] Error generating image:', error)
-        const errorMsg = error.message || 'Unknown error'
-        console.error('[IMAGE] Error message:', errorMsg)
-        // Continue without image if generation fails
-        content += `\n\n---\n\n**Note:** Image generation failed (${errorMsg}). Use the visual prompt above with your preferred AI image generator.`
+        content += `\n\n---\n\n**Image Generation Note:** Unable to generate image automatically. Use the visual prompt above to generate an image with your preferred AI image generator.\n\nError: ${error.message}`
       }
     }
 
@@ -508,7 +529,7 @@ async function generateContent(contentType: string, data: Record<string, any>): 
       }
     }
 
-    return { content, imageUrl, videoUrl }
+    return { content, imageUrl, videoUrl, mockupUrl }
   } catch (error) {
     console.error('Error generating content:', error)
     throw error
@@ -518,10 +539,89 @@ async function generateContent(contentType: string, data: Record<string, any>): 
 export async function POST(request: NextRequest) {
   try {
     const body: ChatRequest = await request.json()
-    const { messages, contentType, conversationId: providedConversationId } = body
+    const { messages, contentType, conversationId: providedConversationId, audience, emailType, bannerFocus, keyMessage } = body
 
     if (!messages || messages.length === 0) {
       return NextResponse.json({ error: 'No messages provided' }, { status: 400 })
+    }
+
+    // Handle IMCIVREE email generation directly (no Q&A flow)
+    if (contentType === 'imcivree-email') {
+      console.log('[IMCIVREE] Generating email:', { audience, emailType, keyMessage })
+
+      const data = {
+        audience: audience || 'hcp',
+        emailType: emailType || 'moa',
+        keyMessage: keyMessage || ''
+      }
+
+      const result = await generateContent('imcivree-email', data)
+
+      // Extract HTML from the response (look for HTML content)
+      let htmlContent = result.content
+
+      // If the response contains HTML, extract it
+      const htmlMatch = result.content.match(/```html\s*([\s\S]*?)\s*```/i)
+      if (htmlMatch && htmlMatch[1]) {
+        htmlContent = htmlMatch[1].trim()
+      } else if (result.content.includes('<!DOCTYPE html>') || result.content.includes('<table')) {
+        // Content is already HTML
+        htmlContent = result.content
+      }
+
+      return NextResponse.json({
+        message: 'Your IMCIVREE email has been generated. You can preview it on the right, make changes by chatting below, or download the HTML.',
+        generatedContent: htmlContent,
+        conversationId: providedConversationId
+      })
+    }
+
+    // Handle IMCIVREE banner generation directly (no Q&A flow)
+    if (contentType === 'imcivree-banner') {
+      console.log('[IMCIVREE BANNER] Generating banner:', { audience, bannerFocus, keyMessage })
+
+      const data = {
+        audience: audience || 'hcp',
+        focus: bannerFocus || 'moa',
+        keyMessage: keyMessage || ''
+      }
+
+      // Generate banner using the prompt
+      const systemPrompt = getImcivreeBannerPrompt(data)
+
+      const openrouter = getOpenRouter()
+      const completion = await openrouter.chat.completions.create({
+        model: defaultModel,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: 'Please generate the complete 5-frame IMCIVREE banner ad concept and HTML code now following all rules and structure requirements.' }
+        ],
+        temperature: 0.7,
+        max_tokens: 8000,
+      })
+
+      const result = completion.choices[0]?.message?.content || 'Failed to generate banner'
+
+      // Extract HTML from the response
+      let htmlContent = result
+
+      // Look for HTML code block
+      const htmlMatch = result.match(/```html\s*([\s\S]*?)\s*```/i)
+      if (htmlMatch && htmlMatch[1]) {
+        htmlContent = htmlMatch[1].trim()
+      } else if (result.includes('<!DOCTYPE html>') || result.includes('<div')) {
+        // Extract HTML if inline
+        const docTypeIndex = result.indexOf('<!DOCTYPE html>')
+        if (docTypeIndex >= 0) {
+          htmlContent = result.substring(docTypeIndex)
+        }
+      }
+
+      return NextResponse.json({
+        message: 'Your IMCIVREE animated banner has been generated. You can preview it on the right, make changes by chatting below, or download the HTML.',
+        generatedContent: htmlContent,
+        conversationId: providedConversationId
+      })
     }
 
     const lastUserMessage = messages[messages.length - 1].content
@@ -577,12 +677,14 @@ export async function POST(request: NextRequest) {
     let generatedContent = null
     let imageUrl = null
     let videoUrl = null
+    let mockupUrl = null
 
     if (shouldGenerate) {
       const result = await generateContent(contentType, state.data)
       generatedContent = result.content
       imageUrl = result.imageUrl || null
       videoUrl = result.videoUrl || null
+      mockupUrl = result.mockupUrl || null
 
       // Save generated content to database
       if (conversationId && generatedContent) {
@@ -609,6 +711,7 @@ export async function POST(request: NextRequest) {
       generatedContent,
       imageUrl,
       videoUrl,
+      mockupUrl,
       state: state.data,
       conversationId
     })

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 type Message = {
@@ -11,24 +10,22 @@ type Message = {
 
 type Audience = 'hcp' | 'patient'
 
-// Email types by audience
-const EMAIL_TYPES = {
+// Banner focus options by audience
+const BANNER_FOCUS = {
   hcp: [
-    { id: 'moa', name: 'Mechanism of Action', description: 'Explain how IMCIVREE works' },
-    { id: 'summary', name: 'Clinical Summary', description: 'Overview of clinical efficacy data' },
-    { id: 'dosing', name: 'Dosing Information', description: 'Dosing and administration details' },
-    { id: 'efficacy', name: 'Efficacy Data', description: 'Weight and hunger reduction results' },
+    { id: 'moa', name: 'Mechanism of Action', description: 'Focus on MC4R pathway and how IMCIVREE works' },
+    { id: 'efficacy-weight', name: 'Weight Reduction', description: 'Highlight BMI and weight reduction data' },
+    { id: 'efficacy-hunger', name: 'Hunger Reduction', description: 'Focus on hunger control and hyperphagia' },
+    { id: 'treatment', name: 'Treatment Journey', description: 'Timeline and treatment expectations' },
   ],
   patient: [
-    { id: 'getting-started', name: 'Getting Started', description: 'Beginning your IMCIVREE journey' },
-    { id: 'what-to-expect', name: 'What to Expect', description: 'Treatment timeline and expectations' },
-    { id: 'support', name: 'Support Resources', description: 'Rhythm InTune and caregiver support' },
+    { id: 'understanding', name: 'Understanding BBS', description: 'Disease education for patients/caregivers' },
+    { id: 'hope', name: 'Path Forward', description: 'Hopeful messaging about treatment options' },
+    { id: 'support', name: 'Support Available', description: 'Rhythm InTune and caregiver resources' },
   ],
 }
 
-function ChatContent() {
-  const searchParams = useSearchParams()
-
+function BannerContent() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -37,7 +34,7 @@ function ChatContent() {
 
   // IMCIVREE-specific state
   const [audience, setAudience] = useState<Audience>('hcp')
-  const [emailType, setEmailType] = useState<string>('moa')
+  const [bannerFocus, setBannerFocus] = useState<string>('moa')
   const [step, setStep] = useState<'select' | 'chat'>('select')
   const [keyMessage, setKeyMessage] = useState<string>('')
 
@@ -45,31 +42,32 @@ function ChatContent() {
   useEffect(() => {
     if (step === 'chat') {
       const audienceLabel = audience === 'hcp' ? 'HCP' : 'Patient/Caregiver'
-      const emailTypeObj = EMAIL_TYPES[audience].find(t => t.id === emailType)
+      const focusObj = BANNER_FOCUS[audience].find(f => f.id === bannerFocus)
 
       setMessages([
         {
           role: 'assistant',
-          content: `Great! I'll create an IMCIVREE ${audienceLabel} email focused on **${emailTypeObj?.name}**.
+          content: `Great! I'll create an IMCIVREE ${audienceLabel} animated banner ad focused on **${focusObj?.name}**.
 
 ${keyMessage ? `Your key message focus: "${keyMessage}"` : ''}
 
-I'm generating your compliant HTML email now with:
-- Proper brand styling and colors
-- Complete ISI (Important Safety Information)
-- AMA-formatted references
-- Approved messaging from the IMCIVREE message bank
+I'm generating your compliant animated banner now with:
+- 5-frame structure with approved messaging
+- Continuous scrolling ISI (Important Safety Information)
+- IMCIVREE brand colors and styling
+- Smooth frame transitions
+- "Learn more" CTA on final frame
 
 Give me a moment...`
         }
       ])
 
-      // Auto-generate the email
-      generateEmail()
+      // Auto-generate the banner
+      generateBanner()
     }
   }, [step])
 
-  const generateEmail = async () => {
+  const generateBanner = async () => {
     setIsLoading(true)
 
     try {
@@ -79,11 +77,11 @@ Give me a moment...`
         body: JSON.stringify({
           messages: [{
             role: 'user',
-            content: `Generate an IMCIVREE email for ${audience === 'hcp' ? 'healthcare professionals' : 'patients/caregivers'} about ${emailType}. ${keyMessage ? `Focus on: ${keyMessage}` : ''}`
+            content: `Generate an IMCIVREE banner ad for ${audience === 'hcp' ? 'healthcare professionals' : 'patients/caregivers'} focused on ${bannerFocus}. ${keyMessage ? `Key message: ${keyMessage}` : ''}`
           }],
-          contentType: 'imcivree-email',
+          contentType: 'imcivree-banner',
           audience,
-          emailType,
+          bannerFocus,
           keyMessage,
           conversationId
         })
@@ -106,7 +104,7 @@ Give me a moment...`
       console.error('Error:', error)
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'Sorry, I encountered an error generating the email. Please try again.'
+        content: 'Sorry, I encountered an error generating the banner. Please try again.'
       }])
     } finally {
       setIsLoading(false)
@@ -129,9 +127,9 @@ Give me a moment...`
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: [...messages, userMessage],
-          contentType: 'imcivree-email',
+          contentType: 'imcivree-banner',
           audience,
-          emailType,
+          bannerFocus,
           conversationId
         })
       })
@@ -197,10 +195,10 @@ Give me a moment...`
 
         <main className="mx-auto max-w-4xl px-6 py-12">
           <h1 className="text-3xl font-bold text-[#007a80] text-center mb-2">
-            Create IMCIVREE Email
+            Create IMCIVREE Banner Ad
           </h1>
           <p className="text-center text-[#4a4f55] mb-10">
-            Select your audience and email type to get started
+            Generate animated 728x250 leaderboard banners with scrolling ISI
           </p>
 
           {/* Audience Toggle */}
@@ -209,7 +207,7 @@ Give me a moment...`
               <button
                 onClick={() => {
                   setAudience('hcp')
-                  setEmailType('moa')
+                  setBannerFocus('moa')
                 }}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
                   audience === 'hcp'
@@ -222,7 +220,7 @@ Give me a moment...`
               <button
                 onClick={() => {
                   setAudience('patient')
-                  setEmailType('getting-started')
+                  setBannerFocus('understanding')
                 }}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
                   audience === 'patient'
@@ -235,31 +233,31 @@ Give me a moment...`
             </div>
           </div>
 
-          {/* Email Type Selection */}
+          {/* Banner Focus Selection */}
           <div className="grid gap-4 sm:grid-cols-2 mb-8">
-            {EMAIL_TYPES[audience].map((type) => (
+            {BANNER_FOCUS[audience].map((focus) => (
               <button
-                key={type.id}
-                onClick={() => setEmailType(type.id)}
+                key={focus.id}
+                onClick={() => setBannerFocus(focus.id)}
                 className={`text-left p-5 rounded-xl border-2 transition-all ${
-                  emailType === type.id
+                  bannerFocus === focus.id
                     ? 'border-[#007a80] bg-[#007a80]/5'
                     : 'border-gray-200 hover:border-[#007a80]/50'
                 }`}
               >
                 <div className="flex items-start gap-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
-                    emailType === type.id ? 'border-[#007a80] bg-[#007a80]' : 'border-gray-300'
+                    bannerFocus === focus.id ? 'border-[#007a80] bg-[#007a80]' : 'border-gray-300'
                   }`}>
-                    {emailType === type.id && (
+                    {bannerFocus === focus.id && (
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     )}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#007a80]">{type.name}</h3>
-                    <p className="text-sm text-[#4a4f55] mt-1">{type.description}</p>
+                    <h3 className="font-semibold text-[#007a80]">{focus.name}</h3>
+                    <p className="text-sm text-[#4a4f55] mt-1">{focus.description}</p>
                   </div>
                 </div>
               </button>
@@ -275,9 +273,21 @@ Give me a moment...`
               type="text"
               value={keyMessage}
               onChange={(e) => setKeyMessage(e.target.value)}
-              placeholder="e.g., Weight reduction data, Getting started with treatment..."
+              placeholder="e.g., First and only FDA-approved treatment, Meaningful weight reduction..."
               className="w-full rounded-lg border border-gray-300 px-4 py-3 text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-2 focus:ring-[#007a80]/20"
             />
+          </div>
+
+          {/* Banner Specs Info */}
+          <div className="mb-8 p-4 bg-[#007a80]/5 rounded-lg">
+            <h4 className="font-medium text-[#007a80] mb-2">Banner Specifications</h4>
+            <ul className="text-sm text-[#4a4f55] space-y-1">
+              <li>• Size: 728 × 250 pixels (Leaderboard)</li>
+              <li>• Format: Animated HTML/CSS/JS</li>
+              <li>• 5 frames with smooth fade transitions</li>
+              <li>• Continuous scrolling ISI at bottom</li>
+              <li>• "Learn more" CTA on final frame</li>
+            </ul>
           </div>
 
           {/* Generate Button */}
@@ -286,7 +296,7 @@ Give me a moment...`
               onClick={() => setStep('chat')}
               className="inline-flex items-center gap-2 rounded-full bg-[#007a80] px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-[#1c7b80]"
             >
-              Generate Email
+              Generate Banner
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
@@ -315,19 +325,10 @@ Give me a moment...`
             />
             <div className="h-6 w-px bg-[#007a80]/20" />
             <span className="text-sm font-medium text-[#4a4f55]">
-              {audience === 'hcp' ? 'HCP' : 'Patient'} Email • {EMAIL_TYPES[audience].find(t => t.id === emailType)?.name}
+              {audience === 'hcp' ? 'HCP' : 'Patient'} Banner • {BANNER_FOCUS[audience].find(f => f.id === bannerFocus)?.name}
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <Link
-              href="/content-history"
-              className="flex items-center gap-2 text-sm text-[#4a4f55] hover:text-[#007a80]"
-            >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              History
-            </Link>
             <button
               onClick={startOver}
               className="text-sm text-[#4a4f55] hover:text-[#007a80]"
@@ -405,7 +406,7 @@ Give me a moment...`
         {generatedContent && (
           <div className="w-1/2 border-l border-[#007a80]/10 bg-white p-6 overflow-y-auto">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-[#007a80]">Email Preview</h3>
+              <h3 className="text-lg font-semibold text-[#007a80]">Banner Preview</h3>
               <div className="flex gap-2">
                 <button
                   onClick={() => {
@@ -422,7 +423,7 @@ Give me a moment...`
                     const url = URL.createObjectURL(blob)
                     const a = document.createElement('a')
                     a.href = url
-                    a.download = `imcivree-${audience}-${emailType}-email.html`
+                    a.download = `imcivree-${audience}-${bannerFocus}-banner.html`
                     a.click()
                     URL.revokeObjectURL(url)
                   }}
@@ -433,13 +434,21 @@ Give me a moment...`
               </div>
             </div>
 
-            {/* HTML Preview */}
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
-              <iframe
-                srcDoc={generatedContent}
-                className="w-full h-[600px]"
-                title="Email Preview"
-              />
+            {/* Banner Preview */}
+            <div className="mb-4 p-2 bg-gray-100 rounded-lg flex justify-center">
+              <div className="shadow-lg">
+                <iframe
+                  srcDoc={generatedContent}
+                  className="w-[728px] h-[250px] border-0"
+                  title="Banner Preview"
+                  style={{ maxWidth: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* Banner Specs */}
+            <div className="mb-4 text-xs text-[#4a4f55] text-center">
+              728 × 250 pixels (Leaderboard) • Animated HTML Banner
             </div>
 
             {/* Raw HTML (collapsed) */}
@@ -458,7 +467,7 @@ Give me a moment...`
   )
 }
 
-export default function ChatPage() {
+export default function BannerGeneratorPage() {
   return (
     <Suspense fallback={
       <div className="flex h-screen items-center justify-center bg-[#f6fbfb]">
@@ -468,7 +477,7 @@ export default function ChatPage() {
         </div>
       </div>
     }>
-      <ChatContent />
+      <BannerContent />
     </Suspense>
   )
 }
