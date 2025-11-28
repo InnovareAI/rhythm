@@ -94,7 +94,16 @@ Give me a moment...`
         throw new Error(errorData.error || errorData.details || 'Failed to get response')
       }
 
-      const data = await response.json()
+      // Handle streaming response - read until we get the JSON
+      const text = await response.text()
+      // The response is spaces followed by JSON at the end
+      const jsonStart = text.lastIndexOf('{')
+      const jsonStr = text.substring(jsonStart)
+      const data = JSON.parse(jsonStr)
+
+      if (data.error) {
+        throw new Error(data.error)
+      }
 
       if (data.conversationId && !conversationId) {
         setConversationId(data.conversationId)

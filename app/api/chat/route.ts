@@ -545,7 +545,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No messages provided' }, { status: 400 })
     }
 
-    // Handle IMCIVREE email generation with streaming
+    // Handle IMCIVREE email generation with true streaming to client
     if (contentType === 'imcivree-email') {
       console.log('[IMCIVREE] Generating email with streaming:', { audience, emailType, keyMessage })
 
@@ -576,26 +576,48 @@ export async function POST(request: NextRequest) {
           stream: true,
         })
 
-        // Collect the full response
-        let fullContent = ''
-        for await (const chunk of stream) {
-          const content = chunk.choices[0]?.delta?.content || ''
-          fullContent += content
-        }
+        // Create a streaming response to keep connection alive
+        const encoder = new TextEncoder()
+        const readable = new ReadableStream({
+          async start(controller) {
+            let fullContent = ''
+            try {
+              for await (const chunk of stream) {
+                const content = chunk.choices[0]?.delta?.content || ''
+                fullContent += content
+                // Send heartbeat to keep connection alive
+                controller.enqueue(encoder.encode(' '))
+              }
 
-        // Extract HTML from the response
-        let htmlContent = fullContent
-        const htmlMatch = fullContent.match(/```html\s*([\s\S]*?)\s*```/i)
-        if (htmlMatch && htmlMatch[1]) {
-          htmlContent = htmlMatch[1].trim()
-        } else if (fullContent.includes('<!DOCTYPE html>') || fullContent.includes('<table')) {
-          htmlContent = fullContent
-        }
+              // Extract HTML from the response
+              let htmlContent = fullContent
+              const htmlMatch = fullContent.match(/```html\s*([\s\S]*?)\s*```/i)
+              if (htmlMatch && htmlMatch[1]) {
+                htmlContent = htmlMatch[1].trim()
+              } else if (fullContent.includes('<!DOCTYPE html>') || fullContent.includes('<table')) {
+                htmlContent = fullContent
+              }
 
-        return NextResponse.json({
-          message: 'Your IMCIVREE email has been generated. You can preview it on the right, make changes by chatting below, or download the HTML.',
-          generatedContent: htmlContent,
-          conversationId: providedConversationId
+              // Send final JSON response
+              const result = JSON.stringify({
+                message: 'Your IMCIVREE email has been generated. You can preview it on the right, make changes by chatting below, or download the HTML.',
+                generatedContent: htmlContent,
+                conversationId: providedConversationId
+              })
+              controller.enqueue(encoder.encode(result))
+              controller.close()
+            } catch (error: any) {
+              controller.enqueue(encoder.encode(JSON.stringify({ error: error.message })))
+              controller.close()
+            }
+          }
+        })
+
+        return new Response(readable, {
+          headers: {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Transfer-Encoding': 'chunked',
+          },
         })
       } catch (emailError: any) {
         console.error('[IMCIVREE EMAIL ERROR]', emailError.message || emailError)
