@@ -112,12 +112,23 @@ export default function ApprovalsPage() {
               Approval Queue
             </span>
           </div>
-          <Link
-            href="/"
-            className="text-sm text-[#4a4f55] hover:text-[#007a80]"
-          >
-            ← Back to Hub
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/content-history"
+              className="flex items-center gap-1 text-sm text-[#4a4f55] hover:text-[#007a80]"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              History
+            </Link>
+            <Link
+              href="/"
+              className="text-sm text-[#4a4f55] hover:text-[#007a80]"
+            >
+              ← Back to Hub
+            </Link>
+          </div>
         </div>
       </header>
 
