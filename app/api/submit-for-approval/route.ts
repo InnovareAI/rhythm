@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getZiflowClient } from '@/lib/ziflow'
-import { saveContent, updateContentStatus, uploadHtmlFile } from '@/lib/content-storage'
+import { saveContent, updateContentStatus } from '@/lib/content-storage'
 
 /**
  * POST /api/submit-for-approval
@@ -47,18 +47,12 @@ export async function POST(request: NextRequest) {
 
     console.log('[ZIFLOW SUBMIT] Content saved:', content.id)
 
-    // Step 2: Upload HTML to Supabase Storage to get public URL
-    const filename = `${content.id}-${Date.now()}.html`
-    const publicUrl = await uploadHtmlFile(htmlContent, filename)
+    // Step 2: Generate public URL for the HTML content
+    // Use the serve-content endpoint which serves HTML from database
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://beautiful-cactus-21f97b.netlify.app'
+    const publicUrl = `${baseUrl}/api/serve-content/${content.id}`
 
-    if (!publicUrl) {
-      return NextResponse.json(
-        { error: 'Failed to upload HTML file for Ziflow' },
-        { status: 500 }
-      )
-    }
-
-    console.log('[ZIFLOW SUBMIT] HTML uploaded:', publicUrl)
+    console.log('[ZIFLOW SUBMIT] Content URL:', publicUrl)
 
     // Step 3: Submit to Ziflow
     const client = getZiflowClient()
