@@ -1,4 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
+import {
+  saveZiflowFeedback,
+  saveZiflowComment,
+  getZiflowFeedback,
+  listZiflowFeedback
+} from '@/lib/content-storage'
 
 /**
  * Ziflow Webhook Events:
@@ -34,24 +40,10 @@ interface ZiflowWebhookPayload {
   timestamp: string
 }
 
-// In-memory store for feedback (use database in production)
-const feedbackStore = new Map<string, {
-  proofId: string
-  proofName: string
-  status: string
-  decision?: string
-  comments: Array<{
-    author: string
-    content: string
-    timestamp: string
-  }>
-  receivedAt: string
-}>()
-
 /**
  * POST /api/ziflow-webhook
  *
- * Receives webhook events from Ziflow
+ * Receives webhook events from Ziflow and persists to Supabase
  * Configure in Ziflow: Settings > Integrations > Webhooks
  * Webhook URL: https://your-domain.com/api/ziflow-webhook
  */
@@ -59,60 +51,62 @@ export async function POST(request: NextRequest) {
   try {
     const payload: ZiflowWebhookPayload = await request.json()
 
-    console.log('Ziflow webhook received:', payload.event, payload.proof?.name)
+    console.log('[ZIFLOW WEBHOOK] Received:', payload.event, payload.proof?.name)
 
     const proofId = payload.proof?.id
     if (!proofId) {
       return NextResponse.json({ error: 'Missing proof ID' }, { status: 400 })
     }
 
-    // Get existing feedback or create new entry
-    const existing = feedbackStore.get(proofId) || {
+    // Save or update feedback in Supabase
+    const feedback = await saveZiflowFeedback({
       proofId,
       proofName: payload.proof.name,
       status: payload.proof.status,
-      comments: [],
-      receivedAt: new Date().toISOString(),
+      decision: payload.event === 'proof.decision' ? payload.proof.decision : undefined,
+      currentStage: payload.proof.current_stage,
+      lastEvent: payload.event
+    })
+
+    if (!feedback) {
+      console.error('[ZIFLOW WEBHOOK] Failed to save feedback')
+      return NextResponse.json({ error: 'Failed to save feedback' }, { status: 500 })
     }
 
-    // Update based on event type
-    switch (payload.event) {
-      case 'proof.commented':
-        if (payload.comments) {
-          const newComments = payload.comments.map(c => ({
-            author: c.author.name,
-            content: c.content,
-            timestamp: c.created_at,
-          }))
-          existing.comments.push(...newComments)
-        }
-        break
-
-      case 'proof.decision':
-        existing.decision = payload.proof.decision
-        existing.status = payload.proof.status
-        break
-
-      case 'proof.stage_changed':
-        existing.status = payload.proof.current_stage || payload.proof.status
-        break
+    // Handle comments
+    if (payload.event === 'proof.commented' && payload.comments) {
+      for (const comment of payload.comments) {
+        await saveZiflowComment({
+          feedbackId: feedback.id,
+          ziflowCommentId: comment.id,
+          authorName: comment.author.name,
+          authorEmail: comment.author.email,
+          content: comment.content,
+          annotationPage: comment.annotation?.page,
+          annotationX: comment.annotation?.x,
+          annotationY: comment.annotation?.y,
+          commentCreatedAt: comment.created_at
+        })
+      }
+      console.log('[ZIFLOW WEBHOOK] Saved', payload.comments.length, 'comments')
     }
 
-    feedbackStore.set(proofId, existing)
-
-    // If decision requires changes, trigger optimization
-    if (payload.event === 'proof.decision' && payload.proof.decision === 'changes_requested') {
-      console.log('Changes requested - ready for LLM optimization')
-      // Could trigger automatic optimization here
+    // Log decision events
+    if (payload.event === 'proof.decision') {
+      console.log('[ZIFLOW WEBHOOK] Decision:', payload.proof.decision)
+      if (payload.proof.decision === 'changes_requested') {
+        console.log('[ZIFLOW WEBHOOK] Changes requested - ready for LLM optimization')
+      }
     }
 
     return NextResponse.json({
       received: true,
       event: payload.event,
       proofId,
+      feedbackId: feedback.id
     })
   } catch (error: any) {
-    console.error('Ziflow webhook error:', error)
+    console.error('[ZIFLOW WEBHOOK] Error:', error)
     return NextResponse.json(
       { error: error.message },
       { status: 500 }
@@ -123,24 +117,37 @@ export async function POST(request: NextRequest) {
 /**
  * GET /api/ziflow-webhook?proofId=xxx
  *
- * Retrieve collected feedback for a proof
+ * Retrieve feedback from Supabase
+ * - ?proofId=xxx - Get specific proof feedback with comments
+ * - No params - List all feedback
+ * - ?decision=changes_requested - Filter by decision
  */
 export async function GET(request: NextRequest) {
-  const proofId = request.nextUrl.searchParams.get('proofId')
+  try {
+    const proofId = request.nextUrl.searchParams.get('proofId')
+    const decision = request.nextUrl.searchParams.get('decision') as 'approved' | 'rejected' | 'changes_requested' | null
 
-  if (proofId) {
-    const feedback = feedbackStore.get(proofId)
-    if (!feedback) {
-      return NextResponse.json({ error: 'Feedback not found' }, { status: 404 })
+    // Get specific proof feedback
+    if (proofId) {
+      const feedback = await getZiflowFeedback(proofId)
+      if (!feedback) {
+        return NextResponse.json({ error: 'Feedback not found' }, { status: 404 })
+      }
+      return NextResponse.json(feedback)
     }
-    return NextResponse.json(feedback)
+
+    // List all feedback with optional filter
+    const feedbackList = await listZiflowFeedback({
+      decision: decision || undefined,
+      limit: 50
+    })
+
+    return NextResponse.json({ feedback: feedbackList })
+  } catch (error: any) {
+    console.error('[ZIFLOW WEBHOOK] GET Error:', error)
+    return NextResponse.json(
+      { error: error.message },
+      { status: 500 }
+    )
   }
-
-  // Return all feedback entries
-  const allFeedback = Array.from(feedbackStore.entries()).map(([id, data]) => ({
-    id,
-    ...data,
-  }))
-
-  return NextResponse.json({ feedback: allFeedback })
 }

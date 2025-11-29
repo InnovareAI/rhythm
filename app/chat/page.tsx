@@ -50,6 +50,9 @@ function ChatContent() {
   const [isLoading, setIsLoading] = useState(false)
   const [generatedContent, setGeneratedContent] = useState<string | null>(null)
   const [conversationId, setConversationId] = useState<string | null>(null)
+  const [contentId, setContentId] = useState<string | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
   // IMCIVREE-specific state
   const [audience, setAudience] = useState<Audience>('hcp')
@@ -71,6 +74,42 @@ function ChatContent() {
   // Ziflow approval state
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'success' | 'error'>('idle')
+
+  // Save content to Supabase
+  const saveContentToDatabase = async (htmlContent: string, parentId?: string) => {
+    setIsSaving(true)
+    setSaveStatus('saving')
+    try {
+      const response = await fetch('/api/save-content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contentType: 'imcivree-email',
+          audience,
+          focus: emailType,
+          keyMessage,
+          htmlContent,
+          parentId
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to save content')
+      }
+
+      const data = await response.json()
+      if (data.content?.id) {
+        setContentId(data.content.id)
+        setSaveStatus('saved')
+        console.log('[EMAIL] Content saved with ID:', data.content.id)
+      }
+    } catch (error) {
+      console.error('[EMAIL] Error saving content:', error)
+      setSaveStatus('error')
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   // Initialize greeting when entering chat
   useEffect(() => {
@@ -190,6 +229,8 @@ Give me a moment...`
                   setMessages(prev => [...prev, { role: 'assistant', content: data.message || 'Email generated!' }])
                   if (data.generatedContent) {
                     setGeneratedContent(data.generatedContent)
+                    // Save to Supabase
+                    saveContentToDatabase(data.generatedContent)
                   }
                   setStreamingContent('')
                 }
@@ -222,6 +263,10 @@ Give me a moment...`
           if (htmlContent.includes('<table') || htmlContent.includes('<!DOCTYPE')) {
             setGeneratedContent(htmlContent)
             setMessages(prev => [...prev, { role: 'assistant', content: 'Your email is ready!' }])
+            // Save to Supabase (fallback case)
+            if (!contentId) {
+              saveContentToDatabase(htmlContent)
+            }
           }
           setProcessingEmail(false)
         }
@@ -300,6 +345,8 @@ Give me a moment...`
                   setMessages(prev => [...prev, { role: 'assistant', content: data.message || 'Email updated!' }])
                   if (data.generatedContent) {
                     setGeneratedContent(data.generatedContent)
+                    // Save revision to Supabase (with parent ID for versioning)
+                    saveContentToDatabase(data.generatedContent, contentId || undefined)
                   }
                   setStreamingContent('')
                 }
@@ -328,6 +375,8 @@ Give me a moment...`
           if (htmlContent.includes('<') && htmlContent.includes('>')) {
             setGeneratedContent(htmlContent)
             setMessages(prev => [...prev, { role: 'assistant', content: 'Email updated!' }])
+            // Save revision to Supabase
+            saveContentToDatabase(htmlContent, contentId || undefined)
           }
           setProcessingEmail(false)
         }
@@ -349,6 +398,7 @@ Give me a moment...`
     setMessages([])
     setGeneratedContent(null)
     setConversationId(null)
+    setContentId(null)
     setKeyMessage('')
     setHcpSegment('aware')
     setVariableFields({
@@ -358,6 +408,7 @@ Give me a moment...`
       city: ''
     })
     setSubmissionStatus('idle')
+    setSaveStatus('idle')
   }
 
   // Submit to Ziflow for approval

@@ -1,12 +1,14 @@
 -- Conversation history storage for Rhythm pharmaceutical content generator
+-- IMCIVREE Creative Hub - Full Schema
 
 -- Create conversations table
 CREATE TABLE IF NOT EXISTS conversations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    content_type TEXT NOT NULL CHECK (content_type IN ('hcp-email', 'social-media', 'patient-email', 'video')),
+    content_type TEXT NOT NULL CHECK (content_type IN ('hcp-email', 'social-media', 'patient-email', 'video', 'imcivree-email', 'imcivree-banner')),
     product_name TEXT,
     brand_info JSONB,
     state_data JSONB,
+    generated_content TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -62,3 +64,28 @@ ALTER TABLE generated_content ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow all operations on conversations" ON conversations FOR ALL USING (true);
 CREATE POLICY "Allow all operations on messages" ON messages FOR ALL USING (true);
 CREATE POLICY "Allow all operations on generated_content" ON generated_content FOR ALL USING (true);
+
+-- Ziflow feedback table (persistent webhook storage)
+CREATE TABLE IF NOT EXISTS ziflow_feedback (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    proof_id TEXT UNIQUE NOT NULL,
+    proof_name TEXT,
+    status TEXT,
+    decision TEXT CHECK (decision IN ('approved', 'rejected', 'changes_requested', NULL)),
+    comments JSONB DEFAULT '[]'::jsonb,
+    conversation_id UUID REFERENCES conversations(id) ON DELETE SET NULL,
+    received_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_ziflow_feedback_proof_id ON ziflow_feedback(proof_id);
+CREATE INDEX IF NOT EXISTS idx_ziflow_feedback_status ON ziflow_feedback(status);
+CREATE INDEX IF NOT EXISTS idx_ziflow_feedback_decision ON ziflow_feedback(decision);
+
+ALTER TABLE ziflow_feedback ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow all operations on ziflow_feedback" ON ziflow_feedback FOR ALL USING (true);
+
+CREATE TRIGGER update_ziflow_feedback_updated_at
+    BEFORE UPDATE ON ziflow_feedback
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();

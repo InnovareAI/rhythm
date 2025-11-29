@@ -3,17 +3,31 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
+type ZiflowComment = {
+  id: string
+  feedback_id: string
+  ziflow_comment_id: string
+  author_name: string
+  author_email: string
+  content: string
+  annotation_page?: number
+  annotation_x?: number
+  annotation_y?: number
+  comment_created_at: string
+  created_at: string
+}
+
 type ApprovalItem = {
-  proofId: string
-  proofName: string
+  id: string
+  proof_id: string
+  proof_name: string
   status: string
-  decision?: string
-  comments: Array<{
-    author: string
-    content: string
-    timestamp: string
-  }>
-  receivedAt: string
+  decision?: 'approved' | 'rejected' | 'changes_requested'
+  current_stage?: string
+  last_event: string
+  created_at: string
+  updated_at: string
+  comments?: ZiflowComment[]
 }
 
 export default function ApprovalsPage() {
@@ -53,7 +67,8 @@ export default function ApprovalsPage() {
   }
 
   const handleOptimize = async (item: ApprovalItem) => {
-    if (item.comments.length === 0) {
+    const commentCount = item.comments?.length || 0
+    if (commentCount === 0) {
       alert('No feedback available to optimize')
       return
     }
@@ -64,7 +79,7 @@ export default function ApprovalsPage() {
     try {
       // This would call the optimize endpoint with the original content
       // For now, show a placeholder
-      alert(`Optimization would use ${item.comments.length} feedback comments to improve the content.`)
+      alert(`Optimization would use ${commentCount} feedback comments to improve the content.`)
     } catch (error) {
       console.error('Optimization error:', error)
     } finally {
@@ -165,12 +180,12 @@ export default function ApprovalsPage() {
                 </h2>
                 <div className="grid gap-4">
                   {needsChangesItems.map((item) => (
-                    <div key={item.proofId} className="bg-yellow-50 border border-yellow-200 rounded-xl p-5">
+                    <div key={item.proof_id} className="bg-yellow-50 border border-yellow-200 rounded-xl p-5">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h3 className="font-semibold text-[#007a80]">{item.proofName}</h3>
+                          <h3 className="font-semibold text-[#007a80]">{item.proof_name}</h3>
                           <p className="text-sm text-[#4a4f55] mt-1">
-                            {item.comments.length} feedback comment{item.comments.length !== 1 ? 's' : ''}
+                            {item.comments?.length || 0} feedback comment{(item.comments?.length || 0) !== 1 ? 's' : ''}
                           </p>
                         </div>
                         <button
@@ -184,12 +199,12 @@ export default function ApprovalsPage() {
                           Optimize with AI
                         </button>
                       </div>
-                      {item.comments.length > 0 && (
+                      {(item.comments?.length || 0) > 0 && (
                         <div className="mt-4 space-y-2">
-                          {item.comments.map((comment, idx) => (
-                            <div key={idx} className="bg-white rounded-lg p-3 border border-yellow-100">
+                          {item.comments?.map((comment) => (
+                            <div key={comment.id} className="bg-white rounded-lg p-3 border border-yellow-100">
                               <p className="text-sm text-[#4a4f55]">{comment.content}</p>
-                              <p className="text-xs text-gray-400 mt-1">— {comment.author}</p>
+                              <p className="text-xs text-gray-400 mt-1">— {comment.author_name}</p>
                             </div>
                           ))}
                         </div>
@@ -211,12 +226,12 @@ export default function ApprovalsPage() {
                 </h2>
                 <div className="grid gap-4">
                   {pendingItems.map((item) => (
-                    <div key={item.proofId} className="bg-blue-50 border border-blue-200 rounded-xl p-5">
+                    <div key={item.proof_id} className="bg-blue-50 border border-blue-200 rounded-xl p-5">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-semibold text-[#007a80]">{item.proofName}</h3>
+                          <h3 className="font-semibold text-[#007a80]">{item.proof_name}</h3>
                           <p className="text-sm text-[#4a4f55] mt-1">
-                            Submitted {new Date(item.receivedAt).toLocaleDateString()}
+                            Submitted {new Date(item.created_at).toLocaleDateString()}
                           </p>
                         </div>
                         <span className="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
@@ -240,12 +255,12 @@ export default function ApprovalsPage() {
                 </h2>
                 <div className="grid gap-4">
                   {approvedItems.map((item) => (
-                    <div key={item.proofId} className="bg-green-50 border border-green-200 rounded-xl p-5">
+                    <div key={item.proof_id} className="bg-green-50 border border-green-200 rounded-xl p-5">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-semibold text-[#007a80]">{item.proofName}</h3>
+                          <h3 className="font-semibold text-[#007a80]">{item.proof_name}</h3>
                           <p className="text-sm text-[#4a4f55] mt-1">
-                            Approved {new Date(item.receivedAt).toLocaleDateString()}
+                            Approved {new Date(item.updated_at).toLocaleDateString()}
                           </p>
                         </div>
                         <span className="px-3 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
