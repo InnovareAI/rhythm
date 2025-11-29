@@ -64,6 +64,7 @@ function ChatContent() {
   const [hcpSegment, setHcpSegment] = useState<string>('aware')
 
   // Variable fields for personalization
+  const [showPersonalization, setShowPersonalization] = useState(false)
   const [variableFields, setVariableFields] = useState<VariableFields>({
     doctorName: '',
     practiceName: '',
@@ -592,67 +593,78 @@ Give me a moment...`
           {/* Variable Fields (Optional - for personalization) */}
           {audience === 'hcp' && (
             <div className="mb-8 p-5 bg-[#f6fbfb] rounded-xl border border-[#007a80]/10">
-              <div className="flex items-center gap-2 mb-4">
-                <svg className="w-5 h-5 text-[#007a80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <label className="text-sm font-medium text-[#007a80]">
-                  Personalization Fields (Optional)
-                </label>
-              </div>
-              <p className="text-xs text-[#4a4f55] mb-4">
-                Add values to include merge variables like {'{{doctor_name}}'} in your email
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showPersonalization}
+                  onChange={(e) => setShowPersonalization(e.target.checked)}
+                  className="w-5 h-5 rounded border-gray-300 text-[#007a80] focus:ring-[#007a80]/20"
+                />
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-[#007a80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <span className="text-sm font-medium text-[#007a80]">
+                    Enable Personalization Fields
+                  </span>
+                </div>
+              </label>
+              <p className="text-xs text-[#4a4f55] mt-2 ml-8">
+                Add merge variables like {'{{doctor_name}}'} to your email
               </p>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="block text-xs font-medium text-[#4a4f55] mb-1">
-                    Doctor Name
-                  </label>
-                  <input
-                    type="text"
-                    value={variableFields.doctorName}
-                    onChange={(e) => setVariableFields(prev => ({ ...prev, doctorName: e.target.value }))}
-                    placeholder="e.g., Smith"
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
-                  />
+
+              {showPersonalization && (
+                <div className="grid gap-4 sm:grid-cols-2 mt-4 pt-4 border-t border-[#007a80]/10">
+                  <div>
+                    <label className="block text-xs font-medium text-[#4a4f55] mb-1">
+                      Doctor Name
+                    </label>
+                    <input
+                      type="text"
+                      value={variableFields.doctorName}
+                      onChange={(e) => setVariableFields(prev => ({ ...prev, doctorName: e.target.value }))}
+                      placeholder="e.g., Smith"
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#4a4f55] mb-1">
+                      Practice Name
+                    </label>
+                    <input
+                      type="text"
+                      value={variableFields.practiceName}
+                      onChange={(e) => setVariableFields(prev => ({ ...prev, practiceName: e.target.value }))}
+                      placeholder="e.g., Bay Area Endocrinology"
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#4a4f55] mb-1">
+                      Specialty
+                    </label>
+                    <input
+                      type="text"
+                      value={variableFields.specialty}
+                      onChange={(e) => setVariableFields(prev => ({ ...prev, specialty: e.target.value }))}
+                      placeholder="e.g., Endocrinology"
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#4a4f55] mb-1">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      value={variableFields.city}
+                      onChange={(e) => setVariableFields(prev => ({ ...prev, city: e.target.value }))}
+                      placeholder="e.g., San Francisco"
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-medium text-[#4a4f55] mb-1">
-                    Practice Name
-                  </label>
-                  <input
-                    type="text"
-                    value={variableFields.practiceName}
-                    onChange={(e) => setVariableFields(prev => ({ ...prev, practiceName: e.target.value }))}
-                    placeholder="e.g., Bay Area Endocrinology"
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-[#4a4f55] mb-1">
-                    Specialty
-                  </label>
-                  <input
-                    type="text"
-                    value={variableFields.specialty}
-                    onChange={(e) => setVariableFields(prev => ({ ...prev, specialty: e.target.value }))}
-                    placeholder="e.g., Endocrinology"
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-[#4a4f55] mb-1">
-                    City
-                  </label>
-                  <input
-                    type="text"
-                    value={variableFields.city}
-                    onChange={(e) => setVariableFields(prev => ({ ...prev, city: e.target.value }))}
-                    placeholder="e.g., San Francisco"
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-1 focus:ring-[#007a80]/20"
-                  />
-                </div>
-              </div>
+              )}
             </div>
           )}
 
