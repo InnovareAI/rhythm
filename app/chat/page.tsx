@@ -916,6 +916,7 @@ Give me a moment...`
                 srcDoc={generatedContent}
                 className="w-full h-[600px]"
                 title="Email Preview"
+                sandbox="allow-scripts allow-same-origin"
               />
             ) : streamingContent || isLoading ? (
               <div className="flex items-center justify-center h-[500px] text-center text-[#4a4f55]">

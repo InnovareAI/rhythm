@@ -141,10 +141,14 @@ Every response must:
 - Use NO external libraries
 - Match the EXACT structure shown in the reference template
 - Use CSS-only animation for slide transitions
+- **CRITICAL: MUST include the JavaScript <script> block for ISI auto-scrolling**
+- The ISI scrolling JavaScript uses requestAnimationFrame and CSS transform
 - Use CSS transform for ISI scrolling (0.2px/frame)
 - Compact CTA buttons (6px 12px padding, 10px font)
 - Use ONLY brand colors listed above
-- Include correct product URL based on audience`
+- Include correct product URL based on audience
+
+**DO NOT omit the <script> section - ISI scrolling will break without it!**`
 
 // Banner focus options
 export const BANNER_FOCUS = {
