@@ -888,8 +888,8 @@ Give me a moment...`
             />
             <div className="h-6 w-px bg-[#007a80]/20" />
             <span className="text-sm font-medium text-[#4a4f55]">
-              {audience === 'hcp' ? 'HCP' : 'Patient'} Email • {EMAIL_TYPES[audience].find(t => t.id === emailType)?.name}
-              {audience === 'hcp' && ` • ${HCP_SEGMENTS.find(s => s.id === hcpSegment)?.name}`}
+              {audience === 'hcp' ? 'HCP' : 'Patient'} {contentType === 'imcivree-banner' ? 'Banner' : 'Email'} • {EMAIL_TYPES[audience].find(t => t.id === emailType)?.name}
+              {audience === 'hcp' && contentType !== 'imcivree-banner' && ` • ${HCP_SEGMENTS.find(s => s.id === hcpSegment)?.name}`}
             </span>
           </div>
           <div className="flex items-center gap-4">
