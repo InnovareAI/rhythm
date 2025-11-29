@@ -2,7 +2,7 @@
 
 **Project:** IMCIVREE Creative Hub
 **Client:** Rhythm Pharmaceuticals / 3cubed
-**Last Updated:** November 29, 2025
+**Last Updated:** November 29, 2025 (Session 2)
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
 **Repository:** https://github.com/InnovareAI/rhythm.git
 
@@ -21,7 +21,8 @@
 9. [Brand Guidelines](#brand-guidelines)
 10. [Compliance Requirements](#compliance-requirements)
 11. [Deployment](#deployment)
-12. [Known Issues & Future Work](#known-issues--future-work)
+12. [Recent Changes (Session 2)](#recent-changes-november-29-2025---session-2)
+13. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
@@ -35,6 +36,7 @@ The IMCIVREE Creative Hub is a pharmaceutical marketing content generation platf
 |---------|-------|-------------|
 | HCP + Patient Email Generator | `/chat` | AI-powered HTML email creation with ISI and references |
 | HCP + Patient Banner Ads | `/banner-generator` | 728x250 animated banners with scrolling ISI |
+| Ziflow Reviews | `/reviews` | View MLR feedback, address comments, resubmit content |
 | Approval Queue | `/approvals` | Ziflow MLR integration for tracking approvals |
 | Content History | `/content-history` | View and download previously generated content |
 
@@ -566,6 +568,77 @@ netlify env:list
 - **Site:** https://beautiful-cactus-21f97b.netlify.app
 - **Build Logs:** https://app.netlify.com/projects/beautiful-cactus-21f97b/deploys
 - **Function Logs:** https://app.netlify.com/projects/beautiful-cactus-21f97b/logs/functions
+
+---
+
+## Recent Changes (November 29, 2025 - Session 2)
+
+### 1. Ziflow Review Feedback Workflow
+
+**New Feature:** `/reviews` page now shows MLR feedback from Ziflow
+
+**Flow:**
+1. Content with `status: pending_review` appears on Reviews page
+2. Clicking opens chat with loaded content + reviewer comments
+3. AI summarizes feedback and suggests action items
+4. User can address feedback and resubmit
+
+**Key Files:**
+- `app/reviews/page.tsx` - Reviews list page
+- `app/api/ziflow-feedback/[proofId]/route.ts` - Fetches Ziflow comments
+- `app/api/ziflow-proofs/route.ts` - Lists all Ziflow proofs (NEW)
+
+**API Fix:** Ziflow API returns comments in `comment` field (not `text`) and author in `reviewer.email` (not `author.email`). Fixed in ziflow-feedback route.
+
+### 2. Dynamic Email/Banner Labels
+
+**Issue Fixed:** Preview panel and header showed "Email" even when viewing banners
+
+**Changes:**
+- Added `contentType` state variable to `app/chat/page.tsx`
+- Header now shows "HCP Banner" / "Patient Banner" for banners
+- Preview panel shows "Banner Preview" for banners, "Email Preview" for emails
+- Download filename is dynamic (e.g., `imcivree-hcp-moa-banner.html`)
+
+### 3. Age Indication Fix
+
+**Issue:** Banner prompts incorrectly said "6 years and older" - should be "2 years and older"
+
+**Fixed in:** `lib/prompts/imcivree-banner.ts`
+- CTA text: "For people 2 years and up"
+- ISI indication: "aged 2 years and older with syndromic or monogenic obesity"
+
+**Note:** Email prompts already had correct "2 years" text.
+
+### 4. Retry Logic & Error Handling
+
+**Issue:** Users getting "Error in input stream" when AI service is busy
+
+**Improvements:**
+- Added retry mechanism with exponential backoff (up to 3 attempts)
+- User-friendly error messages:
+  - "The AI service is temporarily busy. Please try again in a moment."
+  - "Rate limit reached. Please wait a moment and try again."
+  - "Connection timed out. Please try again."
+- Added console logging for debugging stream errors
+
+**File:** `app/api/chat/route.ts` - Banner and email generation sections
+
+### 5. Brand Color Consistency
+
+**Changes:**
+- MLR Review Feedback box in chat page: Blue → Brand green (#007a80)
+- Reviews page: All elements updated to brand green
+- Ziflow Reviews card on home page: Updated to brand green
+
+### Recent Commits (Nov 29, Session 2)
+
+```
+565f5d5 Add retry logic and better error messages for banner/email generation
+f04f3b4 Fix IMCIVREE age indication from 6 to 2 years
+f45cc96 Fix header label to show Banner vs Email dynamically
+3a76c04 Fix preview panel label to be dynamic based on content type
+```
 
 ---
 
