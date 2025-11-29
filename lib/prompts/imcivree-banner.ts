@@ -93,7 +93,7 @@ https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/eb7c399c-9
 - Font-size: 22px
 
 **CTA Button:** Compact teal pill
-- Text: "For people 6 years and up"
+- Text: "For people 2 years and up"
 - Padding: 6px 12px
 - Font-size: 10px
 - Background: #0e7076
@@ -372,7 +372,7 @@ export const BANNER_REFERENCE_HTML = `<!DOCTYPE html>
 
                 <div class="slide" id="slide1">
                     <h1>IMCIVREE is a different kind of treatment</h1>
-                    <a href="{{PRODUCT_URL}}" class="cta-button" target="_blank">For people 6 years and up</a>
+                    <a href="{{PRODUCT_URL}}" class="cta-button" target="_blank">For people 2 years and up</a>
                 </div>
 
                 <div class="slide" id="slide2">
@@ -388,7 +388,7 @@ export const BANNER_REFERENCE_HTML = `<!DOCTYPE html>
             <div class="isi-scroll-wrapper">
                 <div class="isi-content">
                     <h3>Indication</h3>
-                    <p>IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 6 years and older with obesity due to Bardet-Biedl syndrome (BBS).</p>
+                    <p>IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with syndromic or monogenic obesity due to Bardet-Biedl syndrome (BBS).</p>
 
                     <h3>Limitations of Use</h3>
                     <p>IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective:</p>
