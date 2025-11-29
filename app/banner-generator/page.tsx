@@ -271,6 +271,11 @@ Give me a moment...`
           <h1 className="text-3xl font-bold text-[#007a80] text-center mb-2">
             Create IMCIVREE Banner Ad
           </h1>
+          <div className="flex justify-center mb-4">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#007a80]/10 text-[#007a80]">
+              Indication: Bardet-Biedl Syndrome (BBS)
+            </span>
+          </div>
           <p className="text-center text-[#4a4f55] mb-10">
             Generate animated 728x250 leaderboard banners with scrolling ISI
           </p>
@@ -347,7 +352,7 @@ Give me a moment...`
               type="text"
               value={keyMessage}
               onChange={(e) => setKeyMessage(e.target.value)}
-              placeholder="e.g., First and only FDA-approved treatment, Meaningful weight reduction..."
+              placeholder="e.g., First and only treatment for BBS, Meaningful weight reduction..."
               className="w-full rounded-lg border border-gray-300 px-4 py-3 text-[#4a4f55] placeholder-gray-400 focus:border-[#007a80] focus:outline-none focus:ring-2 focus:ring-[#007a80]/20"
             />
           </div>

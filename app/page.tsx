@@ -11,18 +11,7 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-[#007a80]">3cubed</h1>
             </div>
-            <div className="flex items-center gap-4">
-              <Link
-                href="/content-history"
-                className="flex items-center gap-2 text-sm text-[#4a4f55] hover:text-[#007a80]"
-              >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Content History
-              </Link>
-              <p className="text-sm font-medium text-[#007a80]">Creative Hub</p>
-            </div>
+            <p className="text-sm font-medium text-[#007a80]">Creative Hub</p>
           </div>
         </div>
       </header>

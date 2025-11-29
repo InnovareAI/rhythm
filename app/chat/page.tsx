@@ -11,11 +11,10 @@ type Message = {
 
 type Audience = 'hcp' | 'patient'
 
-// HCP Segments for personalization
+// HCP Segments for personalization (rare disease - no competitors)
 const HCP_SEGMENTS = [
   { id: 'loyalist', name: 'Loyalist', description: 'Already prescribing IMCIVREE, reinforce value' },
   { id: 'champion', name: 'Champion', description: 'Advocate who actively promotes IMCIVREE' },
-  { id: 'non-loyalist', name: 'Non-Loyalist', description: 'Prescribes competitors, needs persuasion' },
   { id: 'aware', name: 'Aware', description: 'Knows about IMCIVREE but hasn\'t prescribed' },
   { id: 'unaware', name: 'Unaware', description: 'New to IMCIVREE, needs education' },
 ]
@@ -387,6 +386,11 @@ Give me a moment...`
           <h1 className="text-3xl font-bold text-[#007a80] text-center mb-2">
             Create IMCIVREE Email
           </h1>
+          <div className="flex justify-center mb-4">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#007a80]/10 text-[#007a80]">
+              Indication: Bardet-Biedl Syndrome (BBS)
+            </span>
+          </div>
           <p className="text-center text-[#4a4f55] mb-10">
             Select your audience and email type to get started
           </p>

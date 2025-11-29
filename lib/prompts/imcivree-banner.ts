@@ -55,22 +55,28 @@ export const IMCIVREE_BANNER_SYSTEM_PROMPT = `You are an AI creative engine that
 ### Color Palette
 - Teal/blue-green gradient background: #0F7C8F → #0C5F73
 - Bright neon green accent/CTA: #8CD038
-- Deep navy/teal text: #004354
-- White ISI text on black/dark teal bar
+- **ALL TEXT on teal background MUST be WHITE (#FFFFFF)** - this is critical
+- White ISI text on black bar (#000000)
+
+### Logo Placement
+- IMCIVREE logo should appear on a LIGHT BACKGROUND (white or light teal #f6fbfb)
+- Do NOT place the full-color logo directly on the teal gradient
+- Logo can appear in the final frame on a white/light section
+- If showing logo on teal, use the white knockout version only
 
 ### Typography
 - Font family: 'Jost', Verdana, Arial, sans-serif (use Google Fonts import)
-- Headlines: 24-28px, bold, white, uppercase
-- Subheads: 14-16px, semibold (600 weight)
-- Body text: 12-14px, normal weight
-- CTA button: 14px, bold, uppercase
+- Headlines: 24-28px, bold, **WHITE (#FFFFFF)**, uppercase
+- Subheads: 14-16px, semibold (600 weight), **WHITE**
+- Body text: 12-14px, normal weight, **WHITE**
+- CTA button: 14px, bold, uppercase, teal text on green button
 - ISI text: 9-10px, normal weight, white on black
 
 ### Graphics
-- Floating bubble-like circles
+- Floating bubble-like circles (subtle, translucent)
 - Soft drop shadows
 - Minimal, modern, medical aesthetic
-- High contrast
+- High contrast - white text on teal is essential
 - Mobile-friendly layout
 
 ## MANDATORY BANNER STRUCTURE (5 Frames)
