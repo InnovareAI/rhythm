@@ -89,7 +89,7 @@ export default function Home() {
         {/* Ziflow Reviews Card - Centered Below */}
         <div className="mt-8 flex justify-center">
           <Link
-            href="/content-history?status=pending_review"
+            href="/reviews"
             className="group relative rounded-2xl border-2 border-blue-500 bg-white p-6 shadow-lg transition-all hover:shadow-xl hover:border-blue-600 hover:bg-blue-50 max-w-md w-full"
           >
             <div className="relative flex items-center gap-4">

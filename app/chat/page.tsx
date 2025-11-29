@@ -79,15 +79,79 @@ function ChatContent() {
   const [ziflowFeedback, setZiflowFeedback] = useState<any>(null)
   const [editingContentId, setEditingContentId] = useState<string | null>(null)
 
-  // Load content from sessionStorage if editing existing content
+  // Load content from sessionStorage if editing existing content or review session
   useEffect(() => {
+    // Check for review session first
+    const reviewSession = sessionStorage.getItem('reviewSession')
+    if (reviewSession) {
+      try {
+        const data = JSON.parse(reviewSession)
+        sessionStorage.removeItem('reviewSession')
+
+        const content = data.content
+        const feedback = data.feedback
+
+        // Set the content and state
+        setGeneratedContent(content.html_content)
+        setAudience(content.audience || 'hcp')
+        setEmailType(content.focus || 'moa')
+        setKeyMessage(content.key_message || '')
+        setEditingContentId(content.id)
+        setStep('chat')
+
+        // Generate AI summary with action items
+        if (feedback?.comments?.length > 0) {
+          setZiflowFeedback(feedback)
+
+          // Build detailed feedback summary
+          const commentsList = feedback.comments
+            .map((c: any, i: number) => `${i + 1}. **${c.authorName}**: "${c.text}"`)
+            .join('\n')
+
+          // Generate action items based on feedback
+          const actionItems = feedback.comments
+            .map((c: any) => `- Address: "${c.text.slice(0, 50)}${c.text.length > 50 ? '...' : ''}"`)
+            .join('\n')
+
+          setMessages([{
+            role: 'assistant',
+            content: `## MLR Review Feedback Summary
+
+Your ${content.content_type === 'imcivree-email' ? 'email' : 'banner'} has received feedback from the review team.
+
+### Reviewer Comments:
+${commentsList}
+
+### Suggested Action Items:
+${actionItems}
+
+### How to proceed:
+1. **"Address all feedback"** - I'll revise the content to address each comment
+2. **Ask specific questions** - e.g., "What change does reviewer 1 want?"
+3. **Request specific edits** - e.g., "Update the headline to be more clinical"
+4. **Explain your reasoning** - I can help draft a response to reviewers
+
+What would you like me to do?`
+          }])
+        } else {
+          setMessages([{
+            role: 'assistant',
+            content: `I've loaded your ${content.content_type === 'imcivree-email' ? 'email' : 'banner'} that's currently in MLR review.\n\n**Status:** Waiting for reviewer feedback\n\nYou can make edits now or wait for reviewer comments. Any changes you make can be resubmitted for approval.`
+          }])
+        }
+      } catch (e) {
+        console.error('Error parsing reviewSession:', e)
+      }
+      return
+    }
+
+    // Check for edit content (from content history)
     const editContent = sessionStorage.getItem('editContent')
     if (editContent) {
       try {
         const data = JSON.parse(editContent)
-        sessionStorage.removeItem('editContent') // Clear after reading
+        sessionStorage.removeItem('editContent')
 
-        // Set the content and state
         setGeneratedContent(data.html_content)
         setAudience(data.audience || 'hcp')
         setEmailType(data.focus || 'moa')
@@ -95,18 +159,16 @@ function ChatContent() {
         setEditingContentId(data.id)
         setStep('chat')
 
-        // If there's Ziflow feedback, show it
         if (data.ziflow_feedback?.comments?.length > 0) {
           setZiflowFeedback(data.ziflow_feedback)
-          // Add a message prompting the user about the feedback
           setMessages([{
             role: 'assistant',
-            content: `I've loaded your content that has MLR feedback. Here's what the reviewers said:\n\n${data.ziflow_feedback.comments.map((c: any) => `**${c.authorName}:** ${c.text}`).join('\n\n')}\n\nHow would you like me to address this feedback? You can:\n- Ask me to make specific changes\n- Tell me to revise based on all feedback\n- Ask questions about the feedback`
+            content: `I've loaded your content with MLR feedback.\n\n${data.ziflow_feedback.comments.map((c: any) => `**${c.authorName}:** ${c.text}`).join('\n\n')}\n\nHow would you like me to address this feedback?`
           }])
         } else if (data.ziflow_proof_id) {
           setMessages([{
             role: 'assistant',
-            content: `I've loaded your content that's currently in MLR review. No feedback yet - you can make edits or wait for reviewer comments.`
+            content: `I've loaded your content that's in MLR review. No feedback yet.`
           }])
         }
       } catch (e) {
