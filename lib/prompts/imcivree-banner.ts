@@ -123,6 +123,14 @@ https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/eb7c399c-9
 - Pauses on mouseenter, resumes on mouseleave
 - Restarts from top when reaching bottom
 
+## CTA LINKS (Required)
+
+Replace {{PRODUCT_URL}} with the correct destination:
+- **HCP audience**: https://www.imcivree.com/hcp/bbs/
+- **Patient/Caregiver audience**: https://www.imcivree.com/bbs/
+
+All CTA buttons must include target="_blank" to open in new tab.
+
 ## OUTPUT REQUIREMENTS
 
 Every response must:
@@ -133,7 +141,8 @@ Every response must:
 - Use CSS-only animation for slide transitions
 - Use CSS transform for ISI scrolling (0.2px/frame)
 - Compact CTA buttons (6px 12px padding, 10px font)
-- Use ONLY brand colors listed above`
+- Use ONLY brand colors listed above
+- Include correct product URL based on audience`
 
 // Banner focus options
 export const BANNER_FOCUS = {
@@ -357,12 +366,12 @@ export const BANNER_REFERENCE_HTML = `<!DOCTYPE html>
 
                 <div class="slide" id="slide1">
                     <h1>IMCIVREE is a different kind of treatment</h1>
-                    <a href="#" class="cta-button">For people 6 years and up</a>
+                    <a href="{{PRODUCT_URL}}" class="cta-button" target="_blank">For people 6 years and up</a>
                 </div>
 
                 <div class="slide" id="slide2">
                     <h1 class="small-h1">The only treatment for obesity due to BBS that targets a root cause of obesity & hunger</h1>
-                    <a href="#" class="cta-button">SEE MORE &gt;</a>
+                    <a href="{{PRODUCT_URL}}" class="cta-button" target="_blank">SEE MORE &gt;</a>
                 </div>
 
             </div>
@@ -448,15 +457,25 @@ export const BANNER_REFERENCE_HTML = `<!DOCTYPE html>
 </body>
 </html>`
 
+// Product URLs by audience
+export const PRODUCT_URLS = {
+  hcp: 'https://www.imcivree.com/hcp/bbs/',
+  patient: 'https://www.imcivree.com/bbs/',
+}
+
 export function getImcivreeBannerPrompt(params: {
   audience: 'hcp' | 'patient'
   focus: string
   keyMessage?: string
 }) {
   const audienceLabel = params.audience === 'hcp' ? 'HCP (Healthcare Professional)' : 'Patient/Caregiver'
+  const productUrl = PRODUCT_URLS[params.audience]
   const toneNote = params.audience === 'hcp'
     ? 'Use clinical, data-forward language. Include terms like "hyperphagia" and clinical efficacy data.'
     : 'Use supportive, accessible language. Replace "hyperphagia" with "hunger", use "hard to control" instead of "insatiable".'
+
+  // Replace placeholder URL with actual product URL
+  const templateWithUrl = BANNER_REFERENCE_HTML.replace(/\{\{PRODUCT_URL\}\}/g, productUrl)
 
   return `${IMCIVREE_BANNER_SYSTEM_PROMPT}
 
@@ -464,11 +483,12 @@ export function getImcivreeBannerPrompt(params: {
 
 **Audience:** ${audienceLabel}
 **Focus:** ${params.focus}
+**Product URL:** ${productUrl}
 ${params.keyMessage ? `**Key Message Emphasis:** ${params.keyMessage}` : ''}
 
 **Tone:** ${toneNote}
 
-Generate a complete 728×250 IMCIVREE banner ad following the EXACT structure and styling shown in this reference template. Modify only the headline copy and claims based on the focus area while keeping all other elements identical:
+Generate a complete 728×250 IMCIVREE banner ad following the EXACT structure and styling shown in this reference template. Modify only the headline copy and claims based on the focus area while keeping all other elements identical. Use the product URL provided above for all CTA links:
 
-${BANNER_REFERENCE_HTML}`
+${templateWithUrl}`
 }
