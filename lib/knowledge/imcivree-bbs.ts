@@ -308,18 +308,55 @@ export const FOOTER = {
 }
 
 // =============================================================================
-// REFERENCES (Placeholder - to be filled with actual references)
+// OFFICIAL VERIFIED REFERENCES - USE ONLY THESE, NEVER INVENT REFERENCES
 // =============================================================================
 
 export const REFERENCES = {
-  moa: [
-    '1. IMCIVREE mechanism of action and clinical overview. IMCIVREE HCP website.',
-  ],
-  clinical: [
-    '1. IMCIVREE Prescribing Information. Rhythm Pharmaceuticals, Inc.',
-    '2. Clinical trial data on file. Rhythm Pharmaceuticals, Inc.',
-  ],
-  patient: [
-    '1. IMCIVREE Patient Core Brochure.',
-  ],
+  // Master list of ALL approved references
+  all: {
+    1: 'IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.',
+    2: 'Haqq AM, et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.',
+    3: 'Data on file. Rhythm Pharmaceuticals, Inc.',
+  },
+
+  // Which claims map to which references - STRICT MAPPING
+  claimToReference: {
+    // Indication claims → Reference 1 (PI)
+    'FDA-approved': '1',
+    'first and only': '1',
+    'ages 2 years and older': '1',
+    'pediatric patients': '1',
+    'adults': '1',
+    'BBS indication': '1',
+    'reduce excess body weight': '1',
+    'maintain weight reduction': '1',
+
+    // Efficacy claims → Reference 1,2
+    'weight loss': '1,2',
+    'weight reduction': '1,2',
+    'BMI reduction': '1,2',
+    'meaningful weight reduction': '1,2',
+    '6-8 weeks': '1',
+    'hunger reduction': '1,2',
+
+    // Clinical trial data → Reference 2
+    'clinical trial': '2',
+    'study results': '2',
+    'patients in trial': '2',
+
+    // MOA claims → Reference 1
+    'MC4R pathway': '1',
+    'mechanism of action': '1',
+    'hypothalamic': '1',
+
+    // Data on file → Reference 3
+    'internal data': '3',
+    'real-world': '3',
+  },
+
+  // Formatted reference block for emails
+  formattedBlock: `<strong>References:</strong><br>
+1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
+2. Haqq AM, et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.<br>
+3. Data on file. Rhythm Pharmaceuticals, Inc.`,
 }
