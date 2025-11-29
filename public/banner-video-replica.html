@@ -25,7 +25,7 @@
     .banner-container {
         width: 728px;
         height: 250px;
-        background-color: #F7F7F7; /* Light Off-White */
+        background-color: #eff3d8; /* Pale yellow/cream - IMCIVREE brand */
         border: 1px solid #0f6c73;
         position: relative;
         overflow: hidden;
@@ -96,18 +96,24 @@
         font-weight: bold;
     }
 
-    /* Button Styles - IMCIVREE Brand */
+    /* Button Styles - IMCIVREE Brand (compact pill) */
     .cta-button {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
         background-color: #0e7076; /* IMCIVREE CTA Button */
         color: white;
         text-decoration: none;
-        padding: 10px 15px;
-        border-radius: 4px;
-        font-size: 12px;
+        padding: 6px 12px;
+        border-radius: 3px;
+        font-size: 10px;
         font-weight: bold;
         text-transform: uppercase;
         cursor: pointer;
+    }
+
+    .cta-button .arrow {
+        font-size: 10px;
     }
 
     /* --- ANIMATION LOGIC (CSS ONLY) --- */
