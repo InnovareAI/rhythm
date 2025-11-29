@@ -8,9 +8,9 @@
 const ZIFLOW_API_BASE = 'https://api.ziflow.io/v1'
 
 interface ZiflowProofInput {
-  type: 'website_url' | 'url'  // Type of input
-  url: string
-  name?: string
+  source: string              // URL to the content
+  type: 'web-static' | 'web-interactive' | 'url'
+  nickname?: string           // Optional name for the input
 }
 
 interface CreateProofRequest {
@@ -62,10 +62,18 @@ export class ZiflowClient {
    * Create a new proof for review
    */
   async createProof(params: CreateProofRequest): Promise<ZiflowProofResponse> {
-    console.log('[ZIFLOW] Creating proof with params:', JSON.stringify(params, null, 2))
+    // Clean up the params - only send defined fields
+    const cleanParams: Record<string, any> = {
+      name: params.name,
+      input: params.input,
+    }
+    if (params.folder_id) cleanParams.folder_id = params.folder_id
+    if (params.message) cleanParams.message = params.message
+
+    console.log('[ZIFLOW] Creating proof with params:', JSON.stringify(cleanParams, null, 2))
     return this.request<ZiflowProofResponse>('/proofs', {
       method: 'POST',
-      body: JSON.stringify(params),
+      body: JSON.stringify(cleanParams),
     })
   }
 
@@ -136,9 +144,8 @@ export async function submitForApproval(
   return client.createProof({
     name: proofName,
     input: [{
-      type: 'website_url',
-      url: fileUrl,
-      name: `${name}.html`,
+      type: 'web-static',
+      source: fileUrl,
     }],
     folder_id: options?.folderId,
     workflow_id: options?.workflowId,

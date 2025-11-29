@@ -66,9 +66,8 @@ export async function POST(request: NextRequest) {
       const proof = await client.createProof({
         name: proofName,
         input: [{
-          type: 'website_url',
-          url: publicUrl,
-          name: `${name}.html`
+          type: 'web-static',
+          source: publicUrl
         }],
         folder_id: defaultFolderId,
         message: `Content Type: ${contentType}\nAudience: ${audience}\nFocus: ${focus || 'N/A'}\nKey Message: ${keyMessage || 'N/A'}`
