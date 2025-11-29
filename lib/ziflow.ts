@@ -7,14 +7,14 @@
 
 const ZIFLOW_API_BASE = 'https://api.ziflow.io/v1'
 
-interface ZiflowProofFile {
+interface ZiflowProofInput {
   url: string
-  name: string
+  name?: string
 }
 
 interface CreateProofRequest {
   name: string
-  files: ZiflowProofFile[]
+  inputs: ZiflowProofInput[]  // Ziflow uses "inputs" not "files"
   folder_id?: string
   workflow_id?: string
   due_date?: string
@@ -133,7 +133,7 @@ export async function submitForApproval(
 
   return client.createProof({
     name: proofName,
-    files: [{
+    inputs: [{
       url: fileUrl,
       name: `${name}.html`,
     }],

@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     try {
       const proof = await client.createProof({
         name: proofName,
-        files: [{
+        inputs: [{
           url: publicUrl,
           name: `${name}.html`
         }],
