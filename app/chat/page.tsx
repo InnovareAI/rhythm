@@ -80,6 +80,61 @@ function ChatContent() {
   const [ziflowFeedback, setZiflowFeedback] = useState<any>(null)
   const [editingContentId, setEditingContentId] = useState<string | null>(null)
 
+  // Helper function to build feedback summary message
+  const buildFeedbackMessage = (content: any, feedback: any) => {
+    if (!feedback?.comments?.length) {
+      return `I've loaded your ${content.content_type === 'imcivree-email' ? 'email' : 'banner'} that's currently in MLR review.\n\n**Status:** Waiting for reviewer feedback\n\nYou can make edits now or wait for reviewer comments. Any changes you make can be resubmitted for approval.`
+    }
+
+    // Build detailed feedback summary with action items
+    const feedbackSummary = feedback.comments
+      .map((c: any, i: number) => {
+        // Generate a suggested action for each comment
+        const commentLower = (c.text || '').toLowerCase()
+        let suggestedAction = 'Review and address this feedback'
+        if (commentLower.includes('change') || commentLower.includes('update') || commentLower.includes('revise')) {
+          suggestedAction = 'Make the requested revision'
+        } else if (commentLower.includes('add') || commentLower.includes('include') || commentLower.includes('missing')) {
+          suggestedAction = 'Add the requested content'
+        } else if (commentLower.includes('remove') || commentLower.includes('delete')) {
+          suggestedAction = 'Remove the flagged content'
+        } else if (commentLower.includes('clarify') || commentLower.includes('unclear')) {
+          suggestedAction = 'Clarify the messaging'
+        } else if (commentLower.includes('compliance') || commentLower.includes('claim') || commentLower.includes('reference')) {
+          suggestedAction = 'Verify compliance and add reference if needed'
+        }
+        return `### Comment ${i + 1} from ${c.authorName || 'Reviewer'}:
+> "${c.text || 'No comment text'}"
+
+**Suggested Action:** ${suggestedAction}`
+      })
+      .join('\n\n---\n\n')
+
+    return `# 📋 MLR Review Feedback
+
+Your ${content.content_type === 'imcivree-email' ? 'email' : 'banner'} has **${feedback.comments.length} comment${feedback.comments.length > 1 ? 's' : ''}** from the review team.
+
+---
+
+${feedbackSummary}
+
+---
+
+## 🎯 Next Steps
+
+**Quick Actions:**
+- Say **"Address all feedback"** and I'll revise the content to incorporate all comments
+- Say **"Address comment 1"** to handle a specific comment
+- Ask me **"Explain the feedback"** if you need clarification
+
+**Or give me specific instructions**, for example:
+- "Make the headline more clinical"
+- "Add a reference for the efficacy claim"
+- "Soften the language in paragraph 2"
+
+What would you like me to do?`
+  }
+
   // Load content from sessionStorage if editing existing content or review session
   useEffect(() => {
     // Check for review session first
@@ -90,7 +145,7 @@ function ChatContent() {
         sessionStorage.removeItem('reviewSession')
 
         const content = data.content
-        const feedback = data.feedback
+        let feedback = data.feedback
 
         // Set the content and state
         setGeneratedContent(content.html_content)
@@ -100,67 +155,40 @@ function ChatContent() {
         setEditingContentId(content.id)
         setStep('chat')
 
-        // Generate AI summary with action items
+        // If we have feedback with comments, display them
         if (feedback?.comments?.length > 0) {
           setZiflowFeedback(feedback)
+          setMessages([{ role: 'assistant', content: buildFeedbackMessage(content, feedback) }])
+          setIsLoadingReview(false)
+        } else if (content.ziflow_proof_id) {
+          // No feedback yet - try to fetch it fresh from Ziflow
+          setMessages([{ role: 'assistant', content: 'Loading reviewer feedback from Ziflow...' }])
 
-          // Build detailed feedback summary with action items
-          const feedbackSummary = feedback.comments
-            .map((c: any, i: number) => {
-              // Generate a suggested action for each comment
-              const commentLower = c.text.toLowerCase()
-              let suggestedAction = 'Review and address this feedback'
-              if (commentLower.includes('change') || commentLower.includes('update') || commentLower.includes('revise')) {
-                suggestedAction = 'Make the requested revision'
-              } else if (commentLower.includes('add') || commentLower.includes('include') || commentLower.includes('missing')) {
-                suggestedAction = 'Add the requested content'
-              } else if (commentLower.includes('remove') || commentLower.includes('delete')) {
-                suggestedAction = 'Remove the flagged content'
-              } else if (commentLower.includes('clarify') || commentLower.includes('unclear')) {
-                suggestedAction = 'Clarify the messaging'
-              } else if (commentLower.includes('compliance') || commentLower.includes('claim') || commentLower.includes('reference')) {
-                suggestedAction = 'Verify compliance and add reference if needed'
+          fetch(`/api/ziflow-feedback/${content.ziflow_proof_id}`)
+            .then(res => res.ok ? res.json() : null)
+            .then(freshFeedback => {
+              if (freshFeedback?.comments?.length > 0) {
+                setZiflowFeedback(freshFeedback)
+                setMessages([{ role: 'assistant', content: buildFeedbackMessage(content, freshFeedback) }])
+              } else {
+                setMessages([{ role: 'assistant', content: buildFeedbackMessage(content, null) }])
               }
-              return `**Comment ${i + 1} from ${c.authorName}:**\n> "${c.text}"\n\n**Suggested Action:** ${suggestedAction}`
+              setIsLoadingReview(false)
             })
-            .join('\n\n---\n\n')
-
-          setMessages([{
-            role: 'assistant',
-            content: `# 📋 MLR Review Feedback
-
-Your ${content.content_type === 'imcivree-email' ? 'email' : 'banner'} has **${feedback.comments.length} comment${feedback.comments.length > 1 ? 's' : ''}** from the review team.
-
----
-
-${feedbackSummary}
-
----
-
-## 🎯 Ready to Address Feedback?
-
-**Quick Actions:**
-- Say **"Address all feedback"** and I'll revise the content to incorporate all comments
-- Say **"Address comment 1"** to handle a specific comment
-- Ask me **"What exactly does the reviewer want?"** if you need clarification
-
-**Or tell me specifically what to change**, for example:
-- "Make the headline more clinical"
-- "Add a reference for the efficacy claim"
-- "Soften the language in paragraph 2"
-
-What would you like me to do?`
-          }])
+            .catch(err => {
+              console.error('Error fetching Ziflow feedback:', err)
+              setMessages([{ role: 'assistant', content: buildFeedbackMessage(content, null) }])
+              setIsLoadingReview(false)
+            })
+          return // Don't set isLoadingReview false yet - wait for fetch
         } else {
-          setMessages([{
-            role: 'assistant',
-            content: `I've loaded your ${content.content_type === 'imcivree-email' ? 'email' : 'banner'} that's currently in MLR review.\n\n**Status:** Waiting for reviewer feedback\n\nYou can make edits now or wait for reviewer comments. Any changes you make can be resubmitted for approval.`
-          }])
+          setMessages([{ role: 'assistant', content: buildFeedbackMessage(content, null) }])
+          setIsLoadingReview(false)
         }
       } catch (e) {
         console.error('Error parsing reviewSession:', e)
+        setIsLoadingReview(false)
       }
-      setIsLoadingReview(false)
       return
     }
 
