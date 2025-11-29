@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IMCIVREE 728x250 Banner Replicated</title>
+<style>
+    /* --- RESET & BASIC SETUP --- */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Arial", sans-serif;
+    }
+
+    body {
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    /* --- BANNER CONTAINER --- */
+    .banner-container {
+        width: 728px;
+        height: 250px;
+        background-color: #fcfcfc; /* Off-white background */
+        border: 1px solid #ccc;
+        position: relative;
+        overflow: hidden;
+        display: flex; /* Flexbox used for layout */
+    }
+
+    /* --- LEFT CONTENT AREA (65%) --- */
+    .content-area {
+        width: 65%;
+        height: 100%;
+        position: relative;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* --- LOGO --- */
+    .logo {
+        width: 120px; /* Adjust based on actual logo size */
+        height: auto;
+        margin-bottom: 10px;
+        z-index: 10;
+    }
+
+    /* --- HERO IMAGE --- */
+    /* This is the SPECIFIC CSS from the video to fix the anchor issue */
+    .hero-image {
+        position: absolute;
+        bottom: 0;
+        right: 10px; /* Positioned to the right of the text area */
+        align-self: flex-end;
+        height: 90%; /* Adjusted to match visual proportion in video */
+        object-fit: contain;
+        z-index: 1;
+    }
+
+    /* --- TEXT SLIDES ANIMATION --- */
+    .slide-container {
+        position: relative;
+        z-index: 5; /* In front of image */
+        width: 60%; /* Limit text width so it doesn't overlap image face */
+        margin-top: 20px;
+    }
+
+    .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+    }
+
+    /* Text Styles */
+    h1 {
+        color: #4a7729; /* Olive/Forest Green */
+        font-size: 22px;
+        line-height: 1.2;
+        margin-bottom: 15px;
+    }
+
+    .small-h1 {
+        font-size: 16px; /* Smaller font for the longer text in Slide 2 */
+        font-weight: bold;
+    }
+
+    /* Button Styles */
+    .cta-button {
+        display: inline-block;
+        background-color: #007a6e; /* Teal Color */
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
+    /* --- ANIMATION LOGIC (CSS ONLY) --- */
+    /* Slide 1 visible initially, then fades out */
+    #slide1 {
+        animation: fadeOut 0.5s forwards;
+        animation-delay: 4s; /* Wait 4 seconds before switching */
+        opacity: 1; /* Start visible */
+    }
+
+    /* Slide 2 invisible initially, then fades in */
+    #slide2 {
+        opacity: 0;
+        animation: fadeIn 0.5s forwards;
+        animation-delay: 4.5s; /* Start appearing after Slide 1 fades */
+    }
+
+    @keyframes fadeOut {
+        to { opacity: 0; pointer-events: none; }
+    }
+
+    @keyframes fadeIn {
+        to { opacity: 1; pointer-events: auto; }
+    }
+
+    /* --- RIGHT ISI SCROLL AREA (35%) --- */
+    .isi-panel {
+        width: 35%;
+        height: 100%;
+        background-color: #ffffff;
+        border-left: 1px solid #e0e0e0;
+        padding: 10px;
+        overflow-y: scroll; /* Enables scrolling */
+        font-size: 10px;
+        color: #333;
+        line-height: 1.4;
+    }
+
+    .isi-panel h2 {
+        font-size: 11px;
+        color: #007a6e;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+    }
+
+    .isi-panel h3 {
+        font-size: 10px;
+        font-weight: bold;
+        margin-top: 8px;
+        margin-bottom: 2px;
+    }
+
+    .isi-panel ul {
+        padding-left: 15px;
+        margin-bottom: 5px;
+    }
+
+    /* Custom Scrollbar for Chrome/Safari/Edge to match modern ads */
+    .isi-panel::-webkit-scrollbar {
+        width: 6px;
+    }
+    .isi-panel::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    .isi-panel::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+
+</style>
+</head>
+<body>
+
+    <div class="banner-container">
+        <div class="content-area">
+            <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/eb7c399c-9c9a-480a-b5fa-5cb0deb2a362/imcivree-logo-big.png" alt="IMCIVREE Logo" class="logo">
+
+            <!-- Replace with actual adult woman image URL when available -->
+            <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/6577b351-bb95-474c-a386-838150b5846a/kidiso.png" alt="Person" class="hero-image">
+
+            <div class="slide-container">
+
+                <div class="slide" id="slide1">
+                    <h1>IMCIVREE is a different kind of treatment</h1>
+                    <a href="#" class="cta-button">For people 6 years and up</a>
+                </div>
+
+                <div class="slide" id="slide2">
+                    <h1 class="small-h1">The only treatment for obesity due to BBS that targets a root cause of obesity & hunger</h1>
+                    <a href="#" class="cta-button">SEE MORE &gt;</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="isi-panel">
+            <h2>Important Safety Information</h2>
+
+            <h3>Limitations of Use</h3>
+            <p>IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective:</p>
+            <ul>
+                <li>Other types of obesity not related to BBS or other FDA-approved indications.</li>
+                <li>Obesity associated with other genetic syndromes and general (polygenic) obesity.</li>
+            </ul>
+
+            <h3>Contraindications</h3>
+            <p>Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</p>
+
+            <h3>Warnings and Precautions</h3>
+            <ul>
+                <li><strong>Disturbance in sexual arousal:</strong> Spontaneous penile erections in males and sexual adverse reactions in females have occurred.</li>
+                <li><strong>Depression and suicidal ideation:</strong> Depression, suicidal ideation, and depressed mood have been reported.</li>
+                <li><strong>Hypersensitivity reactions:</strong> Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</li>
+                <li><strong>Skin pigmentation:</strong> Darkening of pre-existing nevi, and development of new skin pigmentation.</li>
+                <li><strong>Risk of serious adverse reactions due to benzyl alcohol preservative:</strong> Risk of serious adverse reactions in neonates and infants.</li>
+            </ul>
+            <br>
+            <p><em>(Please scroll for full Safety Information)</em></p>
+            <br><br><br>
+        </div>
+    </div>
+
+</body>
+</html>

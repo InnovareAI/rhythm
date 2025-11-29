@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>IMCIVREE 728x250 Banner</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #f2f2f2;
+      font-family: 'Avenir', 'Proxima Nova', 'Proxima', Arial, Helvetica, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    #imcivree-banner {
+      width: 728px;
+      height: 250px;
+      border: 1px solid #0f6c73;
+      background: #eff3d8;
+      overflow: hidden;
+      display: flex;
+      flex-direction: row;
+      font-size: 11px;
+      position: relative;
+    }
+
+    /* --- MAIN CREATIVE AREA (LEFT ~65%) --- */
+    .main-panel {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      background: #eff3d8;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-right: 10px;
+    }
+
+    .slide-right {
+      width: 40%;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    /* --- LOGO --- */
+    .logo {
+      width: 140px;
+      height: auto;
+      margin-bottom: 12px;
+    }
+
+    /* --- HEADLINES --- */
+    .headline {
+      font-size: 20px;
+      line-height: 1.15;
+      color: #0f6c73;
+      font-weight: bold;
+      max-width: 95%;
+    }
+
+    .headline-line {
+      display: block;
+    }
+
+    .headline-highlight {
+      color: #00697b;
+      font-weight: 700;
+    }
+
+    /* --- BUTTONS --- */
+    .cta-button {
+      margin-top: 14px;
+      background: #0e7076;
+      color: #ffffff;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: fit-content;
+    }
+
+    .cta-arrow {
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      display: inline-block;
+      padding: 3px;
+      transform: rotate(-45deg);
+    }
+
+    /* --- HERO IMAGE (Bottom Anchored) --- */
+    .hero-image {
+      position: absolute;
+      bottom: 0;
+      align-self: flex-end;
+      height: 100%;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* --- ISI PANEL (RIGHT ~35%) --- */
+    .isi-panel {
+      width: 35%;
+      height: 100%;
+      background: #ffffff;
+      border-left: 1px solid #0f6c73;
+      padding: 10px 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .isi-heading {
+      font-weight: bold;
+      color: #0f6c73;
+      margin-bottom: 6px;
+      font-size: 11px;
+    }
+
+    .isi-subheading {
+      font-weight: bold;
+      margin-top: 8px;
+      margin-bottom: 3px;
+      color: #0f6c73;
+      font-size: 10px;
+    }
+
+    .isi-text {
+      color: #4a4a4a;
+      font-size: 9px;
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+
+    .isi-scroll-wrapper {
+      position: absolute;
+      left: 12px;
+      right: 6px;
+      bottom: 10px;
+      top: 28px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .isi-scroll {
+      position: relative;
+      width: 100%;
+    }
+
+    /* Pause scroll on hover */
+    .isi-panel:hover .isi-scroll-wrapper {
+      overflow-y: scroll;
+    }
+  </style>
+</head>
+<body>
+  <div id="imcivree-banner">
+    <!-- MAIN CREATIVE PANEL (LEFT) -->
+    <div class="main-panel">
+      <!-- SCREEN 1: Different Kind of Treatment -->
+      <div class="slide active" id="slide1">
+        <div class="slide-left">
+          <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/eb7c399c-9c9a-480a-b5fa-5cb0deb2a362/imcivree-logo-big.png" alt="IMCIVREE Logo" class="logo" />
+
+          <div class="headline">
+            <span class="headline-line">IMCIVREE is a</span>
+            <span class="headline-line"><span class="headline-highlight">different kind</span></span>
+            <span class="headline-line">of treatment</span>
+          </div>
+
+          <button class="cta-button">For people 6 years and up</button>
+        </div>
+
+        <div class="slide-right">
+          <!-- Adult woman placeholder - replace with actual image URL -->
+          <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/6577b351-bb95-474c-a386-838150b5846a/kidiso.png" alt="Person" class="hero-image" />
+        </div>
+      </div>
+
+      <!-- SCREEN 2: The Only Treatment -->
+      <div class="slide" id="slide2">
+        <div class="slide-left">
+          <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/eb7c399c-9c9a-480a-b5fa-5cb0deb2a362/imcivree-logo-big.png" alt="IMCIVREE Logo" class="logo" />
+
+          <div class="headline">
+            <span class="headline-line"><span class="headline-highlight">The only treatment</span></span>
+            <span class="headline-line">for <span class="headline-highlight">obesity</span> due to <span class="headline-highlight">BBS</span></span>
+            <span class="headline-line">that targets a <span class="headline-highlight">root cause</span></span>
+            <span class="headline-line" style="color:#4a4a4a; font-weight:normal;">of obesity & hunger</span>
+          </div>
+
+          <button class="cta-button">
+            SEE MORE <span class="cta-arrow"></span>
+          </button>
+        </div>
+
+        <div class="slide-right">
+          <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/6577b351-bb95-474c-a386-838150b5846a/kidiso.png" alt="Person" class="hero-image" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ISI PANEL (RIGHT) -->
+    <div class="isi-panel">
+      <div class="isi-heading">Important Safety Information</div>
+      <div class="isi-scroll-wrapper">
+        <div class="isi-scroll">
+          <div class="isi-subheading">Limitations of Use</div>
+          <p class="isi-text">
+            IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective:
+          </p>
+          <p class="isi-text">
+            Other types of obesity not related to BBS or other FDA-approved indications for IMCIVREE, including obesity associated with other genetic syndromes and general (polygenic) obesity.
+          </p>
+
+          <div class="isi-subheading">Contraindications</div>
+          <p class="isi-text">
+            Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.
+          </p>
+
+          <div class="isi-subheading">Warnings and Precautions</div>
+          <p class="isi-text">
+            <strong>Disturbance in sexual arousal:</strong> Spontaneous penile erections in males and sexual adverse reactions in females have occurred.
+          </p>
+          <p class="isi-text">
+            <strong>Depression and suicidal ideation:</strong> Depression, suicidal ideation, and depressed mood have been reported.
+          </p>
+          <p class="isi-text">
+            <strong>Hypersensitivity reactions:</strong> Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.
+          </p>
+          <p class="isi-text">
+            <strong>Skin pigmentation:</strong> Darkening of pre-existing nevi, and development of new skin pigmentation have occurred.
+          </p>
+          <p class="isi-text">
+            <strong>Risk of serious adverse reactions:</strong> Due to benzyl alcohol preservative in neonates and infants.
+          </p>
+
+          <div class="isi-subheading">Adverse Reactions</div>
+          <p class="isi-text">
+            Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection.
+          </p>
+
+          <div class="isi-subheading">Adverse Event Reporting</div>
+          <p class="isi-text">
+            To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // Slide rotation (5 seconds per frame)
+  (function () {
+    var slide1 = document.getElementById("slide1");
+    var slide2 = document.getElementById("slide2");
+    var slides = [slide1, slide2];
+    var current = 0;
+
+    function showSlide(index) {
+      slides.forEach(function (s, i) {
+        if (s) s.classList.toggle("active", i === index);
+      });
+    }
+
+    function swapSlides() {
+      current = (current + 1) % slides.length;
+      showSlide(current);
+    }
+
+    showSlide(0);
+    setInterval(swapSlides, 5000); // 5 seconds per frame
+  })();
+
+  // ISI auto-scroll
+  (function () {
+    var wrapper = document.querySelector('.isi-scroll-wrapper');
+    if (!wrapper) return;
+
+    var isHovering = false;
+    wrapper.addEventListener('mouseenter', function () { isHovering = true; });
+    wrapper.addEventListener('mouseleave', function () { isHovering = false; });
+
+    function step() {
+      if (!isHovering) {
+        if (wrapper.scrollTop >= wrapper.scrollHeight - wrapper.clientHeight) {
+          wrapper.scrollTop = 0;
+        } else {
+          wrapper.scrollTop += 0.3;
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
+  })();
+  </script>
+</body>
+</html>
