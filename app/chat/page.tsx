@@ -908,14 +908,14 @@ Give me a moment...`
             <div className="mx-auto max-w-3xl space-y-6">
               {/* Ziflow Feedback Banner */}
               {ziflowFeedback?.comments?.length > 0 && (
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl p-5 mb-4 shadow-sm">
+                <div className="bg-gradient-to-r from-[#f6fbfb] to-[#e8f4f4] border-2 border-[#007a80]/30 rounded-xl p-5 mb-4 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="bg-blue-600 rounded-full p-1.5">
+                    <div className="bg-[#007a80] rounded-full p-1.5">
                       <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                       </svg>
                     </div>
-                    <h3 className="font-bold text-blue-900">MLR Review Feedback</h3>
+                    <h3 className="font-bold text-[#007a80]">MLR Review Feedback</h3>
                     <span className="ml-auto px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-semibold rounded-full">
                       {ziflowFeedback.comments.length} action{ziflowFeedback.comments.length > 1 ? 's' : ''} needed
                     </span>
@@ -923,14 +923,14 @@ Give me a moment...`
 
                   <div className="space-y-2 mb-4">
                     {ziflowFeedback.comments.map((comment: any, i: number) => (
-                      <div key={i} className="bg-white rounded-lg p-3 border border-blue-100 shadow-sm">
+                      <div key={i} className="bg-white rounded-lg p-3 border border-[#007a80]/20 shadow-sm">
                         <div className="flex items-start gap-2">
-                          <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xs font-bold">
+                          <span className="flex-shrink-0 w-6 h-6 bg-[#007a80]/10 text-[#007a80] rounded-full flex items-center justify-center text-xs font-bold">
                             {i + 1}
                           </span>
                           <div className="flex-1">
                             <div className="flex justify-between items-start mb-1">
-                              <span className="text-sm font-semibold text-blue-800">{comment.authorName}</span>
+                              <span className="text-sm font-semibold text-[#007a80]">{comment.authorName}</span>
                             </div>
                             <p className="text-sm text-gray-700">{comment.text}</p>
                           </div>
@@ -939,7 +939,7 @@ Give me a moment...`
                     ))}
                   </div>
 
-                  <div className="bg-white/70 rounded-lg p-3 border border-blue-100">
+                  <div className="bg-white/70 rounded-lg p-3 border border-[#007a80]/20">
                     <p className="text-xs text-gray-600 mb-2 font-medium">Quick Actions:</p>
                     <div className="flex flex-wrap gap-2">
                       <button
@@ -951,13 +951,13 @@ Give me a moment...`
                             form?.dispatchEvent(new Event('submit', { bubbles: true }))
                           }, 100)
                         }}
-                        className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-sm"
+                        className="px-4 py-2 text-sm bg-[#007a80] text-white rounded-lg hover:bg-[#1c7b80] font-medium shadow-sm"
                       >
                         ✨ Address All Feedback
                       </button>
                       <button
                         onClick={() => setInput('Can you explain what the reviewer wants me to change?')}
-                        className="px-4 py-2 text-sm border-2 border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 font-medium"
+                        className="px-4 py-2 text-sm border-2 border-[#007a80]/30 text-[#007a80] rounded-lg hover:bg-[#f6fbfb] font-medium"
                       >
                         🤔 Explain Feedback
                       </button>
