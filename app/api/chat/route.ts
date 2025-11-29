@@ -625,7 +625,15 @@ export async function POST(request: NextRequest) {
               })}\n\n`))
               controller.close()
             } catch (error: any) {
-              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: error.message })}\n\n`))
+              console.error('[IMCIVREE EMAIL STREAM ERROR]', error.message || error)
+              // Provide user-friendly error message
+              let userMessage = 'The AI service is temporarily busy. Please try again in a moment.'
+              if (error.message?.includes('rate') || error.message?.includes('limit')) {
+                userMessage = 'Rate limit reached. Please wait a moment and try again.'
+              } else if (error.message?.includes('timeout') || error.message?.includes('stream')) {
+                userMessage = 'Connection timed out. Please try again.'
+              }
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: userMessage })}\n\n`))
               controller.close()
             }
           }
@@ -663,24 +671,40 @@ export async function POST(request: NextRequest) {
         const openrouter = getOpenRouter()
         console.log('[IMCIVREE BANNER] Using model:', defaultModel)
 
-        const stream = await openrouter.chat.completions.create({
-          model: defaultModel,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: 'Generate the HTML banner code now.' }
-          ],
-          temperature: 0.7,
-          max_tokens: 8000,
-          stream: true,
-        })
+        // Helper function to create stream with retry
+        const createStreamWithRetry = async (retries = 2): Promise<any> => {
+          for (let attempt = 0; attempt <= retries; attempt++) {
+            try {
+              console.log(`[IMCIVREE BANNER] Attempt ${attempt + 1}/${retries + 1}`)
+              return await openrouter.chat.completions.create({
+                model: defaultModel,
+                messages: [
+                  { role: 'system', content: systemPrompt },
+                  { role: 'user', content: 'Generate the HTML banner code now.' }
+                ],
+                temperature: 0.7,
+                max_tokens: 8000,
+                stream: true,
+              })
+            } catch (error: any) {
+              console.error(`[IMCIVREE BANNER] Attempt ${attempt + 1} failed:`, error.message)
+              if (attempt === retries) throw error
+              await new Promise(r => setTimeout(r, 1000 * (attempt + 1))) // Exponential backoff
+            }
+          }
+        }
+
+        const stream = await createStreamWithRetry()
 
         // Create SSE streaming response
         const encoder = new TextEncoder()
         const readable = new ReadableStream({
           async start(controller) {
             let fullContent = ''
+            let lastChunkTime = Date.now()
             try {
               for await (const chunk of stream) {
+                lastChunkTime = Date.now()
                 const content = chunk.choices[0]?.delta?.content || ''
                 if (content) {
                   fullContent += content
@@ -708,7 +732,15 @@ export async function POST(request: NextRequest) {
               })}\n\n`))
               controller.close()
             } catch (error: any) {
-              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: error.message })}\n\n`))
+              console.error('[IMCIVREE BANNER STREAM ERROR]', error.message || error)
+              // Provide user-friendly error message
+              let userMessage = 'The AI service is temporarily busy. Please try again in a moment.'
+              if (error.message?.includes('rate') || error.message?.includes('limit')) {
+                userMessage = 'Rate limit reached. Please wait a moment and try again.'
+              } else if (error.message?.includes('timeout') || error.message?.includes('stream')) {
+                userMessage = 'Connection timed out. Please try again.'
+              }
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: userMessage })}\n\n`))
               controller.close()
             }
           }
