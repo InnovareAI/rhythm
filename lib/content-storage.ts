@@ -632,7 +632,7 @@ export async function uploadHtmlFile(
     // Upload to storage
     const { data, error } = await supabase
       .storage
-      .from('content-files')
+      .from('video-images')
       .upload(`html/${filename}`, blob, {
         contentType: 'text/html',
         upsert: true
@@ -646,7 +646,7 @@ export async function uploadHtmlFile(
     // Get public URL
     const { data: urlData } = supabase
       .storage
-      .from('content-files')
+      .from('video-images')
       .getPublicUrl(`html/${filename}`)
 
     return urlData.publicUrl
@@ -665,7 +665,7 @@ export async function deleteHtmlFile(filename: string): Promise<boolean> {
 
     const { error } = await supabase
       .storage
-      .from('content-files')
+      .from('video-images')
       .remove([`html/${filename}`])
 
     if (error) {
