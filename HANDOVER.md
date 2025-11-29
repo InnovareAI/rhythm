@@ -571,49 +571,44 @@ netlify env:list
 
 ## Known Issues & Future Work
 
-### Current Limitations
+### Completed Features (Previously Limitations)
 
-1. **No Content Persistence**
-   - IMCIVREE emails and banners are NOT saved to Supabase
-   - Generated content exists only in browser session
-   - Content History page will be empty
-   - **Solution:** Add save call after streaming completes in `/api/chat/route.ts`
+1. **Content Persistence** - DONE
+   - Emails and banners auto-save to `imcivree_content` table after generation
+   - Content History page shows all saved content
 
-2. **No Conversation History**
-   - Can't view previous generations
-   - Can't resume or edit past content
-   - **Solution:** Save conversations to Supabase `conversations` table
+2. **Content History** - DONE
+   - View all previous generations in Content History
+   - Resume/edit past content with "Edit / Create Revision" button
 
-3. **No Content Versioning**
-   - No way to track revisions of content
-   - Can't compare versions or rollback
-   - **Solution:** Add `version` field and revision history table
+3. **Content Versioning** - DONE
+   - `content_versions` table tracks all revisions
+   - Version history viewable in Content History modal
 
-4. **Ziflow Feedback Lost on Restart**
-   - Webhook feedback stored in-memory Map
-   - Resets on every deploy/restart
-   - **Solution:** Create `ziflow_feedback` Supabase table
+4. **Ziflow Feedback Persistence** - DONE
+   - `ziflow_feedback` and `ziflow_comments` tables in Supabase
+   - Feedback persists across deploys/restarts
 
-5. **Ziflow File Hosting**
-   - Content submission requires publicly accessible URLs
-   - Current MVP returns preparation message
-   - **Solution:** Need S3/Cloudinary for temporary HTML hosting
+5. **Ziflow File Hosting** - DONE
+   - Uses `video-images` Supabase Storage bucket
+   - HTML files uploaded for Ziflow proof submissions
 
-6. **No Content Library/Archive**
-   - Can't browse approved content
-   - No template reuse
-   - **Solution:** Add content library with tagging/search
+6. **Content Library** - DONE
+   - Search by focus area or key message
+   - Filter by content type, audience, status
+   - Version history and edit functionality
 
-7. **Banner Dimensions**
+### Remaining Limitations
+
+1. **Banner Dimensions**
    - Only 728×250 (IAB Leaderboard) implemented
-   - Other sizes may be requested (300×250, 160×600, 320×50)
+   - Other sizes may be requested: 300×250, 160×600, 320×50
 
 ### Potential Enhancements
 
 | Priority | Enhancement |
 |----------|-------------|
-| High | Persistent feedback storage in Supabase |
-| High | Public URL hosting for Ziflow submissions |
+| Medium | Additional banner sizes (300×250, 160×600, 320×50) |
 | Medium | Email preview in mobile/desktop frames |
 | Medium | Template library for approved content |
 | Medium | A/B testing variant generation |
