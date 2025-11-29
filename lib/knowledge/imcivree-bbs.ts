@@ -57,6 +57,7 @@ export const TYPOGRAPHY = {
 export const IMAGES = {
   // Logos
   imcivreeLogo: 'https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png',
+  imcivreeLogoWhite: '/images/imcivree-logo-white.png', // For teal/dark backgrounds
 
   // Hero images by email type
   heroImages: {
