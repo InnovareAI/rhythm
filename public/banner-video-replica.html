@@ -225,5 +225,30 @@
         </div>
     </div>
 
+    <script>
+    // ISI auto-scroll - no user interaction needed
+    (function () {
+        var isiPanel = document.querySelector('.isi-panel');
+        if (!isiPanel) return;
+
+        var isHovering = false;
+        isiPanel.addEventListener('mouseenter', function () { isHovering = true; });
+        isiPanel.addEventListener('mouseleave', function () { isHovering = false; });
+
+        function step() {
+            if (!isHovering) {
+                if (isiPanel.scrollTop >= isiPanel.scrollHeight - isiPanel.clientHeight) {
+                    isiPanel.scrollTop = 0; // Restart from top
+                } else {
+                    isiPanel.scrollTop += 0.3; // Smooth scroll speed
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        requestAnimationFrame(step);
+    })();
+    </script>
+
 </body>
 </html>
