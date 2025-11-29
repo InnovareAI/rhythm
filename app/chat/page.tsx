@@ -237,9 +237,10 @@ What would you like me to do?`
     }
   }
 
-  // Initialize greeting when entering chat
+  // Initialize greeting when entering chat (only for NEW content creation)
   useEffect(() => {
-    if (step === 'chat') {
+    // Skip if this is a review session (content already loaded)
+    if (step === 'chat' && !generatedContent && !editingContentId) {
       const audienceLabel = audience === 'hcp' ? 'HCP' : 'Patient/Caregiver'
       const emailTypeObj = EMAIL_TYPES[audience].find(t => t.id === emailType)
       const segmentObj = audience === 'hcp' ? HCP_SEGMENTS.find(s => s.id === hcpSegment) : null
@@ -269,7 +270,7 @@ Give me a moment...`
       // Auto-generate the email
       generateEmail()
     }
-  }, [step])
+  }, [step, generatedContent, editingContentId])
 
   const [streamingContent, setStreamingContent] = useState('')
   const [processingEmail, setProcessingEmail] = useState(false)
