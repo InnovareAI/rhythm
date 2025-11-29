@@ -1,175 +1,254 @@
-# 3cubed Rhythm - Pharmaceutical Content Hub
-## Handover Document for Next Assistant
+# IMCIVREE Creative Hub - Technical Handover Document
 
-**Last Updated:** January 21, 2025
-**Project Status:** Production - Fully Deployed
+**Project:** IMCIVREE Creative Hub
+**Client:** Rhythm Pharmaceuticals / 3cubed
+**Last Updated:** November 29, 2025
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
+**Repository:** https://github.com/InnovareAI/rhythm.git
 
 ---
 
 ## Table of Contents
+
 1. [Project Overview](#project-overview)
-2. [System Architecture](#system-architecture)
-3. [Key Features](#key-features)
-4. [Technology Stack](#technology-stack)
-5. [File Structure](#file-structure)
+2. [Tech Stack](#tech-stack)
+3. [Environment Setup](#environment-setup)
+4. [Project Architecture](#project-architecture)
+5. [Feature Documentation](#feature-documentation)
 6. [API Endpoints](#api-endpoints)
 7. [Database Schema](#database-schema)
-8. [Environment Variables](#environment-variables)
-9. [AI Models & Services](#ai-models--services)
-10. [Content Generators](#content-generators)
-11. [Known Issues](#known-issues)
-12. [Deployment Process](#deployment-process)
-13. [Future Enhancements](#future-enhancements)
+8. [External Integrations](#external-integrations)
+9. [Brand Guidelines](#brand-guidelines)
+10. [Compliance Requirements](#compliance-requirements)
+11. [Deployment](#deployment)
+12. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
 ## Project Overview
 
-**Purpose:** AI-powered pharmaceutical content generation platform for rare disease medications, creating FDA-compliant marketing materials.
+The IMCIVREE Creative Hub is a pharmaceutical marketing content generation platform that creates compliant HTML emails and banner ads for IMCIVREE (setmelanotide), a treatment for obesity due to Bardet-Biedl Syndrome (BBS).
 
-**Core Capabilities:**
-- HCP Email Generation (conversational chat)
-- Social Media Post Generation (form-based)
-- Video Generation with Kling AI (form-based)
-- AI-powered content prompt generation
-- Unified content history with auto-save
-- Medical/clinical content focus (NO lifestyle imagery)
+### Key Features
 
-**Target Users:** Pharmaceutical marketing teams working on rare disease medications
+| Feature | Route | Description |
+|---------|-------|-------------|
+| HCP + Patient Email Generator | `/chat` | AI-powered HTML email creation with ISI and references |
+| HCP + Patient Banner Ads | `/banner-generator` | 728x250 animated banners with scrolling ISI |
+| Approval Queue | `/approvals` | Ziflow MLR integration for tracking approvals |
+| Content History | `/content-history` | View and download previously generated content |
 
----
+### Target Audiences
 
-## System Architecture
-
-```
-┌─────────────────────────────────────────────────┐
-│              Next.js 16 Frontend                │
-│         (App Router + Server Actions)           │
-└────────────────┬────────────────────────────────┘
-                 │
-    ┌────────────┴────────────┐
-    │                         │
-┌───▼──────────┐    ┌────────▼─────────┐
-│   Netlify    │    │    Supabase      │
-│   Hosting    │    │    Database      │
-│  (60s max)   │    │   + Storage      │
-└───┬──────────┘    └──────────────────┘
-    │
-┌───▼──────────────────────────────────┐
-│        External AI Services          │
-├──────────────────────────────────────┤
-│ • OpenRouter (Claude 4.5 Sonnet)     │
-│ • Fal.ai (Flux Dev + Kling Video)    │
-└──────────────────────────────────────┘
-```
-
-**Key Architectural Decisions:**
-1. **Async Video Generation:** Videos take 60-90s, so we use queue/poll pattern to avoid timeouts
-2. **Client-Side Mockups:** Social media mockups use html2canvas (client-side) due to serverless limitations
-3. **Auto-Save Everything:** All generated content automatically saves to Supabase
-4. **Medical Content Focus:** AI prompts explicitly prevent lifestyle/emotional imagery
+- **HCP (Healthcare Professionals)** - Clinical, data-forward messaging with terms like "hyperphagia"
+- **Patient/Caregiver** - Accessible, supportive messaging using "hunger" instead of clinical terms
 
 ---
 
-## Key Features
+## Tech Stack
 
-### 1. HCP Email Generator (`/chat?type=hcp-email`)
-- Conversational chat interface
-- Generates FDA-compliant emails with ISI and references
-- AI prompt helper at conversation start
-- Auto-saves to conversations table
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Next.js | 16.0.3 | React framework with App Router |
+| React | 19.2.0 | UI components |
+| TypeScript | 5.x | Type safety |
+| Tailwind CSS | 4.x | Styling |
+| Supabase | 2.83.0 | PostgreSQL database & auth |
+| OpenRouter API | - | LLM access (Claude Sonnet 4) |
+| Fal.ai | 0.15.0 | AI image generation |
+| Ziflow API | - | MLR approval workflow |
+| Netlify | - | Hosting & deployment |
 
-### 2. Social Media Generator (`/social-media-generator`)
-- **Form-based** interface (not chat)
-- Platform selection: Instagram, Facebook, X/Twitter
-- AI content generator button
-- Generates medical illustrations/infographics
-- Creates platform-specific mockups
-- Auto-saves to conversations table
+---
 
-### 3. Video Generator (`/video-generator`)
-- **Form-based** interface (not chat)
-- Three image source options:
-  - AI generation (Flux Dev)
-  - Image upload (Supabase storage)
-  - Image URL
-- AI prompt generator for both image and animation
-- Async video generation with Kling 2.5 Turbo Pro
-- Polls every 3 seconds for completion
-- Auto-saves to video_generations table
+## Environment Setup
+
+### Required Environment Variables
+
+Create a `.env.local` file with:
+
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=xxx
+
+# AI Services
+OPENROUTER_API_KEY=xxx
+
+# Fal.ai Image Generation
+FAL_KEY=xxx
+
+# Ziflow MLR Integration
+ZIFLOW_API_KEY=xxx
+```
+
+### Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+```
+
+---
+
+## Project Architecture
+
+### Directory Structure
+
+```
+rhythm/
+├── app/                          # Next.js App Router
+│   ├── api/                      # API routes
+│   │   ├── chat/route.ts         # Email generation streaming
+│   │   ├── conversations/route.ts # Content history API
+│   │   ├── generate-image/route.ts # Fal.ai image generation
+│   │   ├── optimize-with-feedback/route.ts # LLM optimization
+│   │   ├── submit-for-approval/route.ts # Ziflow submission
+│   │   ├── upload-image/route.ts # Image upload handling
+│   │   └── ziflow-webhook/route.ts # Webhook receiver
+│   ├── approvals/page.tsx        # Approval queue UI
+│   ├── banner-generator/page.tsx # Banner creation UI
+│   ├── chat/page.tsx             # Email creation UI
+│   ├── content-history/page.tsx  # Content history UI
+│   ├── layout.tsx                # Root layout
+│   └── page.tsx                  # Home page (hub)
+│
+├── lib/                          # Shared libraries
+│   ├── knowledge/
+│   │   └── imcivree-bbs.ts       # Brand knowledge base (ISI, colors, messages)
+│   ├── prompts/
+│   │   ├── imcivree-banner.ts    # Banner generation prompts + HTML template
+│   │   └── imcivree-email.ts     # Email generation prompts
+│   ├── conversation-storage.ts   # Supabase CRUD operations
+│   ├── fal.ts                    # Fal.ai client
+│   ├── openrouter.ts             # OpenRouter client
+│   ├── supabase.ts               # Supabase client
+│   └── ziflow.ts                 # Ziflow API client
+│
+├── netlify.toml                  # Netlify configuration
+├── package.json
+└── tsconfig.json
+```
+
+### Data Flow
+
+```
+User Input → Next.js API → OpenRouter (Claude) → HTML Generation → Supabase Storage
+                                                        ↓
+                                               Ziflow (Optional)
+                                                        ↓
+                                               Webhook → Feedback → LLM Optimization
+```
+
+---
+
+## Feature Documentation
+
+### 1. Email Generator (`/chat`)
+
+**Location:** `app/chat/page.tsx`
+
+**Flow:**
+1. User selects audience (HCP or Patient)
+2. User selects email type
+3. Optional: Add key message emphasis
+4. AI generates HTML email with proper structure, references, and ISI
+5. User can submit to Ziflow for approval
+
+**Email Types:**
+
+| Audience | Types |
+|----------|-------|
+| HCP | MOA, Clinical Summary, Dosing, Efficacy Data |
+| Patient | Getting Started, What to Expect, Support Resources |
+
+**Technical Details:**
+- Uses streaming response via `app/api/chat/route.ts`
+- Prompt defined in `lib/prompts/imcivree-email.ts`
+- Saves to Supabase `conversations` table
+- Purple "Submit to Ziflow" button after generation
+
+### 2. Banner Generator (`/banner-generator`)
+
+**Location:** `app/banner-generator/page.tsx`
+
+**Specifications:**
+- **Dimensions:** 728×250 pixels (IAB Leaderboard format)
+- **Animation:** CSS-only two-screen fade (4s per screen)
+- **ISI Panel:** 35% width, auto-scrolling at 0.2px/frame using CSS transform
+- **Fonts:** Avenir, Proxima Nova, Arial fallback
+
+**Layout Structure:**
+```
+┌──────────────────────────────┬────────────────┐
+│       Content Area (65%)     │  ISI Panel     │
+│   ┌──────────────────────┐   │    (35%)       │
+│   │ IMCIVREE Logo        │   │                │
+│   └──────────────────────┘   │  Important     │
+│   ┌──────────────────────┐   │  Safety Info   │
+│   │ Headline (animated)  │   │                │
+│   │ CTA Button          │   │  [scrolling]   │
+│   └──────────────────────┘   │                │
+│           [Hero Image]        │                │
+└──────────────────────────────┴────────────────┘
+```
+
+**Focus Options:**
+
+| Audience | Focus Areas |
+|----------|-------------|
+| HCP | MOA, Weight Reduction, Hunger Reduction, Treatment Journey |
+| Patient | Understanding BBS, Path Forward, Support Available |
+
+**Technical Details:**
+- Complete HTML template in `lib/prompts/imcivree-banner.ts` (495 lines)
+- Uses CSS `@keyframes` for slide transitions (fadeIn/fadeOut)
+- Uses `requestAnimationFrame` + CSS `transform: translateY()` for smooth ISI scroll
+- ISI pauses on hover
+- Template includes placeholder `{{PRODUCT_URL}}` replaced based on audience
+
+### 3. Approval Queue (`/approvals`)
+
+**Location:** `app/approvals/page.tsx`
+
+**Features:**
+- View submissions by status (Pending, Needs Changes, Approved)
+- Display reviewer feedback/comments
+- Trigger AI optimization based on feedback
+
+**Status Colors:**
+- Blue: Pending Review
+- Yellow: Needs Changes
+- Green: Approved
+
+**Ziflow Webhook Setup:**
+Configure in Ziflow: Settings > Integrations > Webhooks
+- URL: `https://your-domain.com/api/ziflow-webhook`
+- Events: `proof.commented`, `proof.decision`, `proof.stage_changed`
 
 ### 4. Content History (`/content-history`)
-- **Unified view** of all content (emails, social, videos)
-- Filter tabs by content type
-- Grid view with previews
-- Click to view full details
-- Download options
-- Fetches from both `conversations` and `video_generations` tables
 
----
+**Location:** `app/content-history/page.tsx`
 
-## Technology Stack
+**Features:**
+- Filter by content type (All, Emails, Banners)
+- Preview thumbnails with iframe (banners) or icons (emails)
+- Modal with full preview
+- Copy HTML to clipboard
+- Download as HTML file
 
-### Frontend
-- **Next.js 16.0.3** (App Router, Turbopack)
-- **React 19** with TypeScript
-- **Tailwind CSS** for styling
-- **html2canvas** for client-side mockup generation
-
-### Backend/APIs
-- **Next.js API Routes** (serverless functions)
-- **Netlify** (hosting, 60-second function timeout on Pro plan)
-- **Supabase** (PostgreSQL database + file storage)
-
-### AI Services
-- **OpenRouter API** - Claude 4.5 Sonnet for content/prompt generation
-- **Fal.ai** - Flux Dev (images) + Kling 2.5 Turbo Pro (videos)
-
-### Key Libraries
-- `@supabase/supabase-js` - Database client
-- `@fal-ai/serverless-client` - AI generation
-- `html2canvas` - Social media mockups
-
----
-
-## File Structure
-
-### Critical Files & Their Purpose
-
-#### **Content Generators**
-```
-/app/chat/page.tsx                     # HCP email generator (conversational)
-/app/social-media-generator/page.tsx   # Social media form generator
-/app/video-generator/page.tsx          # Video form generator
-/app/content-history/page.tsx          # Unified content history
-```
-
-#### **API Routes**
-```
-/app/api/chat/route.ts                 # Main chat endpoint (emails + auto-save)
-/app/api/generate-image/route.ts       # Flux Dev image generation
-/app/api/start-video/route.ts          # Start async Kling video (returns request_id)
-/app/api/check-video/route.ts          # Poll video status (async polling)
-/app/api/upload-image/route.ts         # Upload to Supabase storage
-/app/api/save-video/route.ts           # Save video to database
-/app/api/generate-prompts/route.ts     # AI prompt gen for VIDEO (Claude 4.5)
-/app/api/generate-content-prompts/route.ts  # AI prompt gen for EMAIL/SOCIAL (Claude 4.5)
-/app/api/conversations/route.ts        # Fetch email/social history
-/app/api/video-history/route.ts        # Fetch video history
-```
-
-#### **Core Libraries**
-```
-/lib/fal.ts                            # Fal.ai image/video generation
-/lib/supabase.ts                       # Supabase client initialization
-/lib/prompts/                          # LLM prompts for content generation
-```
-
-#### **Components**
-```
-/components/SocialMockup.tsx           # Instagram/Facebook/Twitter mockups
-```
+**Content Types:**
+- `imcivree-email` - HCP/Patient emails
+- `imcivree-banner` - 728x250 banner ads
 
 ---
 
@@ -177,167 +256,88 @@
 
 ### Content Generation
 
-#### `/api/chat` (POST)
-**Purpose:** Main endpoint for email/social generation + auto-save
-**Input:**
+#### POST `/api/chat`
+Generates HTML email content using streaming response.
+
+**Request:**
 ```json
 {
-  "messages": [{"role": "user", "content": "..."}, ...],
-  "contentType": "hcp-email" | "social-media",
-  "conversationId": "uuid" (optional)
-}
-```
-**Output:**
-```json
-{
-  "message": "...",
-  "conversationId": "uuid",
-  "generatedContent": "...",
-  "imageUrl": "...",
-  "state": {...}
+  "messages": [{ "role": "user", "content": "..." }],
+  "audience": "hcp" | "patient",
+  "emailType": "moa" | "summary" | "dosing" | "efficacy" | "getting-started" | "what-to-expect" | "support",
+  "keyMessage": "optional emphasis"
 }
 ```
 
-#### `/api/generate-image` (POST)
-**Purpose:** Generate pharmaceutical image with Flux Dev
-**Input:**
-```json
-{
-  "prompt": "Medical illustration showing...",
-  "productName": "IBRANCE"
-}
-```
-**Output:**
-```json
-{
-  "imageUrl": "https://..."
-}
-```
+### Content History
 
-#### `/api/start-video` (POST)
-**Purpose:** Queue async video generation
-**Timeout:** 10 seconds (just queues job)
-**Input:**
-```json
-{
-  "imageUrl": "https://...",
-  "prompt": "Camera movement...",
-  "productName": "IBRANCE"
-}
-```
-**Output:**
-```json
-{
-  "requestId": "fal-request-id",
-  "status": "QUEUED"
-}
-```
+#### GET `/api/conversations`
+Returns all saved conversations/content.
 
-#### `/api/check-video` (GET)
-**Purpose:** Poll video generation status
-**Timeout:** 10 seconds
-**Query:** `?requestId=fal-request-id`
-**Output:**
-```json
-{
-  "status": "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED" | "FAILED",
-  "videoUrl": "https://..." (if completed)
-}
-```
-
-#### `/api/upload-image` (POST)
-**Purpose:** Upload image to Supabase storage
-**Input:** FormData with `file` field
-**Output:**
-```json
-{
-  "imageUrl": "https://...",
-  "filename": "..."
-}
-```
-
-### AI Prompt Generation
-
-#### `/api/generate-prompts` (POST)
-**Purpose:** Generate image/animation prompts for videos (Claude 4.5)
-**Input:**
-```json
-{
-  "productName": "IBRANCE",
-  "videoType": "patient-story" | "education" | "mechanism" | "reel",
-  "targetAudience": "patients" | "caregivers" | "hcp" | "general"
-}
-```
-**Output:**
-```json
-{
-  "imagePrompt": "Medical illustration showing...",
-  "animationPrompt": "Camera slowly zooms into..."
-}
-```
-
-#### `/api/generate-content-prompts` (POST)
-**Purpose:** Generate content ideas for email/social (Claude 4.5)
-**Input:**
-```json
-{
-  "productName": "IBRANCE",
-  "contentType": "hcp-email" | "social-media",
-  "targetAudience": "..."
-}
-```
-**Output (Email):**
-```json
-{
-  "subject": "...",
-  "keyMessage": "...",
-  "clinicalFocus": "..."
-}
-```
-**Output (Social):**
-```json
-{
-  "message": "...",
-  "visualConcept": "...",
-  "hashtags": "..."
-}
-```
-
-### History
-
-#### `/api/conversations` (GET)
-**Purpose:** Fetch email/social history
-**Output:**
+**Response:**
 ```json
 {
   "conversations": [
     {
       "id": "uuid",
-      "content_type": "hcp-email" | "social-media",
-      "messages": [...],
-      "state": {...},
-      "created_at": "..."
+      "content_type": "imcivree-email" | "imcivree-banner",
+      "state": { "audience": "hcp", "emailType": "moa" },
+      "generated_content": "<html>...</html>",
+      "created_at": "2025-11-29T..."
     }
   ]
 }
 ```
 
-#### `/api/video-history` (GET)
-**Purpose:** Fetch video history
-**Output:**
+### Ziflow Integration
+
+#### POST `/api/submit-for-approval`
+Submits content to Ziflow for MLR review.
+
+**Request:**
 ```json
 {
-  "videos": [
-    {
-      "id": "uuid",
-      "product_name": "IBRANCE",
-      "video_url": "...",
-      "image_url": "...",
-      "created_at": "..."
-    }
-  ]
+  "contentType": "email" | "banner",
+  "name": "MOA Email - HCP",
+  "htmlContent": "<html>...</html>",
+  "audience": "hcp" | "patient",
+  "focus": "moa"
 }
 ```
+
+**Note:** Currently returns preparation message. Production needs public URL hosting (S3/Cloudinary) for HTML files.
+
+#### POST `/api/ziflow-webhook`
+Receives webhook events from Ziflow.
+
+**Events Handled:**
+| Event | Action |
+|-------|--------|
+| `proof.commented` | Stores new comments |
+| `proof.decision` | Updates approval status |
+| `proof.stage_changed` | Updates workflow stage |
+
+**Storage:** In-memory Map (use database for production)
+
+#### GET `/api/ziflow-webhook?proofId=xxx`
+Retrieves stored feedback for a proof.
+
+#### POST `/api/optimize-with-feedback`
+Sends original content + feedback to LLM for optimization.
+
+**Request:**
+```json
+{
+  "originalContent": "<html>...</html>",
+  "contentType": "email" | "banner",
+  "feedback": [
+    { "author": "John", "content": "Change headline to..." }
+  ],
+  "audience": "hcp" | "patient"
+}
+```
+
+**Returns:** Optimized HTML with changes summary
 
 ---
 
@@ -345,260 +345,191 @@
 
 ### Supabase Tables
 
-#### `conversations`
-**Purpose:** Stores email and social media content
-**Schema:**
 ```sql
+-- Conversations table
 CREATE TABLE conversations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  content_type TEXT NOT NULL,  -- 'hcp-email' or 'social-media'
-  messages JSONB NOT NULL,      -- Array of {role, content}
-  state JSONB,                  -- {productName, imageUrl, platform, etc.}
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  content_type VARCHAR(50) NOT NULL,
+  product_name VARCHAR(255),
+  brand_info JSONB,
+  state_data JSONB,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE INDEX idx_conversations_created_at ON conversations(created_at DESC);
-```
-
-**RLS Policies:**
-```sql
--- Allow public read/insert (adjust for production auth)
-CREATE POLICY "Allow public read" ON conversations FOR SELECT TO public USING (true);
-CREATE POLICY "Allow public insert" ON conversations FOR INSERT TO public WITH CHECK (true);
-```
-
-#### `video_generations`
-**Purpose:** Stores generated videos
-**Schema:**
-```sql
-CREATE TABLE video_generations (
+-- Messages table
+CREATE TABLE messages (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  product_name TEXT NOT NULL,
-  video_type TEXT NOT NULL,     -- 'patient-story', 'education', etc.
-  target_audience TEXT NOT NULL,
-  image_prompt TEXT,
-  animation_prompt TEXT,
-  image_url TEXT,
-  video_url TEXT NOT NULL,
-  image_source TEXT,            -- 'generate', 'upload', 'url'
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
+  role VARCHAR(20) NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE INDEX idx_video_generations_created_at ON video_generations(created_at DESC);
+-- Generated content table
+CREATE TABLE generated_content (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  image_url TEXT,
+  video_url TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
 ```
 
-**RLS Policies:**
-```sql
-CREATE POLICY "Allow public read" ON video_generations FOR SELECT TO public USING (true);
-CREATE POLICY "Allow public insert" ON video_generations FOR INSERT TO public WITH CHECK (true);
-```
+---
 
-### Supabase Storage
+## External Integrations
 
-#### `video-images` Bucket
-**Purpose:** Store user-uploaded images for video generation
+### OpenRouter API
+
+**Purpose:** LLM access for content generation
+
+**Model:** `anthropic/claude-sonnet-4` (via OpenRouter)
+
 **Configuration:**
-- Public bucket: YES
-- Max file size: 10MB
-- Allowed types: image/jpeg, image/png, image/webp
-
-**RLS Policies:**
-```sql
-CREATE POLICY "Allow public uploads to video-images"
-  ON storage.objects FOR INSERT TO public
-  WITH CHECK (bucket_id = 'video-images');
-
-CREATE POLICY "Allow public reads from video-images"
-  ON storage.objects FOR SELECT TO public
-  USING (bucket_id = 'video-images');
+```typescript
+const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  headers: {
+    'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    model: 'anthropic/claude-sonnet-4',
+    messages: [...],
+    stream: true,
+    temperature: 0.3,  // Lower for consistency
+  }),
+})
 ```
+
+### Ziflow API
+
+**Purpose:** MLR approval workflow
+
+**Base URL:** `https://api.ziflow.io/v1`
+
+**Authentication:** Bearer token
+
+**Key Endpoints:**
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/proofs` | POST | Create new proof for review |
+| `/proofs/:id` | GET | Get proof status |
+| `/proofs` | GET | List all proofs |
+| `/folders` | GET | List folders |
+| `/workflows` | GET | List workflows |
+
+**Client:** `lib/ziflow.ts`
+
+### Fal.ai
+
+**Purpose:** AI image generation
+
+**Model:** `fal-ai/flux/dev`
 
 ---
 
-## Environment Variables
+## Brand Guidelines
 
-### Required in Netlify
+### Colors
 
-```bash
-# OpenRouter (Claude 4.5 Sonnet)
-OPENROUTER_API_KEY=sk-or-...
+| Element | Hex Code | Usage |
+|---------|----------|-------|
+| Primary Teal | #007a80 | Headlines, CTAs, links |
+| Header Teal | #1c7b80 | Top bars, email headers |
+| Light Background | #f6fbfb | Page backgrounds |
+| ISI Background | #fafafa | ISI blocks in emails |
+| Text Gray | #4a4f55 | Body text |
+| Banner Background | #eff3d8 | Banner creative area |
+| Banner Border | #0f6c73 | Banner ISI panel border |
+| Banner CTA | #0e7076 | Banner buttons |
 
-# Fal.ai (Flux Dev + Kling Video)
-FAL_KEY=...
+### Typography
 
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://....supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+```css
+/* Primary font stack */
+font-family: 'Avenir', 'Proxima Nova', 'Proxima', Arial, Helvetica, sans-serif;
 
-# Optional
-NEXT_PUBLIC_SITE_URL=https://beautiful-cactus-21f97b.netlify.app
+/* Email fallback */
+font-family: Arial, Helvetica, sans-serif;
 ```
 
-### Local Development (`.env.local`)
-Same as above, plus:
-```bash
-NODE_ENV=development
-```
+### Brand Assets
+
+| Asset | URL |
+|-------|-----|
+| IMCIVREE Logo | https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png |
+| Hero Image (Kid) | https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/6577b351-bb95-474c-a386-838150b5846a/kidiso.png |
+| MOA Image | https://www.imcivree.com/static/hcp-bbs-functional-mc4r-3e490b24a8f4f9bcc4ede22918fb38da.png |
+| Dosing Box | https://www.imcivree.com/static/dosing-box-953935ca5e56951d5e90c73760348f8e.png |
+| Dosing Chart | https://www.imcivree.com/static/hcp-bbs-dosing-chart-young-children-0287c959c1242bd92cc8832f0b0f0c42.png |
+
+### CTA URLs
+
+| Audience | URL |
+|----------|-----|
+| HCP | https://www.imcivree.com/hcp/bbs/ |
+| Patient | https://www.imcivree.com/bbs/ |
+| Getting Started | https://www.imcivree.com/bbs/getting-started/ |
 
 ---
 
-## AI Models & Services
+## Compliance Requirements
 
-### OpenRouter (Claude 4.5 Sonnet)
-**Model ID:** `anthropic/claude-sonnet-4.5`
-**Used For:**
-- Content generation (emails, social posts)
-- AI prompt generation
-- Medical content focus
+### Critical Rules
 
-**Pricing:** ~$3 per 1M input tokens, ~$15 per 1M output tokens
+1. **Use ONLY FDA-approved, on-label information**
+2. **NEVER invent or infer data**
+3. **NEVER compare IMCIVREE to other therapies**
+4. **All claims MUST have superscripted references** (e.g., `<sup>1</sup>`)
+5. **ISI must be included in full** - never paraphrase
+6. **Subject lines must NEVER include the product name**
+7. **IMCIVREE is ONLY for obesity due to BBS** - never generalize to "obesity"
+8. **No cure claims, no guarantees, no superlatives**
+9. **No device/injection imagery**
 
-**Key Prompt Instructions:**
-- Focus on MEDICAL and CLINICAL content
-- NO lifestyle imagery or emotional scenes
-- Emphasize mechanism of action, clinical data, infographics
-- FDA-compliant language
+### Required References
 
-### Fal.ai - Flux Dev
-**Model ID:** `fal-ai/flux/dev`
-**Used For:** Image generation
-**Settings:**
-```javascript
-{
-  image_size: 'portrait_4_3',
-  num_inference_steps: 20,
-  guidance_scale: 3.5,
-  output_format: 'jpeg'
-}
 ```
-**Pricing:** ~$0.025 per image
-
-### Fal.ai - Kling Video 2.5 Turbo Pro
-**Model ID:** `fal-ai/kling-video/v2.5-turbo/pro/image-to-video`
-**Used For:** Video generation (image-to-video)
-**Settings:**
-```javascript
-{
-  duration: '5',              // 5 seconds
-  aspect_ratio: '16:9',
-  cfg_scale: 0.5,
-  negative_prompt: 'blur, distortion, low quality, artifacts, watermark, text'
-}
+Reference 1: IMCIVREE [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.
+Reference 2: Haqq AM, et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.
+Reference 3: Data on file. Rhythm Pharmaceuticals, Inc.
 ```
-**Generation Time:** 60-90 seconds
-**Pricing:** $0.35 per 5-second video
 
-**Async Pattern:**
-1. `/api/start-video` queues job, returns `request_id`
-2. Frontend polls `/api/check-video` every 3 seconds
-3. Max 60 attempts (3 minutes total)
-4. Status: `IN_QUEUE` → `IN_PROGRESS` → `COMPLETED`
+### Approved Message Bank
+
+Located in `lib/knowledge/imcivree-bbs.ts`:
+
+**Disease Problem (HCP):**
+- "Hyperphagia in BBS is chronic and insatiable"
+- "Hunger and obesity in BBS come from the brain due to impaired MC4R pathway signaling"
+
+**Disease Problem (Patient):**
+- "Hunger in BBS is chronic and hard to control"
+- Replace "hyperphagia" with "hunger"
+
+**Product Introduction:**
+- "IMCIVREE is the first and only FDA-approved treatment targeting the impaired MC4R pathway in people with BBS"
+
+**Efficacy:**
+- "Meaningful weight reduction typically begins within 6–8 weeks"
+- "IMCIVREE reduced BMI and weight across children and adults with BBS"
+
+### ISI Requirements
+
+- **Emails:** Full ISI must appear after References block
+- **Banners:** 35% width right panel with scrolling ISI at 0.2px/frame
+- **ISI text:** Defined in `lib/knowledge/imcivree-bbs.ts` - **DO NOT MODIFY**
 
 ---
 
-## Content Generators
+## Deployment
 
-### HCP Email Generator
-**Route:** `/chat?type=hcp-email`
-**Interface:** Conversational chat
-**Features:**
-- AI prompt helper at start
-- Step-by-step questions
-- Generates email with ISI and references
-- Auto-saves to `conversations` table
+### Netlify Configuration
 
-**Prompt System:** See `/lib/prompts/hcp-email.ts`
+**File:** `netlify.toml`
 
-### Social Media Generator
-**Route:** `/social-media-generator`
-**Interface:** Form-based (like video generator)
-**Features:**
-- Platform selection (Instagram/Facebook/X)
-- AI content generator button
-- Medical visual generation (infographics, diagrams)
-- Platform-specific mockup preview
-- Auto-saves to `conversations` table
-
-**Key Component:** `SocialMockup.tsx` (client-side html2canvas)
-
-### Video Generator
-**Route:** `/video-generator`
-**Interface:** Form-based
-**Features:**
-- Three image sources: AI, Upload, URL
-- AI prompt generator (image + animation)
-- Async video generation with polling
-- Auto-saves to `video_generations` table
-
-**Async Flow:**
-```
-User submits → Generate/upload image → start-video (queue)
-→ Poll check-video every 3s → Get video URL → Auto-save → Display
-```
-
----
-
-## Known Issues
-
-### 1. Image Generation Timeout Warning
-**Issue:** The earlier deployment had "Failed to generate image" errors
-**Cause:** Unknown - may be FAL_KEY or API issues
-**Status:** Needs testing after deployment
-**Solution:** Check Netlify function logs with `netlify functions:log`
-
-### 2. Video Generation Database Table
-**Issue:** `video_generations` table must be created manually in Supabase
-**Status:** User needs to run SQL in Supabase dashboard
-**Solution:** SQL provided in deployment notes (see Database Schema section)
-
-### 3. Supabase Storage Bucket
-**Issue:** `video-images` bucket must be created manually
-**Status:** User needs to create in Supabase dashboard
-**Solution:**
-1. Go to Storage → New Bucket
-2. Name: `video-images`
-3. Public: YES
-4. Run RLS policies (see Database Schema section)
-
-### 4. Old Chat History Page
-**Issue:** `/history` page was removed but may still exist in old deployments
-**Status:** RESOLVED - deleted in this session
-**Note:** Only `/content-history` should exist now
-
-### 5. Lockfile Warning
-**Issue:** Next.js warns about multiple lockfiles
-**Message:** "Next.js inferred your workspace root, but it may not be correct"
-**Status:** Non-critical, doesn't affect functionality
-**Solution (Optional):** Add to `next.config.js`:
-```javascript
-turbopack: {
-  root: '/Users/tvonlinz/Dev_Master/3cubed/rhythm'
-}
-```
-
----
-
-## Deployment Process
-
-### Current Deployment
-**Platform:** Netlify
-**Plan:** Pro (60-second function timeout)
-**Build Command:** `npm run build`
-**Publish Directory:** `.next`
-
-### Deploy Steps
-```bash
-# 1. Build locally (checks for errors)
-npm run build
-
-# 2. Deploy to production
-netlify deploy --prod
-
-# Alternative: Combined command
-npm run build && netlify deploy --prod
-```
-
-### Netlify Configuration (`netlify.toml`)
 ```toml
 [build]
   command = "npm run build"
@@ -609,257 +540,112 @@ npm run build && netlify deploy --prod
 
 [functions]
   node_bundler = "esbuild"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
 ```
 
-### Post-Deployment Checklist
-- [ ] Verify environment variables are set in Netlify
-- [ ] Test image generation (`/social-media-generator`)
-- [ ] Test video generation (`/video-generator`)
-- [ ] Test async video polling (wait 60-90 seconds)
-- [ ] Test content history (`/content-history`)
-- [ ] Check Supabase tables exist
-- [ ] Check Supabase storage bucket exists
-- [ ] Verify auto-save works for all content types
+### Deploy Commands
 
-### Troubleshooting Deployment
-
-**Build Fails:**
 ```bash
-# Clear Next.js cache
-rm -rf .next
-
-# Rebuild
+# Build locally first
 npm run build
+
+# Deploy to production
+netlify deploy --prod
+
+# Set environment variables
+netlify env:set ZIFLOW_API_KEY "xxx"
+netlify env:list
 ```
 
-**Function Timeouts:**
-- Check if using async pattern for videos
-- Verify `maxDuration = 10` for start-video
-- Verify `maxDuration = 60` for generate-image
-- Ensure Netlify Pro plan (60s timeout)
+### Production URLs
 
-**Database Errors:**
-- Check Supabase credentials
-- Verify tables exist (conversations, video_generations)
-- Check RLS policies allow public access
-- Test with SQL Editor: `SELECT * FROM conversations LIMIT 1;`
-
-**Storage Errors:**
-- Check bucket exists: `video-images`
-- Verify bucket is public
-- Check RLS policies on storage.objects
-- Test upload manually in Supabase dashboard
+- **Site:** https://beautiful-cactus-21f97b.netlify.app
+- **Build Logs:** https://app.netlify.com/projects/beautiful-cactus-21f97b/deploys
+- **Function Logs:** https://app.netlify.com/projects/beautiful-cactus-21f97b/logs/functions
 
 ---
 
-## Future Enhancements
+## Known Issues & Future Work
 
-### High Priority
-1. **User Authentication**
-   - Add Supabase Auth
-   - User-specific content history
-   - Team collaboration features
+### Current Limitations
 
-2. **Content Editing**
-   - Allow editing saved content
-   - Version history
-   - Regenerate with different settings
+1. **Ziflow File Hosting**
+   - Content submission requires publicly accessible URLs
+   - Current MVP returns preparation message
+   - **Solution:** Need S3/Cloudinary for temporary HTML hosting
 
-3. **Better Error Handling**
-   - User-friendly error messages
-   - Retry mechanisms for API failures
-   - Fallback options when generation fails
+2. **Webhook Feedback Storage**
+   - Uses in-memory Map (resets on deploy)
+   - **Solution:** Use Supabase table for persistent storage
 
-### Medium Priority
-4. **Batch Generation**
-   - Generate multiple social posts at once
-   - A/B testing variants
-   - Bulk export
+3. **Banner Dimensions**
+   - Only 728×250 (IAB Leaderboard) implemented
+   - Other sizes may be requested (300×250, 160×600, 320×50)
 
-5. **Template Library**
-   - Pre-built templates for common use cases
-   - Save custom templates
-   - Share templates across team
+### Potential Enhancements
 
-6. **Analytics Dashboard**
-   - Usage statistics
-   - Cost tracking
-   - Content performance metrics
+| Priority | Enhancement |
+|----------|-------------|
+| High | Persistent feedback storage in Supabase |
+| High | Public URL hosting for Ziflow submissions |
+| Medium | Email preview in mobile/desktop frames |
+| Medium | Template library for approved content |
+| Medium | A/B testing variant generation |
+| Low | Analytics dashboard |
+| Low | Role-based access control |
 
-### Low Priority
-7. **Multi-Language Support**
-   - Generate content in multiple languages
-   - Translation service integration
+### Security Considerations
 
-8. **Brand Guidelines**
-   - Upload brand assets
-   - Enforce brand colors/fonts
-   - Custom visual style presets
-
-9. **Compliance Tools**
-   - Built-in ISI validator
-   - Reference checker
-   - FDA regulation checker
+- API keys should be rotated periodically
+- Ziflow webhook should implement signature verification
+- Consider rate limiting on generation endpoints
+- Add authentication for production use
 
 ---
 
-## Testing Checklist
+## Quick Reference
 
-### Manual Testing
+### Home Page Cards
 
-#### Social Media Generator
-- [ ] Visit `/social-media-generator`
-- [ ] Enter product name: "IBRANCE"
-- [ ] Click "Generate Post Content with AI"
-- [ ] Verify medical-focused content (not lifestyle)
-- [ ] Fill in fields or use generated content
-- [ ] Submit form
-- [ ] Wait for image generation
-- [ ] Verify mockup displays correctly
-- [ ] Check image downloads
-- [ ] Verify saved to Content History
+| Card | Color | Route | Purpose |
+|------|-------|-------|---------|
+| HCP + Patient Emails | Teal | `/chat` | Email generation |
+| HCP + Patient Banner Ads | Teal | `/banner-generator` | Banner generation |
+| Approval Queue | Purple | `/approvals` | Ziflow tracking |
+| Content History | Amber | `/content-history` | View past content |
 
-#### Video Generator
-- [ ] Visit `/video-generator`
-- [ ] Enter product name: "IBRANCE"
-- [ ] Click "Generate Image & Animation Prompts"
-- [ ] Verify medical-focused prompts
-- [ ] Select "Generate Image"
-- [ ] Fill in image description
-- [ ] Fill in animation description
-- [ ] Submit form
-- [ ] Wait for image generation
-- [ ] Wait for video polling (60-90 seconds)
-- [ ] Verify video plays
-- [ ] Check downloads work
-- [ ] Verify saved to Content History
+### Key Files
 
-#### HCP Email Generator
-- [ ] Visit `/chat?type=hcp-email`
-- [ ] See AI prompt generator
-- [ ] Generate content ideas
-- [ ] Use or skip
-- [ ] Complete conversation
-- [ ] Verify email generated
-- [ ] Check saved to Content History
+| File | Purpose |
+|------|---------|
+| `lib/knowledge/imcivree-bbs.ts` | Brand colors, ISI, message bank |
+| `lib/prompts/imcivree-banner.ts` | Banner HTML template + prompt |
+| `lib/prompts/imcivree-email.ts` | Email structure + prompt |
+| `lib/ziflow.ts` | Ziflow API client |
 
-#### Content History
-- [ ] Visit `/content-history`
-- [ ] See all generated content
-- [ ] Test filter tabs (All, Emails, Social, Videos)
-- [ ] Click on each content type
-- [ ] Verify modal displays correctly
-- [ ] Test downloads
+### Testing Checklist
 
-### API Testing
-
-```bash
-# Test image generation
-curl -X POST https://beautiful-cactus-21f97b.netlify.app/api/generate-image \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "Medical illustration", "productName": "IBRANCE"}'
-
-# Test video queue
-curl -X POST https://beautiful-cactus-21f97b.netlify.app/api/start-video \
-  -H "Content-Type: application/json" \
-  -d '{"imageUrl": "...", "prompt": "...", "productName": "IBRANCE"}'
-
-# Test video status
-curl https://beautiful-cactus-21f97b.netlify.app/api/check-video?requestId=...
-
-# Test content history
-curl https://beautiful-cactus-21f97b.netlify.app/api/conversations
-curl https://beautiful-cactus-21f97b.netlify.app/api/video-history
-```
+- [ ] Generate HCP email
+- [ ] Generate Patient email
+- [ ] Generate HCP banner
+- [ ] Generate Patient banner
+- [ ] Submit to Ziflow (verify preparation message)
+- [ ] View Content History
+- [ ] Download content as HTML
+- [ ] Copy content to clipboard
 
 ---
 
-## Important Notes
+## Contact & Support
 
-### Medical Content Focus
-**CRITICAL:** All AI prompts are configured to generate MEDICAL and CLINICAL content:
-- ✅ Medical illustrations, infographics, clinical diagrams
-- ✅ Mechanism of action visualizations
-- ✅ Clinical data, trial results, patient outcomes
-- ❌ NO lifestyle imagery (living rooms, home settings)
-- ❌ NO emotional scenes (people with tablets, warm lighting)
+**Project maintained by:** 3cubed x K+M Creative Intelligence Labs
 
-If lifestyle content starts appearing, check:
-- `/app/api/generate-prompts/route.ts` (video prompts)
-- `/app/api/generate-content-prompts/route.ts` (email/social prompts)
-
-Both have explicit instructions to avoid lifestyle imagery.
-
-### Async Pattern is Critical
-Video generation MUST use async queue/poll pattern:
-- Videos take 60-90 seconds to generate
-- Netlify Pro has 60-second timeout
-- Cannot use synchronous generation
-- Must use `start-video` → poll `check-video`
-
-### Auto-Save is Transparent
-All content auto-saves in background:
-- Social: Saves after image generation
-- Video: Saves after video completion
-- Email: Saves after conversation ends
-- No user action required
-- Failures are logged but not shown to user
-
-### Database Access is Public
-Current RLS policies allow public read/write:
-- **Good for:** Demo/testing
-- **Bad for:** Production with real data
-- **TODO:** Add authentication and user-specific policies
+**GitHub Repository:** https://github.com/InnovareAI/rhythm.git
 
 ---
 
-## Contact & Resources
-
-**Project Repository:** `/Users/tvonlinz/Dev_Master/3cubed/rhythm`
-**Production URL:** https://beautiful-cactus-21f97b.netlify.app
-**Netlify Dashboard:** https://app.netlify.com/projects/beautiful-cactus-21f97b
-
-**Key Documentation:**
-- [Next.js 16 Docs](https://nextjs.org/docs)
-- [Supabase Docs](https://supabase.com/docs)
-- [Fal.ai Docs](https://fal.ai/models)
-- [OpenRouter Docs](https://openrouter.ai/docs)
-- [Netlify Functions](https://docs.netlify.com/functions/overview/)
-
-**API Keys Location:** Netlify Environment Variables
-
----
-
-## Quick Start for Next Assistant
-
-1. **Review this document completely**
-2. **Check current deployment:** Visit production URL
-3. **Test all three generators** (email, social, video)
-4. **Review database:** Login to Supabase, check tables
-5. **Check environment variables:** Netlify dashboard
-6. **Run locally:**
-   ```bash
-   cd /Users/tvonlinz/Dev_Master/3cubed/rhythm
-   npm install
-   npm run dev
-   ```
-7. **Test deployment:**
-   ```bash
-   npm run build && netlify deploy --prod
-   ```
-
-**If anything is unclear, check:**
-- Function logs: `netlify functions:log ___netlify-server-handler`
-- Supabase logs: Supabase dashboard → Logs
-- Browser console: Check for client-side errors
-- Network tab: Check API responses
-
----
-
-## End of Handover Document
-
-**Last Working State:** All features operational and deployed
-**Next Assistant:** Ready to continue development
-**Priority:** Test all features after reading this document
-
-Good luck! 🚀
+*Document generated: November 29, 2025*
