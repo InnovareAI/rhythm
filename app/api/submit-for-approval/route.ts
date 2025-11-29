@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getZiflowClient } from '@/lib/ziflow'
+import { saveContent, updateContentStatus, uploadHtmlFile } from '@/lib/content-storage'
 
 /**
  * POST /api/submit-for-approval
@@ -7,16 +8,17 @@ import { getZiflowClient } from '@/lib/ziflow'
  * Submit generated content to Ziflow for MLR approval
  *
  * Body:
- * - contentType: 'email' | 'banner'
+ * - contentType: 'imcivree-email' | 'imcivree-banner'
  * - name: string (proof name)
  * - htmlContent: string (the generated HTML)
  * - audience: 'hcp' | 'patient'
  * - focus?: string (e.g., 'moa', 'weight-reduction')
+ * - keyMessage?: string
  */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { contentType, name, htmlContent, audience, focus } = body
+    const { contentType, name, htmlContent, audience, focus, keyMessage } = body
 
     if (!contentType || !name || !htmlContent) {
       return NextResponse.json(
@@ -25,54 +27,82 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // For Ziflow, we need to provide a URL to the file
-    // We'll create a temporary blob URL or use a data URL approach
-    // For production, you'd upload to S3/Cloudinary and get a public URL
+    console.log('[ZIFLOW SUBMIT] Starting submission:', { contentType, name, audience })
 
-    // Create a base64 data URL for the HTML content
-    const base64Content = Buffer.from(htmlContent).toString('base64')
-    const dataUrl = `data:text/html;base64,${base64Content}`
+    // Step 1: Save content to database
+    const content = await saveContent({
+      contentType: contentType === 'email' ? 'imcivree-email' : 'imcivree-banner',
+      audience: audience || 'hcp',
+      focus,
+      keyMessage,
+      htmlContent
+    })
 
-    // Note: Ziflow requires an accessible URL, not a data URL
-    // For now, we'll store content and return a public URL
-    // In production, upload to S3 or similar
-
-    const client = getZiflowClient()
-
-    // Generate proof name with metadata
-    const proofName = `IMCIVREE ${contentType.toUpperCase()} - ${audience.toUpperCase()} - ${name}`
-    const timestamp = new Date().toISOString().split('T')[0]
-
-    // For the MVP, we'll need to host the HTML somewhere accessible
-    // Option 1: Upload to our own server and provide URL
-    // Option 2: Use Netlify Functions to serve the content temporarily
-    // Option 3: Upload to S3 with presigned URL
-
-    // For now, return instructions on what's needed
-    const response = {
-      success: true,
-      message: 'Content prepared for Ziflow submission',
-      proofDetails: {
-        name: proofName,
-        contentType,
-        audience,
-        focus,
-        timestamp,
-        contentLength: htmlContent.length,
-      },
-      // In production, this would be the actual Ziflow proof response
-      nextSteps: [
-        'Content needs to be hosted at a public URL',
-        'Then submitted to Ziflow via API',
-        'Webhook will notify when reviewed',
-      ],
-      // Store content ID for webhook reference
-      contentId: `${contentType}-${audience}-${Date.now()}`,
+    if (!content) {
+      return NextResponse.json(
+        { error: 'Failed to save content to database' },
+        { status: 500 }
+      )
     }
 
-    return NextResponse.json(response)
+    console.log('[ZIFLOW SUBMIT] Content saved:', content.id)
+
+    // Step 2: Upload HTML to Supabase Storage to get public URL
+    const filename = `${content.id}-${Date.now()}.html`
+    const publicUrl = await uploadHtmlFile(htmlContent, filename)
+
+    if (!publicUrl) {
+      return NextResponse.json(
+        { error: 'Failed to upload HTML file for Ziflow' },
+        { status: 500 }
+      )
+    }
+
+    console.log('[ZIFLOW SUBMIT] HTML uploaded:', publicUrl)
+
+    // Step 3: Submit to Ziflow
+    const client = getZiflowClient()
+    const proofName = `IMCIVREE ${contentType === 'email' ? 'Email' : 'Banner'} - ${audience.toUpperCase()} - ${name}`
+
+    try {
+      const proof = await client.createProof({
+        name: proofName,
+        files: [{
+          url: publicUrl,
+          name: `${name}.html`
+        }],
+        message: `Content Type: ${contentType}\nAudience: ${audience}\nFocus: ${focus || 'N/A'}\nKey Message: ${keyMessage || 'N/A'}`
+      })
+
+      console.log('[ZIFLOW SUBMIT] Proof created:', proof.id)
+
+      // Step 4: Update content status with Ziflow proof ID
+      await updateContentStatus(content.id, 'pending_review', proof.id)
+
+      return NextResponse.json({
+        success: true,
+        message: 'Content submitted to Ziflow for MLR approval',
+        contentId: content.id,
+        proofId: proof.id,
+        proofName: proof.name,
+        proofUrl: proof.proof_url,
+        fileUrl: publicUrl
+      })
+    } catch (ziflowError: any) {
+      console.error('[ZIFLOW SUBMIT] Ziflow API error:', ziflowError)
+
+      // Content is saved but Ziflow submission failed
+      // Keep content as draft so user can retry
+      return NextResponse.json({
+        success: false,
+        error: `Ziflow submission failed: ${ziflowError.message}`,
+        contentId: content.id,
+        fileUrl: publicUrl,
+        canRetry: true
+      }, { status: 502 })
+    }
   } catch (error: any) {
-    console.error('Submit for approval error:', error)
+    console.error('[ZIFLOW SUBMIT] Error:', error)
     return NextResponse.json(
       { error: error.message || 'Failed to submit for approval' },
       { status: 500 }
@@ -83,15 +113,17 @@ export async function POST(request: NextRequest) {
 /**
  * GET /api/submit-for-approval
  *
- * Check Ziflow connection status
+ * Check Ziflow connection status and list available folders/workflows
  */
 export async function GET() {
   try {
     const client = getZiflowClient()
 
-    // Test the connection by listing folders
-    const folders = await client.listFolders()
-    const workflows = await client.listWorkflows()
+    // Test the connection by listing folders and workflows
+    const [folders, workflows] = await Promise.all([
+      client.listFolders().catch(() => []),
+      client.listWorkflows().catch(() => [])
+    ])
 
     return NextResponse.json({
       connected: true,
