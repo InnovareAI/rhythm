@@ -14,7 +14,7 @@ interface ZiflowProofInput {
 
 interface CreateProofRequest {
   name: string
-  inputs: ZiflowProofInput[]  // Ziflow uses "inputs" not "files"
+  input: ZiflowProofInput[]  // Ziflow API field name
   folder_id?: string
   workflow_id?: string
   due_date?: string
@@ -61,6 +61,7 @@ export class ZiflowClient {
    * Create a new proof for review
    */
   async createProof(params: CreateProofRequest): Promise<ZiflowProofResponse> {
+    console.log('[ZIFLOW] Creating proof with params:', JSON.stringify(params, null, 2))
     return this.request<ZiflowProofResponse>('/proofs', {
       method: 'POST',
       body: JSON.stringify(params),
@@ -133,7 +134,7 @@ export async function submitForApproval(
 
   return client.createProof({
     name: proofName,
-    inputs: [{
+    input: [{
       url: fileUrl,
       name: `${name}.html`,
     }],

@@ -59,12 +59,17 @@ export async function POST(request: NextRequest) {
     const proofName = `IMCIVREE ${contentType === 'email' ? 'Email' : 'Banner'} - ${audience.toUpperCase()} - ${name}`
 
     try {
+      // Get the default folder (Ziflow Demo Project)
+      const folders = await client.listFolders().catch(() => [])
+      const defaultFolderId = folders.length > 0 ? folders[0].id : undefined
+
       const proof = await client.createProof({
         name: proofName,
-        inputs: [{
+        input: [{
           url: publicUrl,
           name: `${name}.html`
         }],
+        folder_id: defaultFolderId,
         message: `Content Type: ${contentType}\nAudience: ${audience}\nFocus: ${focus || 'N/A'}\nKey Message: ${keyMessage || 'N/A'}`
       })
 
