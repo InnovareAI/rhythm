@@ -36,11 +36,11 @@ export default function Home() {
         </div>
 
         {/* Content Type Cards */}
-        <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+        <div className="mt-16 flex flex-col sm:flex-row gap-8 justify-center items-stretch max-w-4xl mx-auto">
           {/* Emails Card */}
           <Link
             href="/chat"
-            className="group relative rounded-2xl border-2 border-[#007a80] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#1c7b80] hover:bg-[#f6fbfb]"
+            className="group relative rounded-2xl border-2 border-[#007a80] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#1c7b80] hover:bg-[#f6fbfb] sm:max-w-md flex-1"
           >
             <div className="relative">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#007a80]">
@@ -64,7 +64,7 @@ export default function Home() {
           {/* Banner Ads Card */}
           <Link
             href="/banner-generator"
-            className="group relative rounded-2xl border-2 border-[#007a80] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#1c7b80] hover:bg-[#f6fbfb]"
+            className="group relative rounded-2xl border-2 border-[#007a80] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#1c7b80] hover:bg-[#f6fbfb] sm:max-w-md flex-1"
           >
             <div className="relative">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#007a80]">
