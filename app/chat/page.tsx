@@ -13,8 +13,7 @@ type Audience = 'hcp' | 'patient'
 
 // HCP Segments for personalization (rare disease - no competitors)
 const HCP_SEGMENTS = [
-  { id: 'loyalist', name: 'Loyalist', description: 'Already prescribing IMCIVREE, reinforce value' },
-  { id: 'champion', name: 'Champion', description: 'Advocate who actively promotes IMCIVREE' },
+  { id: 'champion', name: 'Champion', description: 'Already prescribing and promoting IMCIVREE' },
   { id: 'aware', name: 'Aware', description: 'Knows about IMCIVREE but hasn\'t prescribed' },
   { id: 'unaware', name: 'Unaware', description: 'New to IMCIVREE, needs education' },
 ]
