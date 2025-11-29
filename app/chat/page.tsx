@@ -104,33 +104,50 @@ function ChatContent() {
         if (feedback?.comments?.length > 0) {
           setZiflowFeedback(feedback)
 
-          // Build detailed feedback summary
-          const commentsList = feedback.comments
-            .map((c: any, i: number) => `${i + 1}. **${c.authorName}**: "${c.text}"`)
-            .join('\n')
-
-          // Generate action items based on feedback
-          const actionItems = feedback.comments
-            .map((c: any) => `- Address: "${c.text.slice(0, 50)}${c.text.length > 50 ? '...' : ''}"`)
-            .join('\n')
+          // Build detailed feedback summary with action items
+          const feedbackSummary = feedback.comments
+            .map((c: any, i: number) => {
+              // Generate a suggested action for each comment
+              const commentLower = c.text.toLowerCase()
+              let suggestedAction = 'Review and address this feedback'
+              if (commentLower.includes('change') || commentLower.includes('update') || commentLower.includes('revise')) {
+                suggestedAction = 'Make the requested revision'
+              } else if (commentLower.includes('add') || commentLower.includes('include') || commentLower.includes('missing')) {
+                suggestedAction = 'Add the requested content'
+              } else if (commentLower.includes('remove') || commentLower.includes('delete')) {
+                suggestedAction = 'Remove the flagged content'
+              } else if (commentLower.includes('clarify') || commentLower.includes('unclear')) {
+                suggestedAction = 'Clarify the messaging'
+              } else if (commentLower.includes('compliance') || commentLower.includes('claim') || commentLower.includes('reference')) {
+                suggestedAction = 'Verify compliance and add reference if needed'
+              }
+              return `**Comment ${i + 1} from ${c.authorName}:**\n> "${c.text}"\n\n**Suggested Action:** ${suggestedAction}`
+            })
+            .join('\n\n---\n\n')
 
           setMessages([{
             role: 'assistant',
-            content: `## MLR Review Feedback Summary
+            content: `# 📋 MLR Review Feedback
 
-Your ${content.content_type === 'imcivree-email' ? 'email' : 'banner'} has received feedback from the review team.
+Your ${content.content_type === 'imcivree-email' ? 'email' : 'banner'} has **${feedback.comments.length} comment${feedback.comments.length > 1 ? 's' : ''}** from the review team.
 
-### Reviewer Comments:
-${commentsList}
+---
 
-### Suggested Action Items:
-${actionItems}
+${feedbackSummary}
 
-### How to proceed:
-1. **"Address all feedback"** - I'll revise the content to address each comment
-2. **Ask specific questions** - e.g., "What change does reviewer 1 want?"
-3. **Request specific edits** - e.g., "Update the headline to be more clinical"
-4. **Explain your reasoning** - I can help draft a response to reviewers
+---
+
+## 🎯 Ready to Address Feedback?
+
+**Quick Actions:**
+- Say **"Address all feedback"** and I'll revise the content to incorporate all comments
+- Say **"Address comment 1"** to handle a specific comment
+- Ask me **"What exactly does the reviewer want?"** if you need clarification
+
+**Or tell me specifically what to change**, for example:
+- "Make the headline more clinical"
+- "Add a reference for the efficacy claim"
+- "Soften the language in paragraph 2"
 
 What would you like me to do?`
           }])
@@ -862,44 +879,66 @@ Give me a moment...`
             <div className="mx-auto max-w-3xl space-y-6">
               {/* Ziflow Feedback Banner */}
               {ziflowFeedback?.comments?.length > 0 && (
-                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <svg className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h3 className="font-semibold text-blue-800">MLR Review Feedback</h3>
-                    <span className="ml-auto text-xs text-blue-600">
-                      {ziflowFeedback.comments.length} comment{ziflowFeedback.comments.length > 1 ? 's' : ''}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl p-5 mb-4 shadow-sm">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="bg-blue-600 rounded-full p-1.5">
+                      <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-blue-900">MLR Review Feedback</h3>
+                    <span className="ml-auto px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-semibold rounded-full">
+                      {ziflowFeedback.comments.length} action{ziflowFeedback.comments.length > 1 ? 's' : ''} needed
                     </span>
                   </div>
-                  <div className="space-y-2">
-                    {ziflowFeedback.comments.slice(0, 3).map((comment: any, i: number) => (
-                      <div key={i} className="bg-white rounded-lg p-3 border border-blue-100">
-                        <div className="flex justify-between items-start mb-1">
-                          <span className="text-sm font-medium text-blue-800">{comment.authorName}</span>
+
+                  <div className="space-y-2 mb-4">
+                    {ziflowFeedback.comments.map((comment: any, i: number) => (
+                      <div key={i} className="bg-white rounded-lg p-3 border border-blue-100 shadow-sm">
+                        <div className="flex items-start gap-2">
+                          <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xs font-bold">
+                            {i + 1}
+                          </span>
+                          <div className="flex-1">
+                            <div className="flex justify-between items-start mb-1">
+                              <span className="text-sm font-semibold text-blue-800">{comment.authorName}</span>
+                            </div>
+                            <p className="text-sm text-gray-700">{comment.text}</p>
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-700">{comment.text}</p>
                       </div>
                     ))}
-                    {ziflowFeedback.comments.length > 3 && (
-                      <p className="text-xs text-blue-600 text-center">
-                        +{ziflowFeedback.comments.length - 3} more comments
-                      </p>
-                    )}
                   </div>
-                  <div className="mt-3 flex gap-2">
-                    <button
-                      onClick={() => setInput('Please address all the feedback and update the content accordingly.')}
-                      className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                    >
-                      Address All Feedback
-                    </button>
-                    <button
-                      onClick={() => setZiflowFeedback(null)}
-                      className="px-3 py-1.5 text-xs border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50"
-                    >
-                      Dismiss
-                    </button>
+
+                  <div className="bg-white/70 rounded-lg p-3 border border-blue-100">
+                    <p className="text-xs text-gray-600 mb-2 font-medium">Quick Actions:</p>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => {
+                          setInput('Please address all the feedback and update the content accordingly.')
+                          // Auto-submit
+                          setTimeout(() => {
+                            const form = document.querySelector('form')
+                            form?.dispatchEvent(new Event('submit', { bubbles: true }))
+                          }, 100)
+                        }}
+                        className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-sm"
+                      >
+                        ✨ Address All Feedback
+                      </button>
+                      <button
+                        onClick={() => setInput('Can you explain what the reviewer wants me to change?')}
+                        className="px-4 py-2 text-sm border-2 border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 font-medium"
+                      >
+                        🤔 Explain Feedback
+                      </button>
+                      <button
+                        onClick={() => setZiflowFeedback(null)}
+                        className="px-3 py-2 text-xs text-gray-500 hover:text-gray-700"
+                      >
+                        Dismiss
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
