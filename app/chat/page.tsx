@@ -79,6 +79,7 @@ function ChatContent() {
   // Ziflow feedback state (when editing content with feedback)
   const [ziflowFeedback, setZiflowFeedback] = useState<any>(null)
   const [editingContentId, setEditingContentId] = useState<string | null>(null)
+  const [contentType, setContentType] = useState<'imcivree-email' | 'imcivree-banner'>('imcivree-email')
 
   // Helper function to build feedback summary message
   const buildFeedbackMessage = (content: any, feedback: any) => {
@@ -153,6 +154,7 @@ What would you like me to do?`
         setEmailType(content.focus || 'moa')
         setKeyMessage(content.key_message || '')
         setEditingContentId(content.id)
+        setContentType(content.content_type || 'imcivree-email')
         setStep('chat')
 
         // If we have feedback with comments, display them
@@ -204,6 +206,7 @@ What would you like me to do?`
         setEmailType(data.focus || 'moa')
         setKeyMessage(data.key_message || '')
         setEditingContentId(data.id)
+        setContentType(data.content_type || 'imcivree-email')
         setStep('chat')
 
         if (data.ziflow_feedback?.comments?.length > 0) {
@@ -1063,7 +1066,7 @@ Give me a moment...`
         {/* Preview Panel - Right side (always visible) */}
         <div className="w-1/2 border-l border-[#007a80]/10 bg-white p-6 overflow-y-auto">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-[#007a80]">Email Preview</h3>
+            <h3 className="text-lg font-semibold text-[#007a80]">{contentType === 'imcivree-banner' ? 'Banner Preview' : 'Email Preview'}</h3>
             {generatedContent && (
               <div className="flex gap-2">
                 <button
@@ -1081,7 +1084,7 @@ Give me a moment...`
                     const url = URL.createObjectURL(blob)
                     const a = document.createElement('a')
                     a.href = url
-                    a.download = `imcivree-${audience}-${emailType}-email.html`
+                    a.download = `imcivree-${audience}-${emailType}-${contentType === 'imcivree-banner' ? 'banner' : 'email'}.html`
                     a.click()
                     URL.revokeObjectURL(url)
                   }}
@@ -1136,7 +1139,7 @@ Give me a moment...`
               <iframe
                 srcDoc={generatedContent}
                 className="w-full h-[600px]"
-                title="Email Preview"
+                title={contentType === 'imcivree-banner' ? 'Banner Preview' : 'Email Preview'}
                 sandbox="allow-scripts allow-same-origin"
               />
             ) : isLoadingReview ? (
