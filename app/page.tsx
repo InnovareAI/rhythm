@@ -36,7 +36,7 @@ export default function Home() {
         </div>
 
         {/* Content Type Cards */}
-        <div className="mt-16 grid gap-8 sm:grid-cols-2 max-w-4xl mx-auto">
+        <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
           {/* Emails Card */}
           <Link
             href="/chat"
@@ -78,6 +78,30 @@ export default function Home() {
               </p>
               <div className="mt-6 inline-flex items-center rounded-full bg-[#007a80] px-6 py-3 text-sm font-semibold text-white transition-colors group-hover:bg-[#1c7b80]">
                 Let's create a banner
+                <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </Link>
+
+          {/* Approval Queue Card */}
+          <Link
+            href="/approvals"
+            className="group relative rounded-2xl border-2 border-purple-500 bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-purple-600 hover:bg-purple-50"
+          >
+            <div className="relative">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-purple-500">
+                <svg className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+              </div>
+              <h3 className="mt-5 text-2xl font-bold text-purple-600">Approval Queue</h3>
+              <p className="mt-3 text-[#4a4f55]">
+                Track MLR submissions, view feedback, and optimize content with AI-powered suggestions.
+              </p>
+              <div className="mt-6 inline-flex items-center rounded-full bg-purple-500 px-6 py-3 text-sm font-semibold text-white transition-colors group-hover:bg-purple-600">
+                View approvals
                 <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
