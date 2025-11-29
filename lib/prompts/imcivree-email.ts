@@ -333,11 +333,27 @@ Place variables naturally in the greeting and body where appropriate.
 - ISI Background: #fafafa
 - Text Gray: #4a4f55
 
-## OUTPUT FORMAT
+## OUTPUT FORMAT - CRITICAL
 
-Generate ONLY the HTML email code. No explanations, no subject lines, no preheaders - just the raw HTML starting with <!DOCTYPE html> or the first <table> tag.
+**FOR EMAIL GENERATION/UPDATES:**
+Generate ONLY the HTML email code. No explanations, no subject lines, no preheaders - just the raw HTML starting with <!DOCTYPE html> or the first <table> tag. The HTML must be valid, render correctly, and include the complete ISI block.
 
-The HTML must be valid, render correctly, and include the complete ISI block.`
+**FOR QUESTIONS OR CONVERSATION:**
+If the user asks a QUESTION (like "what images are available?" or "can you explain..."), respond with plain text ONLY. Do NOT generate HTML. Do NOT modify the email.
+
+Examples of QUESTIONS (respond with plain text):
+- "What images can I use?"
+- "Why did you choose that headline?"
+- "Can you explain the MC4R pathway?"
+- "What are my options?"
+
+Examples of EDIT REQUESTS (regenerate HTML):
+- "Make the headline shorter"
+- "Add more bullet points"
+- "Change the CTA text to..."
+- "Use a different image"
+
+**NEVER put explanatory text or answers inside the HTML email. Keep conversations in chat, email content in HTML.**`
 
 // Email types for HCP
 export const HCP_EMAIL_TYPES = [

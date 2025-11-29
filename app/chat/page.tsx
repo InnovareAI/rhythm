@@ -342,11 +342,15 @@ Give me a moment...`
                   if (data.conversationId && !conversationId) {
                     setConversationId(data.conversationId)
                   }
-                  setMessages(prev => [...prev, { role: 'assistant', content: data.message || 'Email updated!' }])
+                  // Only update email if generatedContent is provided (explicit email update)
                   if (data.generatedContent) {
                     setGeneratedContent(data.generatedContent)
+                    setMessages(prev => [...prev, { role: 'assistant', content: data.message || 'Email updated!' }])
                     // Save revision to Supabase (with parent ID for versioning)
                     saveContentToDatabase(data.generatedContent, contentId || undefined)
+                  } else if (data.message) {
+                    // Conversational response - show in chat, don't touch email
+                    setMessages(prev => [...prev, { role: 'assistant', content: data.message }])
                   }
                   setStreamingContent('')
                 }
@@ -361,24 +365,34 @@ Give me a moment...`
           }
         }
 
-        // Fallback extraction if done message wasn't received
-        if (fullContent && !generatedContent) {
+        // Check if response is conversational (no HTML) or an email update
+        if (fullContent) {
           setStreamingContent('')
-          setProcessingEmail(true)
-          await new Promise(resolve => setTimeout(resolve, 500))
 
-          let htmlContent = fullContent
-          const htmlMatch = fullContent.match(/```html\s*([\s\S]*?)\s*```/i)
-          if (htmlMatch && htmlMatch[1]) {
-            htmlContent = htmlMatch[1].trim()
-          }
-          if (htmlContent.includes('<') && htmlContent.includes('>')) {
+          // Check if response contains HTML email (starts with DOCTYPE/table or contains email structure)
+          const isHtmlEmail = fullContent.includes('<!DOCTYPE') ||
+                              fullContent.includes('<table') ||
+                              fullContent.match(/```html\s*[\s\S]*?```/i)
+
+          if (isHtmlEmail) {
+            // This is an email update - extract HTML
+            setProcessingEmail(true)
+            await new Promise(resolve => setTimeout(resolve, 500))
+
+            let htmlContent = fullContent
+            const htmlMatch = fullContent.match(/```html\s*([\s\S]*?)\s*```/i)
+            if (htmlMatch && htmlMatch[1]) {
+              htmlContent = htmlMatch[1].trim()
+            }
             setGeneratedContent(htmlContent)
             setMessages(prev => [...prev, { role: 'assistant', content: 'Email updated!' }])
             // Save revision to Supabase
             saveContentToDatabase(htmlContent, contentId || undefined)
+            setProcessingEmail(false)
+          } else {
+            // This is a conversational response - show in chat, don't touch email
+            setMessages(prev => [...prev, { role: 'assistant', content: fullContent }])
           }
-          setProcessingEmail(false)
         }
       }
     } catch (error: any) {
