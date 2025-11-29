@@ -76,15 +76,18 @@ export async function POST(request: NextRequest) {
         folder_id: defaultFolderId,
       }
 
+      // Ziflow owner email - must be a reviewer on every proof
+      const ownerEmail = process.env.ZIFLOW_OWNER_EMAIL || 'sophia@3cubed.ai'
+
       // Use workflow template if available, otherwise add a basic stage
       if (defaultWorkflowId) {
         proofParams.workflow_template = { id: defaultWorkflowId }
       } else {
-        // Add minimal stage for MLR review
+        // Add minimal stage for MLR review with owner as reviewer
         proofParams.stages = [{
           name: 'MLR Review',
           members: [{
-            email: process.env.ZIFLOW_REVIEWER_EMAIL || 'mlr@rhythmpharma.com',
+            email: ownerEmail,
             view: true,
             comment: true,
             decision: true
