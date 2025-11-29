@@ -110,7 +110,7 @@ export default function ReviewsPage() {
               3cubed
             </Link>
             <div className="h-6 w-px bg-[#007a80]/20" />
-            <span className="text-lg font-medium text-blue-600">
+            <span className="text-lg font-medium text-[#007a80]">
               Ziflow Reviews
             </span>
           </div>
@@ -125,13 +125,13 @@ export default function ReviewsPage() {
 
       <main className="mx-auto max-w-4xl px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-blue-600">MLR Review Feedback</h1>
+          <h1 className="text-3xl font-bold text-[#007a80]">MLR Review Feedback</h1>
           <p className="text-[#4a4f55] mt-1">Content awaiting review or with reviewer comments</p>
         </div>
 
         {isLoading ? (
           <div className="text-center py-12">
-            <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+            <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-[#007a80] border-t-transparent"></div>
             <p className="mt-4 text-sm text-[#4a4f55]">Loading reviews...</p>
           </div>
         ) : content.length === 0 ? (
@@ -139,7 +139,7 @@ export default function ReviewsPage() {
             <svg className="mx-auto h-16 w-16 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h3 className="mt-4 text-lg font-medium text-blue-600">No content in review</h3>
+            <h3 className="mt-4 text-lg font-medium text-[#007a80]">No content in review</h3>
             <p className="mt-2 text-sm text-[#4a4f55]">
               Submit content to Ziflow to see it here.
             </p>
@@ -161,7 +161,7 @@ export default function ReviewsPage() {
                   key={item.id}
                   onClick={() => openReviewSession(item)}
                   className={`bg-white rounded-xl border-2 p-5 cursor-pointer transition-all hover:shadow-lg ${
-                    hasComments ? 'border-orange-300 hover:border-orange-400' : 'border-blue-200 hover:border-blue-400'
+                    hasComments ? 'border-orange-300 hover:border-orange-400' : 'border-[#007a80]/30 hover:border-[#007a80]'
                   }`}
                 >
                   <div className="flex items-start gap-4">

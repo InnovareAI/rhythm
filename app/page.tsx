@@ -90,21 +90,21 @@ export default function Home() {
         <div className="mt-8 flex justify-center">
           <Link
             href="/reviews"
-            className="group relative rounded-2xl border-2 border-blue-500 bg-white p-6 shadow-lg transition-all hover:shadow-xl hover:border-blue-600 hover:bg-blue-50 max-w-md w-full"
+            className="group relative rounded-2xl border-2 border-[#007a80] bg-white p-6 shadow-lg transition-all hover:shadow-xl hover:border-[#1c7b80] hover:bg-[#f6fbfb] max-w-md w-full"
           >
             <div className="relative flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#007a80]">
                 <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-blue-600">Ziflow Reviews</h3>
+                <h3 className="text-lg font-bold text-[#007a80]">Ziflow Reviews</h3>
                 <p className="text-sm text-[#4a4f55]">
                   View MLR feedback and address reviewer comments
                 </p>
               </div>
-              <svg className="h-5 w-5 text-blue-500 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5 text-[#007a80] transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
