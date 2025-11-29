@@ -135,41 +135,49 @@
         background-color: #ffffff;
         border-left: 1px solid #e0e0e0;
         padding: 10px;
-        overflow-y: scroll; /* Enables scrolling */
+        position: relative;
+        overflow: hidden;
         font-size: 10px;
         color: #333;
         line-height: 1.4;
     }
 
-    .isi-panel h2 {
+    .isi-header {
         font-size: 11px;
         color: #007a6e;
         margin-bottom: 5px;
         text-transform: uppercase;
+        font-weight: bold;
     }
 
-    .isi-panel h3 {
+    .isi-scroll-wrapper {
+        position: absolute;
+        top: 30px;
+        left: 10px;
+        right: 6px;
+        bottom: 10px;
+        overflow: hidden;
+    }
+
+    .isi-content {
+        position: relative;
+    }
+
+    .isi-content h3 {
         font-size: 10px;
         font-weight: bold;
         margin-top: 8px;
         margin-bottom: 2px;
+        color: #007a6e;
     }
 
-    .isi-panel ul {
+    .isi-content ul {
         padding-left: 15px;
         margin-bottom: 5px;
     }
 
-    /* Custom Scrollbar for Chrome/Safari/Edge to match modern ads */
-    .isi-panel::-webkit-scrollbar {
-        width: 6px;
-    }
-    .isi-panel::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-    .isi-panel::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 3px;
+    .isi-content p {
+        margin-bottom: 5px;
     }
 
 </style>
@@ -199,54 +207,79 @@
         </div>
 
         <div class="isi-panel">
-            <h2>Important Safety Information</h2>
+            <div class="isi-header">Important Safety Information</div>
+            <div class="isi-scroll-wrapper">
+                <div class="isi-content">
+                    <h3>Indication</h3>
+                    <p>IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 6 years and older with obesity due to Bardet-Biedl syndrome (BBS).</p>
 
-            <h3>Limitations of Use</h3>
-            <p>IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective:</p>
-            <ul>
-                <li>Other types of obesity not related to BBS or other FDA-approved indications.</li>
-                <li>Obesity associated with other genetic syndromes and general (polygenic) obesity.</li>
-            </ul>
+                    <h3>Limitations of Use</h3>
+                    <p>IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective:</p>
+                    <ul>
+                        <li>Other types of obesity not related to BBS or other FDA-approved indications.</li>
+                        <li>Obesity associated with other genetic syndromes and general (polygenic) obesity.</li>
+                    </ul>
 
-            <h3>Contraindications</h3>
-            <p>Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</p>
+                    <h3>Contraindications</h3>
+                    <p>Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</p>
 
-            <h3>Warnings and Precautions</h3>
-            <ul>
-                <li><strong>Disturbance in sexual arousal:</strong> Spontaneous penile erections in males and sexual adverse reactions in females have occurred.</li>
-                <li><strong>Depression and suicidal ideation:</strong> Depression, suicidal ideation, and depressed mood have been reported.</li>
-                <li><strong>Hypersensitivity reactions:</strong> Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</li>
-                <li><strong>Skin pigmentation:</strong> Darkening of pre-existing nevi, and development of new skin pigmentation.</li>
-                <li><strong>Risk of serious adverse reactions due to benzyl alcohol preservative:</strong> Risk of serious adverse reactions in neonates and infants.</li>
-            </ul>
-            <br>
-            <p><em>(Please scroll for full Safety Information)</em></p>
-            <br><br><br>
+                    <h3>Warnings and Precautions</h3>
+                    <ul>
+                        <li><strong>Disturbance in sexual arousal:</strong> Spontaneous penile erections in males and sexual adverse reactions in females have occurred.</li>
+                        <li><strong>Depression and suicidal ideation:</strong> Depression, suicidal ideation, and depressed mood have been reported.</li>
+                        <li><strong>Hypersensitivity reactions:</strong> Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</li>
+                        <li><strong>Skin pigmentation:</strong> Darkening of pre-existing nevi, and development of new skin pigmentation.</li>
+                        <li><strong>Risk of serious adverse reactions due to benzyl alcohol preservative:</strong> Risk of serious adverse reactions in neonates and infants.</li>
+                    </ul>
+
+                    <h3>Adverse Reactions</h3>
+                    <p>Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection.</p>
+
+                    <h3>Use in Specific Populations</h3>
+                    <p>Treatment with IMCIVREE is not recommended when breastfeeding. Discontinue IMCIVREE when pregnancy is recognized unless the benefits of therapy outweigh the potential risks to the fetus.</p>
+
+                    <h3>Adverse Event Reporting</h3>
+                    <p>To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088.</p>
+
+                    <p style="margin-top: 20px;"><em>Please see full Prescribing Information.</em></p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-    // ISI auto-scroll - no user interaction needed
+    // ISI auto-scroll using CSS transform (smoother animation)
     (function () {
-        var isiPanel = document.querySelector('.isi-panel');
-        if (!isiPanel) return;
+        var wrapper = document.querySelector('.isi-scroll-wrapper');
+        var content = document.querySelector('.isi-content');
+        if (!wrapper || !content) return;
 
         var isHovering = false;
-        isiPanel.addEventListener('mouseenter', function () { isHovering = true; });
-        isiPanel.addEventListener('mouseleave', function () { isHovering = false; });
+        var scrollPos = 0;
+        var scrollSpeed = 0.5; // pixels per frame
 
-        function step() {
+        wrapper.addEventListener('mouseenter', function () { isHovering = true; });
+        wrapper.addEventListener('mouseleave', function () { isHovering = false; });
+
+        function animate() {
             if (!isHovering) {
-                if (isiPanel.scrollTop >= isiPanel.scrollHeight - isiPanel.clientHeight) {
-                    isiPanel.scrollTop = 0; // Restart from top
-                } else {
-                    isiPanel.scrollTop += 0.3; // Smooth scroll speed
+                var maxScroll = content.offsetHeight - wrapper.offsetHeight;
+
+                if (maxScroll > 0) {
+                    scrollPos += scrollSpeed;
+
+                    if (scrollPos >= maxScroll) {
+                        scrollPos = 0; // Reset to top
+                    }
+
+                    content.style.transform = 'translateY(-' + scrollPos + 'px)';
                 }
             }
-            requestAnimationFrame(step);
+            requestAnimationFrame(animate);
         }
 
-        requestAnimationFrame(step);
+        // Start animation
+        requestAnimationFrame(animate);
     })();
     </script>
 
