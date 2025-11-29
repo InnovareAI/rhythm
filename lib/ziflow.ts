@@ -13,11 +13,28 @@ interface ZiflowProofInput {
   nickname?: string           // Optional name for the input
 }
 
+interface ZiflowStageMember {
+  email: string
+  view?: boolean
+  comment?: boolean
+  decision?: boolean
+  manage?: boolean
+  share?: boolean
+}
+
+interface ZiflowStage {
+  name: string
+  members: ZiflowStageMember[]
+  deadline?: string
+}
+
 interface CreateProofRequest {
   name: string
-  input: ZiflowProofInput[]  // Ziflow API field name
+  input: ZiflowProofInput[]
   folder_id?: string
   workflow_id?: string
+  workflow_template?: { id: string }
+  stages?: ZiflowStage[]
   due_date?: string
   message?: string
 }
@@ -68,7 +85,8 @@ export class ZiflowClient {
       input: params.input,
     }
     if (params.folder_id) cleanParams.folder_id = params.folder_id
-    if (params.message) cleanParams.message = params.message
+    if (params.workflow_template) cleanParams.workflow_template = params.workflow_template
+    if (params.stages) cleanParams.stages = params.stages
 
     console.log('[ZIFLOW] Creating proof with params:', JSON.stringify(cleanParams, null, 2))
     return this.request<ZiflowProofResponse>('/proofs', {

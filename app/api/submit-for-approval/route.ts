@@ -63,15 +63,36 @@ export async function POST(request: NextRequest) {
       const folders = await client.listFolders().catch(() => [])
       const defaultFolderId = folders.length > 0 ? folders[0].id : undefined
 
-      const proof = await client.createProof({
+      // Get workflows to use if available
+      const workflows = await client.listWorkflows().catch(() => [])
+      const defaultWorkflowId = workflows.length > 0 ? workflows[0].id : undefined
+
+      const proofParams: any = {
         name: proofName,
         input: [{
           type: 'web-static',
           source: publicUrl
         }],
         folder_id: defaultFolderId,
-        message: `Content Type: ${contentType}\nAudience: ${audience}\nFocus: ${focus || 'N/A'}\nKey Message: ${keyMessage || 'N/A'}`
-      })
+      }
+
+      // Use workflow template if available, otherwise add a basic stage
+      if (defaultWorkflowId) {
+        proofParams.workflow_template = { id: defaultWorkflowId }
+      } else {
+        // Add minimal stage for MLR review
+        proofParams.stages = [{
+          name: 'MLR Review',
+          members: [{
+            email: process.env.ZIFLOW_REVIEWER_EMAIL || 'mlr@rhythmpharma.com',
+            view: true,
+            comment: true,
+            decision: true
+          }]
+        }]
+      }
+
+      const proof = await client.createProof(proofParams)
 
       console.log('[ZIFLOW SUBMIT] Proof created:', proof.id)
 
