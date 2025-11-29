@@ -3,40 +3,29 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
-interface VideoGeneration {
-  id: string
-  type: 'video'
-  product_name: string
-  video_type: string
-  target_audience: string
-  image_prompt: string
-  animation_prompt: string
-  image_url: string
-  video_url: string
-  image_source: string
-  created_at: string
-}
-
 interface Conversation {
   id: string
-  type: 'hcp-email' | 'social-media'
-  content_type: string
-  state: any
+  content_type: 'imcivree-email' | 'imcivree-banner'
+  state: {
+    audience?: string
+    emailType?: string
+    bannerFocus?: string
+    keyMessage?: string
+  }
   messages: Array<{
     role: string
     content: string
   }>
+  generated_content?: string
   created_at: string
 }
 
-type ContentItem = VideoGeneration | Conversation
-
 export default function ContentHistoryPage() {
-  const [content, setContent] = useState<ContentItem[]>([])
+  const [content, setContent] = useState<Conversation[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedItem, setSelectedItem] = useState<ContentItem | null>(null)
-  const [filter, setFilter] = useState<'all' | 'hcp-email' | 'social-media' | 'video'>('all')
+  const [selectedItem, setSelectedItem] = useState<Conversation | null>(null)
+  const [filter, setFilter] = useState<'all' | 'imcivree-email' | 'imcivree-banner'>('all')
 
   useEffect(() => {
     fetchHistory()
@@ -45,34 +34,14 @@ export default function ContentHistoryPage() {
   const fetchHistory = async () => {
     try {
       setIsLoading(true)
+      const response = await fetch('/api/conversations')
 
-      // Fetch both conversations and videos in parallel
-      const [conversationsRes, videosRes] = await Promise.all([
-        fetch('/api/conversations'),
-        fetch('/api/video-history')
-      ])
+      if (!response.ok) {
+        throw new Error('Failed to fetch history')
+      }
 
-      const conversationsData = conversationsRes.ok ? await conversationsRes.json() : { conversations: [] }
-      const videosData = videosRes.ok ? await videosRes.json() : { videos: [] }
-
-      // Map conversations to include type
-      const conversations: Conversation[] = (conversationsData.conversations || []).map((conv: any) => ({
-        ...conv,
-        type: conv.content_type
-      }))
-
-      // Map videos to include type
-      const videos: VideoGeneration[] = (videosData.videos || []).map((video: any) => ({
-        ...video,
-        type: 'video'
-      }))
-
-      // Merge and sort by created_at
-      const allContent = [...conversations, ...videos].sort((a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      )
-
-      setContent(allContent)
+      const data = await response.json()
+      setContent(data.conversations || [])
       setError(null)
     } catch (err: any) {
       console.error('Error fetching history:', err)
@@ -93,70 +62,107 @@ export default function ContentHistoryPage() {
     })
   }
 
-  const getContentTypeLabel = (item: ContentItem) => {
-    if (item.type === 'video') {
-      const labels: Record<string, string> = {
-        'patient-story': 'Patient Story Video',
-        'education': 'Education Video',
-        'mechanism': 'Mechanism Video',
-        'reel': 'Social Media Reel'
+  const getContentTypeLabel = (item: Conversation) => {
+    if (item.content_type === 'imcivree-email') {
+      return 'Email'
+    }
+    if (item.content_type === 'imcivree-banner') {
+      return 'Banner'
+    }
+    return 'Content'
+  }
+
+  const getAudienceLabel = (item: Conversation) => {
+    return item.state?.audience === 'hcp' ? 'HCP' : 'Patient'
+  }
+
+  const getContentTitle = (item: Conversation) => {
+    if (item.content_type === 'imcivree-email') {
+      const types: Record<string, string> = {
+        'moa': 'Mechanism of Action',
+        'summary': 'Clinical Summary',
+        'dosing': 'Dosing Information',
+        'efficacy': 'Efficacy Data',
+        'getting-started': 'Getting Started',
+        'what-to-expect': 'What to Expect',
+        'support': 'Support Resources',
       }
-      return labels[(item as VideoGeneration).video_type] || 'Video'
+      return types[item.state?.emailType || ''] || 'Email'
     }
-    return item.type === 'hcp-email' ? 'HCP Email' : 'Social Media Post'
-  }
-
-  const getContentTypeColor = (item: ContentItem) => {
-    if (item.type === 'video') return 'text-[#FF6B35]'
-    if (item.type === 'hcp-email') return 'text-[#007a80]'
-    return 'text-purple-400'
-  }
-
-  const getContentTitle = (item: ContentItem) => {
-    if (item.type === 'video') {
-      return (item as VideoGeneration).product_name
+    if (item.content_type === 'imcivree-banner') {
+      const types: Record<string, string> = {
+        'moa': 'Mechanism of Action',
+        'efficacy-weight': 'Weight Reduction',
+        'efficacy-hunger': 'Hunger Reduction',
+        'treatment': 'Treatment Journey',
+        'understanding': 'Understanding BBS',
+        'hope': 'Path Forward',
+        'support': 'Support Available',
+      }
+      return types[item.state?.bannerFocus || ''] || 'Banner'
     }
-    const conv = item as Conversation
-    return conv.state?.productName || conv.state?.brand || 'Content'
+    return 'Content'
   }
 
   const filteredContent = content.filter(item => {
     if (filter === 'all') return true
-    return item.type === filter
+    return item.content_type === filter
   })
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+    alert('HTML copied to clipboard!')
+  }
+
+  const downloadHtml = (item: Conversation) => {
+    if (!item.generated_content) return
+    const blob = new Blob([item.generated_content], { type: 'text/html' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `imcivree-${item.content_type}-${item.id}.html`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-b from-[#f6fbfb] via-white to-[#f6fbfb]">
       {/* Header */}
-      <header className="border-b border-gray-800 bg-black">
+      <header className="border-b border-[#007a80]/10 bg-white">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-2xl font-bold text-[#FF6B35]">
+            <Link href="/" className="text-2xl font-bold text-[#007a80]">
               3cubed
             </Link>
-            <div className="h-6 w-px bg-gray-700" />
-            <span className="text-sm font-medium text-gray-400">
+            <div className="h-6 w-px bg-[#007a80]/20" />
+            <img
+              src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png"
+              alt="IMCIVREE"
+              className="h-8"
+            />
+            <div className="h-6 w-px bg-[#007a80]/20" />
+            <span className="text-lg font-medium text-[#007a80]">
               Content History
             </span>
           </div>
           <div className="flex items-center gap-3">
             <Link
-              href="/chat?type=hcp-email"
-              className="rounded-lg bg-[#007a80] px-4 py-2 text-sm font-medium text-white hover:bg-[#006570]"
+              href="/chat"
+              className="rounded-lg bg-[#007a80] px-4 py-2 text-sm font-medium text-white hover:bg-[#1c7b80]"
             >
               Create Email
             </Link>
             <Link
-              href="/social-media-generator"
-              className="rounded-lg bg-purple-500 px-4 py-2 text-sm font-medium text-white hover:bg-purple-600"
+              href="/banner-generator"
+              className="rounded-lg border border-[#007a80] px-4 py-2 text-sm font-medium text-[#007a80] hover:bg-[#007a80]/5"
             >
-              Create Social
+              Create Banner
             </Link>
             <Link
-              href="/video-generator"
-              className="rounded-lg bg-[#FF6B35] px-4 py-2 text-sm font-medium text-white hover:bg-[#E65A2B]"
+              href="/"
+              className="text-sm text-[#4a4f55] hover:text-[#007a80]"
             >
-              Create Video
+              ← Back to Hub
             </Link>
           </div>
         </div>
@@ -164,99 +170,85 @@ export default function ContentHistoryPage() {
 
       <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">Content History</h1>
-          <p className="mt-2 text-gray-400">
-            View and download all your generated content - emails, social posts, and videos
+          <h1 className="text-3xl font-bold text-[#007a80]">Content History</h1>
+          <p className="mt-2 text-[#4a4f55]">
+            View and download all your generated emails and banners
           </p>
         </div>
 
         {/* Filter Tabs */}
-        <div className="mb-6 flex gap-2 border-b border-gray-800">
+        <div className="mb-6 flex gap-2 border-b border-[#007a80]/10">
           <button
             onClick={() => setFilter('all')}
             className={`px-4 py-2 text-sm font-medium transition-colors ${
               filter === 'all'
-                ? 'border-b-2 border-[#FF6B35] text-white'
-                : 'text-gray-400 hover:text-white'
+                ? 'border-b-2 border-[#007a80] text-[#007a80]'
+                : 'text-[#4a4f55] hover:text-[#007a80]'
             }`}
           >
             All Content ({content.length})
           </button>
           <button
-            onClick={() => setFilter('hcp-email')}
+            onClick={() => setFilter('imcivree-email')}
             className={`px-4 py-2 text-sm font-medium transition-colors ${
-              filter === 'hcp-email'
-                ? 'border-b-2 border-[#007a80] text-white'
-                : 'text-gray-400 hover:text-white'
+              filter === 'imcivree-email'
+                ? 'border-b-2 border-[#007a80] text-[#007a80]'
+                : 'text-[#4a4f55] hover:text-[#007a80]'
             }`}
           >
-            Emails ({content.filter(c => c.type === 'hcp-email').length})
+            Emails ({content.filter(c => c.content_type === 'imcivree-email').length})
           </button>
           <button
-            onClick={() => setFilter('social-media')}
+            onClick={() => setFilter('imcivree-banner')}
             className={`px-4 py-2 text-sm font-medium transition-colors ${
-              filter === 'social-media'
-                ? 'border-b-2 border-purple-400 text-white'
-                : 'text-gray-400 hover:text-white'
+              filter === 'imcivree-banner'
+                ? 'border-b-2 border-[#007a80] text-[#007a80]'
+                : 'text-[#4a4f55] hover:text-[#007a80]'
             }`}
           >
-            Social Media ({content.filter(c => c.type === 'social-media').length})
-          </button>
-          <button
-            onClick={() => setFilter('video')}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              filter === 'video'
-                ? 'border-b-2 border-[#FF6B35] text-white'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            Videos ({content.filter(c => c.type === 'video').length})
+            Banners ({content.filter(c => c.content_type === 'imcivree-banner').length})
           </button>
         </div>
 
         {/* Loading State */}
         {isLoading && (
           <div className="flex items-center justify-center py-12">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#FF6B35] border-t-transparent"></div>
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#007a80] border-t-transparent"></div>
           </div>
         )}
 
         {/* Error State */}
         {error && (
-          <div className="rounded-lg border border-red-500 bg-red-500/10 p-4">
-            <div className="font-medium text-red-400">Error</div>
-            <div className="mt-1 text-sm text-red-300">{error}</div>
+          <div className="rounded-lg border border-red-300 bg-red-50 p-4">
+            <div className="font-medium text-red-800">Error</div>
+            <div className="mt-1 text-sm text-red-600">{error}</div>
           </div>
         )}
 
         {/* Empty State */}
         {!isLoading && !error && filteredContent.length === 0 && (
-          <div className="rounded-lg border border-gray-700 bg-gray-900 p-12 text-center">
-            <div className="text-4xl mb-4">📄</div>
-            <h3 className="text-lg font-semibold text-white">
-              {filter === 'all' ? 'No content yet' : `No ${filter === 'hcp-email' ? 'emails' : filter === 'social-media' ? 'social posts' : 'videos'} yet`}
+          <div className="rounded-xl border-2 border-dashed border-[#007a80]/20 bg-white p-12 text-center">
+            <svg className="mx-auto h-16 w-16 text-[#007a80]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3 className="mt-4 text-lg font-semibold text-[#007a80]">
+              {filter === 'all' ? 'No content yet' : `No ${filter === 'imcivree-email' ? 'emails' : 'banners'} yet`}
             </h3>
-            <p className="mt-2 text-sm text-gray-400">
+            <p className="mt-2 text-sm text-[#4a4f55]">
               Start creating content to see it here
             </p>
-            <div className="mt-4 flex items-center justify-center gap-3">
+            <div className="mt-6 flex items-center justify-center gap-3">
               <Link
-                href="/chat?type=hcp-email"
-                className="rounded-lg bg-[#007a80] px-6 py-3 text-sm font-medium text-white hover:bg-[#006570]"
+                href="/chat"
+                className="rounded-lg bg-[#007a80] px-6 py-3 text-sm font-medium text-white hover:bg-[#1c7b80]"
               >
                 Create Email
               </Link>
               <Link
-                href="/social-media-generator"
-                className="rounded-lg bg-purple-500 px-6 py-3 text-sm font-medium text-white hover:bg-purple-600"
+                href="/banner-generator"
+                className="rounded-lg border border-[#007a80] px-6 py-3 text-sm font-medium text-[#007a80] hover:bg-[#007a80]/5"
               >
-                Create Social Post
-              </Link>
-              <Link
-                href="/video-generator"
-                className="rounded-lg bg-[#FF6B35] px-6 py-3 text-sm font-medium text-white hover:bg-[#E65A2B]"
-              >
-                Create Video
+                Create Banner
               </Link>
             </div>
           </div>
@@ -268,51 +260,45 @@ export default function ContentHistoryPage() {
             {filteredContent.map((item) => (
               <div
                 key={item.id}
-                className="group cursor-pointer rounded-lg border border-gray-700 bg-gray-900 overflow-hidden transition-all hover:border-[#FF6B35]"
+                className="group cursor-pointer rounded-xl border border-[#007a80]/10 bg-white overflow-hidden shadow-sm transition-all hover:shadow-lg hover:border-[#007a80]/30"
                 onClick={() => setSelectedItem(item)}
               >
                 {/* Content Preview */}
-                {item.type === 'video' ? (
-                  <div className="relative aspect-video bg-gray-800">
-                    <video
-                      src={(item as VideoGeneration).video_url}
-                      className="h-full w-full object-cover"
-                      muted
-                      loop
-                      playsInline
-                      onMouseEnter={(e) => e.currentTarget.play()}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.pause()
-                        e.currentTarget.currentTime = 0
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-                    <div className="absolute top-2 right-2 rounded-lg bg-black/60 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm">
-                      🎬 Video
-                    </div>
+                <div className="relative aspect-video bg-gradient-to-br from-[#f6fbfb] to-[#e8f4f4] p-4 flex items-center justify-center">
+                  <div className="absolute top-2 left-2 flex gap-2">
+                    <span className="rounded-full bg-[#007a80] px-2 py-0.5 text-xs font-medium text-white">
+                      {getContentTypeLabel(item)}
+                    </span>
+                    <span className="rounded-full bg-[#007a80]/10 px-2 py-0.5 text-xs font-medium text-[#007a80]">
+                      {getAudienceLabel(item)}
+                    </span>
                   </div>
-                ) : (
-                  <div className="relative aspect-video bg-gradient-to-br from-gray-800 to-gray-900 p-6 flex flex-col justify-center">
-                    <div className="absolute top-2 right-2 rounded-lg bg-black/60 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm">
-                      {item.type === 'hcp-email' ? '✉️ Email' : '📱 Social'}
+                  {item.content_type === 'imcivree-banner' && item.generated_content ? (
+                    <div className="w-full h-full flex items-center justify-center overflow-hidden rounded">
+                      <iframe
+                        srcDoc={item.generated_content}
+                        className="w-full h-full transform scale-50 origin-center pointer-events-none"
+                        title="Banner Preview"
+                      />
                     </div>
-                    <div className="text-sm text-gray-400 line-clamp-4">
-                      {(item as Conversation).messages.find(m => m.role === 'assistant')?.content.substring(0, 150)}...
+                  ) : (
+                    <div className="text-center">
+                      <svg className="mx-auto h-12 w-12 text-[#007a80]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
 
                 {/* Content Info */}
                 <div className="p-4">
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-semibold text-white truncate">{getContentTitle(item)}</h3>
-                    <span className={`text-xs font-medium whitespace-nowrap ${getContentTypeColor(item)}`}>
-                      {getContentTypeLabel(item)}
-                    </span>
-                  </div>
-                  <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+                  <h3 className="font-semibold text-[#007a80] truncate">{getContentTitle(item)}</h3>
+                  {item.state?.keyMessage && (
+                    <p className="mt-1 text-sm text-[#4a4f55] truncate">"{item.state.keyMessage}"</p>
+                  )}
+                  <div className="mt-3 flex items-center justify-between text-xs text-[#4a4f55]">
                     <span>{formatDate(item.created_at)}</span>
-                    <span className="text-[#FF6B35]">View</span>
+                    <span className="text-[#007a80] font-medium group-hover:underline">View Details</span>
                   </div>
                 </div>
               </div>
@@ -324,117 +310,87 @@ export default function ContentHistoryPage() {
       {/* Detail Modal */}
       {selectedItem && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           onClick={() => setSelectedItem(null)}
         >
           <div
-            className="max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-lg border border-gray-700 bg-gray-900"
+            className="max-w-5xl w-full max-h-[90vh] overflow-y-auto rounded-xl border border-[#007a80]/20 bg-white shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 flex items-center justify-between border-b border-gray-700 bg-gray-900 p-4 z-10">
+            <div className="sticky top-0 flex items-center justify-between border-b border-[#007a80]/10 bg-white p-4 z-10">
               <div>
-                <h2 className="text-xl font-bold text-white">{getContentTitle(selectedItem)}</h2>
-                <span className={`text-sm ${getContentTypeColor(selectedItem)}`}>
-                  {getContentTypeLabel(selectedItem)}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="rounded-full bg-[#007a80] px-2 py-0.5 text-xs font-medium text-white">
+                    {getContentTypeLabel(selectedItem)}
+                  </span>
+                  <span className="rounded-full bg-[#007a80]/10 px-2 py-0.5 text-xs font-medium text-[#007a80]">
+                    {getAudienceLabel(selectedItem)}
+                  </span>
+                </div>
+                <h2 className="mt-2 text-xl font-bold text-[#007a80]">{getContentTitle(selectedItem)}</h2>
               </div>
-              <button
-                onClick={() => setSelectedItem(null)}
-                className="text-gray-400 hover:text-white"
-              >
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              <div className="flex items-center gap-2">
+                {selectedItem.generated_content && (
+                  <>
+                    <button
+                      onClick={() => copyToClipboard(selectedItem.generated_content!)}
+                      className="rounded-lg border border-[#007a80]/20 px-3 py-1.5 text-sm text-[#007a80] hover:bg-[#007a80]/5"
+                    >
+                      Copy HTML
+                    </button>
+                    <button
+                      onClick={() => downloadHtml(selectedItem)}
+                      className="rounded-lg bg-[#007a80] px-3 py-1.5 text-sm text-white hover:bg-[#1c7b80]"
+                    >
+                      Download
+                    </button>
+                  </>
+                )}
+                <button
+                  onClick={() => setSelectedItem(null)}
+                  className="ml-2 text-[#4a4f55] hover:text-[#007a80]"
+                >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
-            <div className="p-6 space-y-6">
-              {selectedItem.type === 'video' ? (
-                <>
-                  {/* Video Player */}
+            <div className="p-6">
+              {selectedItem.generated_content ? (
+                <div className="space-y-6">
+                  {/* Preview */}
                   <div>
-                    <video
-                      src={(selectedItem as VideoGeneration).video_url}
-                      controls
-                      loop
-                      className="w-full rounded-lg"
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                    <a
-                      href={(selectedItem as VideoGeneration).video_url}
-                      download
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-3 inline-block rounded-lg bg-[#FF6B35] px-6 py-3 text-sm font-medium text-white hover:bg-[#E65A2B]"
-                    >
-                      Download Video
-                    </a>
-                  </div>
-
-                  {/* Source Image */}
-                  {(selectedItem as VideoGeneration).image_url && (
-                    <div>
-                      <h3 className="mb-3 text-lg font-semibold text-white">Source Image</h3>
-                      <img
-                        src={(selectedItem as VideoGeneration).image_url}
-                        alt="Source"
-                        className="w-full rounded-lg border border-gray-700"
+                    <h3 className="mb-3 text-sm font-medium text-[#4a4f55]">Preview</h3>
+                    <div className="rounded-lg border border-[#007a80]/10 overflow-hidden bg-gray-50">
+                      <iframe
+                        srcDoc={selectedItem.generated_content}
+                        className={`w-full ${selectedItem.content_type === 'imcivree-banner' ? 'h-[320px]' : 'h-[600px]'}`}
+                        title="Content Preview"
                       />
                     </div>
-                  )}
-
-                  {/* Video Details */}
-                  <div className="space-y-4">
-                    {(selectedItem as VideoGeneration).image_prompt && (
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-400">Image Prompt</h4>
-                        <p className="mt-1 text-sm text-gray-300">{(selectedItem as VideoGeneration).image_prompt}</p>
-                      </div>
-                    )}
-                    {(selectedItem as VideoGeneration).animation_prompt && (
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-400">Animation Prompt</h4>
-                        <p className="mt-1 text-sm text-gray-300">{(selectedItem as VideoGeneration).animation_prompt}</p>
-                      </div>
-                    )}
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-400">Created</h4>
-                      <p className="mt-1 text-white">{formatDate(selectedItem.created_at)}</p>
-                    </div>
                   </div>
-                </>
+
+                  {/* HTML Code */}
+                  <details className="rounded-lg border border-[#007a80]/10">
+                    <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-[#007a80] hover:bg-[#007a80]/5">
+                      View HTML Code
+                    </summary>
+                    <pre className="p-4 bg-gray-50 text-xs text-[#4a4f55] overflow-x-auto max-h-96">
+                      {selectedItem.generated_content}
+                    </pre>
+                  </details>
+                </div>
               ) : (
-                <>
-                  {/* Email/Social Media Content */}
-                  <div className="prose prose-invert max-w-none">
-                    {(selectedItem as Conversation).messages
-                      .filter(m => m.role === 'assistant')
-                      .map((msg, idx) => (
-                        <div key={idx} className="whitespace-pre-wrap text-gray-300">
-                          {msg.content}
-                        </div>
-                      ))}
-                  </div>
-
-                  {/* Generated Image for Social Media */}
-                  {(selectedItem as Conversation).state?.imageUrl && (
-                    <div>
-                      <h3 className="mb-3 text-lg font-semibold text-white">Generated Image</h3>
-                      <img
-                        src={(selectedItem as Conversation).state.imageUrl}
-                        alt="Generated"
-                        className="w-full rounded-lg border border-gray-700"
-                      />
-                    </div>
-                  )}
-
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-400">Created</h4>
-                    <p className="mt-1 text-white">{formatDate(selectedItem.created_at)}</p>
-                  </div>
-                </>
+                <div className="text-center py-12 text-[#4a4f55]">
+                  <p>No generated content available for this item.</p>
+                </div>
               )}
+
+              <div className="mt-6 pt-4 border-t border-[#007a80]/10 text-sm text-[#4a4f55]">
+                Created: {formatDate(selectedItem.created_at)}
+              </div>
             </div>
           </div>
         </div>

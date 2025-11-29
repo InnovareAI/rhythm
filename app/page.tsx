@@ -36,7 +36,7 @@ export default function Home() {
         </div>
 
         {/* Content Type Cards */}
-        <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+        <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto">
           {/* Emails Card */}
           <Link
             href="/chat"
@@ -102,6 +102,30 @@ export default function Home() {
               </p>
               <div className="mt-6 inline-flex items-center rounded-full bg-purple-500 px-6 py-3 text-sm font-semibold text-white transition-colors group-hover:bg-purple-600">
                 View approvals
+                <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </Link>
+
+          {/* Content History Card */}
+          <Link
+            href="/content-history"
+            className="group relative rounded-2xl border-2 border-amber-500 bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-amber-600 hover:bg-amber-50"
+          >
+            <div className="relative">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-amber-500">
+                <svg className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="mt-5 text-2xl font-bold text-amber-600">Content History</h3>
+              <p className="mt-3 text-[#4a4f55]">
+                View, download, and manage all your previously generated emails and banners.
+              </p>
+              <div className="mt-6 inline-flex items-center rounded-full bg-amber-500 px-6 py-3 text-sm font-semibold text-white transition-colors group-hover:bg-amber-600">
+                View history
                 <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
