@@ -69,22 +69,15 @@ async function fetchComments(proofId: string) {
 
   const data = await response.json()
 
-  console.log('[ZIFLOW] Raw comments response:', JSON.stringify(data, null, 2))
-
   // Transform comments to a simpler format
-  // Ziflow comment structure: body, message, or text field
-  return (data || []).map((comment: any) => ({
-    id: comment.id,
-    text: comment.body || comment.message || comment.text || comment.content || '',
-    author: comment.author?.email || comment.user?.email || comment.created_by?.email || 'Reviewer',
-    authorName: comment.author?.first_name
-      ? `${comment.author.first_name} ${comment.author.last_name || ''}`.trim()
-      : comment.created_by?.first_name
-        ? `${comment.created_by.first_name} ${comment.created_by.last_name || ''}`.trim()
-        : 'Reviewer',
-    createdAt: comment.created_at || comment.createdAt,
-    status: comment.status,
-    // Include raw for debugging
-    _raw: comment,
+  // Ziflow comment structure: "comment" field contains the text, "reviewer" contains author info
+  return (data || []).map((c: any) => ({
+    id: c.id,
+    text: c.comment || c.body || c.message || c.text || c.content || '',
+    author: c.reviewer?.email || c.author?.email || 'Reviewer',
+    authorName: c.reviewer?.email?.split('@')[0] || 'Reviewer',
+    createdAt: c.created_at || c.createdAt,
+    status: c.comment_resolve?.type || 'unresolved',
+    page: c.location?.page || 1,
   }))
 }
