@@ -69,17 +69,22 @@ async function fetchComments(proofId: string) {
 
   const data = await response.json()
 
+  console.log('[ZIFLOW] Raw comments response:', JSON.stringify(data, null, 2))
+
   // Transform comments to a simpler format
+  // Ziflow comment structure: body, message, or text field
   return (data || []).map((comment: any) => ({
     id: comment.id,
-    text: comment.text || comment.content || '',
-    author: comment.author?.email || comment.user?.email || 'Reviewer',
+    text: comment.body || comment.message || comment.text || comment.content || '',
+    author: comment.author?.email || comment.user?.email || comment.created_by?.email || 'Reviewer',
     authorName: comment.author?.first_name
-      ? `${comment.author.first_name} ${comment.author.last_name || ''}`
-      : 'Reviewer',
+      ? `${comment.author.first_name} ${comment.author.last_name || ''}`.trim()
+      : comment.created_by?.first_name
+        ? `${comment.created_by.first_name} ${comment.created_by.last_name || ''}`.trim()
+        : 'Reviewer',
     createdAt: comment.created_at || comment.createdAt,
     status: comment.status,
-    // Include any decision info
-    decision: comment.decision,
+    // Include raw for debugging
+    _raw: comment,
   }))
 }
