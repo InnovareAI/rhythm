@@ -75,6 +75,46 @@ function ChatContent() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
+  // Ziflow feedback state (when editing content with feedback)
+  const [ziflowFeedback, setZiflowFeedback] = useState<any>(null)
+  const [editingContentId, setEditingContentId] = useState<string | null>(null)
+
+  // Load content from sessionStorage if editing existing content
+  useEffect(() => {
+    const editContent = sessionStorage.getItem('editContent')
+    if (editContent) {
+      try {
+        const data = JSON.parse(editContent)
+        sessionStorage.removeItem('editContent') // Clear after reading
+
+        // Set the content and state
+        setGeneratedContent(data.html_content)
+        setAudience(data.audience || 'hcp')
+        setEmailType(data.focus || 'moa')
+        setKeyMessage(data.key_message || '')
+        setEditingContentId(data.id)
+        setStep('chat')
+
+        // If there's Ziflow feedback, show it
+        if (data.ziflow_feedback?.comments?.length > 0) {
+          setZiflowFeedback(data.ziflow_feedback)
+          // Add a message prompting the user about the feedback
+          setMessages([{
+            role: 'assistant',
+            content: `I've loaded your content that has MLR feedback. Here's what the reviewers said:\n\n${data.ziflow_feedback.comments.map((c: any) => `**${c.authorName}:** ${c.text}`).join('\n\n')}\n\nHow would you like me to address this feedback? You can:\n- Ask me to make specific changes\n- Tell me to revise based on all feedback\n- Ask questions about the feedback`
+          }])
+        } else if (data.ziflow_proof_id) {
+          setMessages([{
+            role: 'assistant',
+            content: `I've loaded your content that's currently in MLR review. No feedback yet - you can make edits or wait for reviewer comments.`
+          }])
+        }
+      } catch (e) {
+        console.error('Error parsing editContent:', e)
+      }
+    }
+  }, [])
+
   // Save content to Supabase
   const saveContentToDatabase = async (htmlContent: string, parentId?: string) => {
     setIsSaving(true)
@@ -751,6 +791,50 @@ Give me a moment...`
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-6">
             <div className="mx-auto max-w-3xl space-y-6">
+              {/* Ziflow Feedback Banner */}
+              {ziflowFeedback?.comments?.length > 0 && (
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 className="font-semibold text-blue-800">MLR Review Feedback</h3>
+                    <span className="ml-auto text-xs text-blue-600">
+                      {ziflowFeedback.comments.length} comment{ziflowFeedback.comments.length > 1 ? 's' : ''}
+                    </span>
+                  </div>
+                  <div className="space-y-2">
+                    {ziflowFeedback.comments.slice(0, 3).map((comment: any, i: number) => (
+                      <div key={i} className="bg-white rounded-lg p-3 border border-blue-100">
+                        <div className="flex justify-between items-start mb-1">
+                          <span className="text-sm font-medium text-blue-800">{comment.authorName}</span>
+                        </div>
+                        <p className="text-sm text-gray-700">{comment.text}</p>
+                      </div>
+                    ))}
+                    {ziflowFeedback.comments.length > 3 && (
+                      <p className="text-xs text-blue-600 text-center">
+                        +{ziflowFeedback.comments.length - 3} more comments
+                      </p>
+                    )}
+                  </div>
+                  <div className="mt-3 flex gap-2">
+                    <button
+                      onClick={() => setInput('Please address all the feedback and update the content accordingly.')}
+                      className="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    >
+                      Address All Feedback
+                    </button>
+                    <button
+                      onClick={() => setZiflowFeedback(null)}
+                      className="px-3 py-1.5 text-xs border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50"
+                    >
+                      Dismiss
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {messages.map((message, index) => (
                 <div
                   key={index}

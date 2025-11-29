@@ -38,6 +38,10 @@ export default function ContentHistoryPage() {
   const [versions, setVersions] = useState<ContentVersion[]>([])
   const [loadingVersions, setLoadingVersions] = useState(false)
 
+  // Ziflow feedback state
+  const [ziflowFeedback, setZiflowFeedback] = useState<any>(null)
+  const [loadingFeedback, setLoadingFeedback] = useState(false)
+
   // Filters
   const [typeFilter, setTypeFilter] = useState<'all' | 'imcivree-email' | 'imcivree-banner'>('all')
   const [audienceFilter, setAudienceFilter] = useState<'all' | 'hcp' | 'patient'>('all')
@@ -94,6 +98,30 @@ export default function ContentHistoryPage() {
       setLoadingVersions(false)
     }
   }
+
+  const fetchZiflowFeedback = async (proofId: string) => {
+    try {
+      setLoadingFeedback(true)
+      const response = await fetch(`/api/ziflow-feedback/${proofId}`)
+      if (response.ok) {
+        const data = await response.json()
+        setZiflowFeedback(data)
+      }
+    } catch (err) {
+      console.error('Error fetching Ziflow feedback:', err)
+    } finally {
+      setLoadingFeedback(false)
+    }
+  }
+
+  // Fetch Ziflow feedback when selecting an item with a proof ID
+  useEffect(() => {
+    if (selectedItem?.ziflow_proof_id) {
+      fetchZiflowFeedback(selectedItem.ziflow_proof_id)
+    } else {
+      setZiflowFeedback(null)
+    }
+  }, [selectedItem?.ziflow_proof_id])
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -540,6 +568,68 @@ export default function ContentHistoryPage() {
                 </div>
               )}
 
+              {/* Ziflow Feedback Panel */}
+              {selectedItem.ziflow_proof_id && (
+                <div className="p-4 bg-blue-50 border-b border-blue-100">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-sm font-semibold text-blue-800 flex items-center gap-2">
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      MLR Review Feedback
+                    </h3>
+                    {ziflowFeedback?.proofUrl && (
+                      <a
+                        href={ziflowFeedback.proofUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-600 hover:underline"
+                      >
+                        View in Ziflow →
+                      </a>
+                    )}
+                  </div>
+                  {loadingFeedback ? (
+                    <div className="text-center py-4">
+                      <div className="h-6 w-6 mx-auto animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
+                    </div>
+                  ) : ziflowFeedback?.comments?.length > 0 ? (
+                    <div className="space-y-2 max-h-48 overflow-auto">
+                      {ziflowFeedback.comments.map((comment: any) => (
+                        <div
+                          key={comment.id}
+                          className="p-3 bg-white rounded-lg border border-blue-100"
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-sm font-medium text-blue-800">
+                              {comment.authorName}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {comment.createdAt && formatDate(comment.createdAt)}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-700">{comment.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-4 bg-white rounded-lg border border-blue-100">
+                      <p className="text-sm text-blue-600">
+                        {ziflowFeedback?.status === 'in_progress'
+                          ? 'Waiting for reviewer feedback...'
+                          : 'No comments yet'}
+                      </p>
+                      <button
+                        onClick={() => selectedItem.ziflow_proof_id && fetchZiflowFeedback(selectedItem.ziflow_proof_id)}
+                        className="mt-2 text-xs text-blue-700 hover:underline"
+                      >
+                        Refresh
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Preview */}
               <div className="flex-1 overflow-auto p-4 bg-gray-50">
                 <div className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -550,7 +640,7 @@ export default function ContentHistoryPage() {
                       height: selectedItem.content_type === 'imcivree-banner' ? '250px' : '600px',
                       maxHeight: '70vh'
                     }}
-                    sandbox="allow-same-origin"
+                    sandbox="allow-same-origin allow-scripts"
                   />
                 </div>
               </div>
@@ -573,17 +663,19 @@ export default function ContentHistoryPage() {
                         audience: selectedItem.audience,
                         focus: selectedItem.focus,
                         key_message: selectedItem.key_message,
-                        html_content: selectedItem.html_content
+                        html_content: selectedItem.html_content,
+                        ziflow_proof_id: selectedItem.ziflow_proof_id,
+                        ziflow_feedback: ziflowFeedback
                       }))
                       // Navigate to the appropriate generator
-                      router.push(selectedItem.content_type === 'imcivree-email' ? '/chat' : '/banner-generator')
+                      router.push(selectedItem.content_type === 'imcivree-email' ? '/chat' : '/chat?type=banner')
                     }}
                     className="flex items-center gap-1 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700"
                   >
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
-                    Edit / Create Revision
+                    {ziflowFeedback?.comments?.length > 0 ? 'Address Feedback' : 'Edit / Create Revision'}
                   </button>
                   <button
                     onClick={() => copyHtml(selectedItem)}
