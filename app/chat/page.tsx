@@ -48,6 +48,7 @@ function ChatContent() {
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [generatedContent, setGeneratedContent] = useState<string | null>(null)
+  const [isLoadingReview, setIsLoadingReview] = useState(true) // Prevent flash of empty state
   const [conversationId, setConversationId] = useState<string | null>(null)
   const [contentId, setContentId] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState(false)
@@ -142,6 +143,7 @@ What would you like me to do?`
       } catch (e) {
         console.error('Error parsing reviewSession:', e)
       }
+      setIsLoadingReview(false)
       return
     }
 
@@ -174,7 +176,12 @@ What would you like me to do?`
       } catch (e) {
         console.error('Error parsing editContent:', e)
       }
+      setIsLoadingReview(false)
+      return
     }
+
+    // No session data found - ready for new content
+    setIsLoadingReview(false)
   }, [])
 
   // Save content to Supabase
@@ -1064,6 +1071,13 @@ Give me a moment...`
                 title="Email Preview"
                 sandbox="allow-scripts allow-same-origin"
               />
+            ) : isLoadingReview ? (
+              <div className="flex items-center justify-center h-[500px] text-center text-[#4a4f55]">
+                <div>
+                  <div className="h-10 w-10 mx-auto animate-spin rounded-full border-4 border-[#007a80] border-t-transparent mb-3"></div>
+                  <p className="text-sm">Loading content...</p>
+                </div>
+              </div>
             ) : streamingContent || isLoading ? (
               <div className="flex items-center justify-center h-[500px] text-center text-[#4a4f55]">
                 <div>
