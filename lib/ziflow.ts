@@ -8,6 +8,7 @@
 const ZIFLOW_API_BASE = 'https://api.ziflow.io/v1'
 
 interface ZiflowProofInput {
+  type: 'website_url' | 'url'  // Type of input
   url: string
   name?: string
 }
@@ -135,6 +136,7 @@ export async function submitForApproval(
   return client.createProof({
     name: proofName,
     input: [{
+      type: 'website_url',
       url: fileUrl,
       name: `${name}.html`,
     }],
