@@ -537,13 +537,10 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 8.5s; }
     @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
-    .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; display: flex; flex-direction: column; }
-    .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 3px 15px 2px; }
-    .isi-scroll-wrapper { flex: 1; overflow: hidden; position: relative; padding: 0 15px; }
-    .isi-scroll-content { position: relative; font-size: 8px; color: #4A4A4A; line-height: 1.25; }
-    .isi-link-bar { background-color: #00697B; padding: 5px 15px; }
-    .isi-link-bar a { color: #FFFFFF; font-size: 9px; text-decoration: underline; }
-    .isi-link-bar span { color: #FFFFFF; margin: 0 5px; }
+    .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
+    .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 4px 15px 3px; }
+    .isi-scroll-wrapper { height: 60px; overflow: hidden; position: relative; padding: 0 15px; }
+    .isi-scroll-content { position: absolute; top: 0; left: 15px; right: 15px; font-size: 8px; color: #4A4A4A; line-height: 1.3; }
   </style>
 </head>
 <body>
@@ -570,11 +567,6 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
         <div class="isi-scroll-content">
           <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. <strong>Warnings:</strong> Disturbance in sexual arousal, depression and suicidal ideation, skin hyperpigmentation. <strong>Adverse Reactions:</strong> Most common (≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain.
         </div>
-      </div>
-      <div class="isi-link-bar">
-        <a href="https://www.imcivree.com/bbs/safety/" target="_blank">Important Safety Information</a>
-        <span>|</span>
-        <a href="https://www.imcivree.com/bbs/medication-guide/" target="_blank">Medication Guide</a>
       </div>
     </div>
   </div>
@@ -640,13 +632,10 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 8.5s; }
     @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
-    .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; display: flex; flex-direction: column; }
-    .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 3px 15px 2px; }
-    .isi-scroll-wrapper { flex: 1; overflow: hidden; position: relative; padding: 0 15px; }
-    .isi-scroll-content { position: relative; font-size: 8px; color: #4A4A4A; line-height: 1.25; }
-    .isi-link-bar { background-color: #00697B; padding: 5px 15px; }
-    .isi-link-bar a { color: #FFFFFF; font-size: 9px; text-decoration: underline; }
-    .isi-link-bar span { color: #FFFFFF; margin: 0 5px; }
+    .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
+    .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 4px 15px 3px; }
+    .isi-scroll-wrapper { height: 60px; overflow: hidden; position: relative; padding: 0 15px; }
+    .isi-scroll-content { position: absolute; top: 0; left: 15px; right: 15px; font-size: 8px; color: #4A4A4A; line-height: 1.3; }
   </style>
 </head>
 <body>
@@ -673,11 +662,6 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
         <div class="isi-scroll-content">
           <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. <strong>Warnings:</strong> Disturbance in sexual arousal, depression and suicidal ideation, skin hyperpigmentation. <strong>Adverse Reactions:</strong> Most common (≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain.
         </div>
-      </div>
-      <div class="isi-link-bar">
-        <a href="https://www.imcivree.com/bbs/safety/" target="_blank">Important Safety Information</a>
-        <span>|</span>
-        <a href="https://www.imcivree.com/bbs/medication-guide/" target="_blank">Medication Guide</a>
       </div>
     </div>
   </div>
@@ -743,13 +727,10 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 8.5s; }
     @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
-    .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; display: flex; flex-direction: column; }
-    .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 3px 15px 2px; }
-    .isi-scroll-wrapper { flex: 1; overflow: hidden; position: relative; padding: 0 15px; }
-    .isi-scroll-content { position: relative; font-size: 8px; color: #4A4A4A; line-height: 1.25; }
-    .isi-link-bar { background-color: #00697B; padding: 5px 15px; }
-    .isi-link-bar a { color: #FFFFFF; font-size: 9px; text-decoration: underline; }
-    .isi-link-bar span { color: #FFFFFF; margin: 0 5px; }
+    .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
+    .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 4px 15px 3px; }
+    .isi-scroll-wrapper { height: 60px; overflow: hidden; position: relative; padding: 0 15px; }
+    .isi-scroll-content { position: absolute; top: 0; left: 15px; right: 15px; font-size: 8px; color: #4A4A4A; line-height: 1.3; }
   </style>
 </head>
 <body>
@@ -776,11 +757,6 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
         <div class="isi-scroll-content">
           <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. <strong>Warnings:</strong> Disturbance in sexual arousal, depression and suicidal ideation, skin hyperpigmentation. <strong>Adverse Reactions:</strong> Most common (≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain.
         </div>
-      </div>
-      <div class="isi-link-bar">
-        <a href="https://www.imcivree.com/bbs/safety/" target="_blank">Important Safety Information</a>
-        <span>|</span>
-        <a href="https://www.imcivree.com/bbs/medication-guide/" target="_blank">Medication Guide</a>
       </div>
     </div>
   </div>
