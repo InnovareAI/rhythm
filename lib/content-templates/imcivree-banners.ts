@@ -525,25 +525,25 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Avenir', 'Proxima Nova', 'Proxima', Arial, Helvetica, sans-serif; }
     body { background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; }
     .banner-container { width: 728px; height: 250px; background-color: #eff3d8; border: 1px solid #0f6c73; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-    .main-content { height: 180px; position: relative; padding: 12px 20px; overflow: hidden; }
-    .logo { width: 100px; height: auto; margin-bottom: 6px; z-index: 10; position: relative; }
+    .main-content { height: 165px; position: relative; padding: 10px 20px; overflow: hidden; }
+    .logo { width: 90px; height: auto; margin-bottom: 4px; z-index: 10; position: relative; }
     .hero-image { position: absolute; bottom: 0; right: 20px; height: 100%; object-fit: contain; z-index: 1; }
     .slide-container { position: relative; z-index: 5; width: 55%; }
     .slide { position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out; }
-    h1 { color: #007681; font-size: 20px; line-height: 1.15; margin-bottom: 6px; font-weight: bold; }
-    .body-text { color: #4A4A4A; font-size: 12px; line-height: 1.3; margin-bottom: 8px; }
-    .cta-button { display: inline-block; background-color: #0E7076; color: white; text-decoration: none; padding: 8px 20px; border-radius: 30px; font-size: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
+    h1 { color: #007681; font-size: 18px; line-height: 1.15; margin-bottom: 4px; font-weight: bold; }
+    .body-text { color: #4A4A4A; font-size: 11px; line-height: 1.25; margin-bottom: 6px; }
+    .cta-button { display: inline-block; background-color: #0E7076; color: white; text-decoration: none; padding: 6px 16px; border-radius: 30px; font-size: 11px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
     #slide1 { animation: fadeOut 0.5s forwards; animation-delay: 8s; opacity: 1; }
     #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 8.5s; }
     @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
-    .isi-section { height: 70px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
-    .isi-header { color: #007681; font-size: 11px; font-weight: bold; padding: 4px 20px 2px; }
-    .isi-scroll-wrapper { height: 28px; overflow: hidden; position: relative; padding: 0 20px; }
-    .isi-scroll-content { position: relative; font-size: 9px; color: #4A4A4A; line-height: 1.3; }
-    .isi-link-bar { background-color: #00697B; padding: 6px 20px; }
-    .isi-link-bar a { color: #FFFFFF; font-size: 10px; text-decoration: underline; }
-    .isi-link-bar span { color: #FFFFFF; margin: 0 6px; }
+    .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; display: flex; flex-direction: column; }
+    .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 3px 15px 2px; }
+    .isi-scroll-wrapper { flex: 1; overflow: hidden; position: relative; padding: 0 15px; }
+    .isi-scroll-content { position: relative; font-size: 8px; color: #4A4A4A; line-height: 1.25; }
+    .isi-link-bar { background-color: #00697B; padding: 5px 15px; }
+    .isi-link-bar a { color: #FFFFFF; font-size: 9px; text-decoration: underline; }
+    .isi-link-bar span { color: #FFFFFF; margin: 0 5px; }
   </style>
 </head>
 <body>
@@ -628,25 +628,25 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Avenir', 'Proxima Nova', 'Proxima', Arial, Helvetica, sans-serif; }
     body { background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; }
     .banner-container { width: 728px; height: 250px; background-color: #eff3d8; border: 1px solid #0f6c73; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-    .main-content { height: 180px; position: relative; padding: 12px 20px; overflow: hidden; }
-    .logo { width: 100px; height: auto; margin-bottom: 6px; z-index: 10; position: relative; }
+    .main-content { height: 165px; position: relative; padding: 10px 20px; overflow: hidden; }
+    .logo { width: 90px; height: auto; margin-bottom: 4px; z-index: 10; position: relative; }
     .hero-image { position: absolute; bottom: 0; right: 20px; height: 100%; object-fit: contain; z-index: 1; }
     .slide-container { position: relative; z-index: 5; width: 55%; }
     .slide { position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out; }
-    h1 { color: #007681; font-size: 20px; line-height: 1.15; margin-bottom: 6px; font-weight: bold; }
-    .body-text { color: #4A4A4A; font-size: 12px; line-height: 1.3; margin-bottom: 8px; }
-    .cta-button { display: inline-block; background-color: #0E7076; color: white; text-decoration: none; padding: 8px 20px; border-radius: 30px; font-size: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
+    h1 { color: #007681; font-size: 18px; line-height: 1.15; margin-bottom: 4px; font-weight: bold; }
+    .body-text { color: #4A4A4A; font-size: 11px; line-height: 1.25; margin-bottom: 6px; }
+    .cta-button { display: inline-block; background-color: #0E7076; color: white; text-decoration: none; padding: 6px 16px; border-radius: 30px; font-size: 11px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
     #slide1 { animation: fadeOut 0.5s forwards; animation-delay: 8s; opacity: 1; }
     #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 8.5s; }
     @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
-    .isi-section { height: 70px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
-    .isi-header { color: #007681; font-size: 11px; font-weight: bold; padding: 4px 20px 2px; }
-    .isi-scroll-wrapper { height: 28px; overflow: hidden; position: relative; padding: 0 20px; }
-    .isi-scroll-content { position: relative; font-size: 9px; color: #4A4A4A; line-height: 1.3; }
-    .isi-link-bar { background-color: #00697B; padding: 6px 20px; }
-    .isi-link-bar a { color: #FFFFFF; font-size: 10px; text-decoration: underline; }
-    .isi-link-bar span { color: #FFFFFF; margin: 0 6px; }
+    .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; display: flex; flex-direction: column; }
+    .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 3px 15px 2px; }
+    .isi-scroll-wrapper { flex: 1; overflow: hidden; position: relative; padding: 0 15px; }
+    .isi-scroll-content { position: relative; font-size: 8px; color: #4A4A4A; line-height: 1.25; }
+    .isi-link-bar { background-color: #00697B; padding: 5px 15px; }
+    .isi-link-bar a { color: #FFFFFF; font-size: 9px; text-decoration: underline; }
+    .isi-link-bar span { color: #FFFFFF; margin: 0 5px; }
   </style>
 </head>
 <body>
@@ -731,25 +731,25 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Avenir', 'Proxima Nova', 'Proxima', Arial, Helvetica, sans-serif; }
     body { background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; }
     .banner-container { width: 728px; height: 250px; background-color: #eff3d8; border: 1px solid #0f6c73; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-    .main-content { height: 180px; position: relative; padding: 12px 20px; overflow: hidden; }
-    .logo { width: 100px; height: auto; margin-bottom: 6px; z-index: 10; position: relative; }
+    .main-content { height: 165px; position: relative; padding: 10px 20px; overflow: hidden; }
+    .logo { width: 90px; height: auto; margin-bottom: 4px; z-index: 10; position: relative; }
     .hero-image { position: absolute; bottom: 0; right: 20px; height: 100%; object-fit: contain; z-index: 1; }
     .slide-container { position: relative; z-index: 5; width: 55%; }
     .slide { position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out; }
-    h1 { color: #007681; font-size: 20px; line-height: 1.15; margin-bottom: 6px; font-weight: bold; }
-    .body-text { color: #4A4A4A; font-size: 12px; line-height: 1.3; margin-bottom: 8px; }
-    .cta-button { display: inline-block; background-color: #0E7076; color: white; text-decoration: none; padding: 8px 20px; border-radius: 30px; font-size: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
+    h1 { color: #007681; font-size: 18px; line-height: 1.15; margin-bottom: 4px; font-weight: bold; }
+    .body-text { color: #4A4A4A; font-size: 11px; line-height: 1.25; margin-bottom: 6px; }
+    .cta-button { display: inline-block; background-color: #0E7076; color: white; text-decoration: none; padding: 6px 16px; border-radius: 30px; font-size: 11px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
     #slide1 { animation: fadeOut 0.5s forwards; animation-delay: 8s; opacity: 1; }
     #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 8.5s; }
     @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
-    .isi-section { height: 70px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
-    .isi-header { color: #007681; font-size: 11px; font-weight: bold; padding: 4px 20px 2px; }
-    .isi-scroll-wrapper { height: 28px; overflow: hidden; position: relative; padding: 0 20px; }
-    .isi-scroll-content { position: relative; font-size: 9px; color: #4A4A4A; line-height: 1.3; }
-    .isi-link-bar { background-color: #00697B; padding: 6px 20px; }
-    .isi-link-bar a { color: #FFFFFF; font-size: 10px; text-decoration: underline; }
-    .isi-link-bar span { color: #FFFFFF; margin: 0 6px; }
+    .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; display: flex; flex-direction: column; }
+    .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 3px 15px 2px; }
+    .isi-scroll-wrapper { flex: 1; overflow: hidden; position: relative; padding: 0 15px; }
+    .isi-scroll-content { position: relative; font-size: 8px; color: #4A4A4A; line-height: 1.25; }
+    .isi-link-bar { background-color: #00697B; padding: 5px 15px; }
+    .isi-link-bar a { color: #FFFFFF; font-size: 9px; text-decoration: underline; }
+    .isi-link-bar span { color: #FFFFFF; margin: 0 5px; }
   </style>
 </head>
 <body>

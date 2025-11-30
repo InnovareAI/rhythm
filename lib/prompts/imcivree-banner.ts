@@ -746,16 +746,16 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
 
     /* Main content area - fixed height with overflow hidden */
     .main-content {
-      height: 180px;
+      height: 165px;
       position: relative;
-      padding: 12px 20px;
+      padding: 10px 20px;
       overflow: hidden;
     }
 
     .logo {
-      width: 100px;
+      width: 90px;
       height: auto;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       z-index: 10;
       position: relative;
     }
@@ -786,17 +786,17 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
 
     h1 {
       color: #007681;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1.15;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       font-weight: bold;
     }
 
     .body-text {
       color: #4A4A4A;
-      font-size: 12px;
-      line-height: 1.3;
-      margin-bottom: 8px;
+      font-size: 11px;
+      line-height: 1.25;
+      margin-bottom: 6px;
     }
 
     .cta-button {
@@ -804,9 +804,9 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       background-color: #0E7076;
       color: #FFFFFF;
       text-decoration: none;
-      padding: 8px 20px;
+      padding: 6px 16px;
       border-radius: 30px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: bold;
       text-transform: uppercase;
       cursor: pointer;
@@ -838,46 +838,48 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
 
     /* ISI Footer Section - at bottom with fixed height */
     .isi-section {
-      height: 70px;
+      height: 85px;
       background-color: #FFFFFF;
       border-top: 1px solid #0F6C73;
+      display: flex;
+      flex-direction: column;
     }
 
     .isi-header {
       color: #007681;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: bold;
-      padding: 4px 20px 2px;
+      padding: 3px 15px 2px;
     }
 
     .isi-scroll-wrapper {
-      height: 28px;
+      flex: 1;
       overflow: hidden;
       position: relative;
-      padding: 0 20px;
+      padding: 0 15px;
     }
 
     .isi-scroll-content {
       position: relative;
-      font-size: 9px;
+      font-size: 8px;
       color: #4A4A4A;
-      line-height: 1.3;
+      line-height: 1.25;
     }
 
     .isi-link-bar {
       background-color: #00697B;
-      padding: 6px 20px;
+      padding: 5px 15px;
     }
 
     .isi-link-bar a {
       color: #FFFFFF;
-      font-size: 10px;
+      font-size: 9px;
       text-decoration: underline;
     }
 
     .isi-link-bar span {
       color: #FFFFFF;
-      margin: 0 6px;
+      margin: 0 5px;
     }
   </style>
 </head>
