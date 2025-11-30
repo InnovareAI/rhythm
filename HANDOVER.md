@@ -2,7 +2,7 @@
 
 **Project:** IMCIVREE Creative Hub
 **Client:** Rhythm Pharmaceuticals / 3cubed
-**Last Updated:** November 30, 2025 (Session 3)
+**Last Updated:** November 30, 2025 (Session 4)
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
 **Repository:** https://github.com/InnovareAI/rhythm.git
 
@@ -23,7 +23,8 @@
 11. [Deployment](#deployment)
 12. [Recent Changes (Session 2)](#recent-changes-november-29-2025---session-2)
 13. [Recent Changes (Session 3)](#recent-changes-november-30-2025---session-3)
-14. [Known Issues & Future Work](#known-issues--future-work)
+14. [Recent Changes (Session 4)](#recent-changes-november-30-2025---session-4)
+15. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
@@ -773,6 +774,131 @@ sandbox="allow-same-origin allow-scripts"
 
 ```
 b62b040 Update HANDOVER.md with Session 2 changes
+```
+
+---
+
+## Recent Changes (November 30, 2025 - Session 4)
+
+### Summary: 15 Key Updates
+
+#### Banner Templates & ISI
+
+1. **ISI Scrolling Fix (patient-support)** - Fixed ISI not scrolling in `patient-support` banner template by removing `position: absolute` from `.isi-scroll-content`
+
+2. **ISI Height Adjustment** - Increased `.isi-scroll-wrapper` height from 60px to 65px across all patient banner templates for better visibility
+
+3. **DOM Rendering Fix** - Added `setTimeout(100ms)` wrapper to ISI scroll JavaScript to ensure DOM is rendered before calculating heights
+
+4. **Height Calculation Fix** - Changed from `offsetHeight` to `scrollHeight`/`clientHeight` for accurate scroll bounds calculation
+
+5. **Full ISI Content** - All patient banner templates now include complete ISI with all required sections (Indication, Limitations, Contraindications, Warnings, Adverse Reactions, etc.)
+
+#### Reference RAG System (CVA 2025 Compliance)
+
+6. **Complete Claim Pattern Expansion** - Expanded `CLAIM_PATTERNS` from ~20 to 35+ regex patterns for comprehensive claim coverage
+
+7. **Reference 48 Added (VENTURE Trial)** - Added Argente 2025 reference for young children (ages 2-<6) efficacy claims
+
+8. **Reference 2 Added (Eneli 2019)** - Added for "first and only" and "precision medicine" claims
+
+9. **MC4R Impairment References** - Added References 5, 8, 9 for detailed MC4R pathway impairment claims
+
+10. **Re-establish Pathway References** - Added References 45, 46 for "re-establish MC4R pathway" claims
+
+11. **Safety References Updated** - Added Reference 54 (safety poster) for safety profile claims alongside 1 and 48
+
+#### Reference Recommendation Functions
+
+12. **getRecommendedReferences() Expanded** - Updated function with content-type-specific reference mappings:
+    - MOA → 1, 2, 45, 46
+    - Efficacy → 1, 47, 48
+    - Safety → 1, 48, 54
+    - Support → 50
+
+13. **buildReferenceContext() Enhanced** - Added comprehensive claim-reference table in LLM prompt context for accurate citation guidance
+
+#### Knowledge Base
+
+14. **Complete Reference Database** - Verified 60 references from CVA 2025 (US-SET-2200068 - 08.01/2025) exist in `lib/knowledge/imcivree-bbs.ts`
+
+15. **Claim-to-Reference Mapping** - Full mapping object in knowledge base aligns with RAG system patterns
+
+### Technical Details
+
+#### ISI Scrolling Implementation (Final Working Solution)
+
+**CSS (lib/content-templates/imcivree-banners.ts):**
+```css
+.isi-scroll-wrapper {
+  height: 65px;
+  overflow: hidden;
+  position: relative;
+  padding: 0 15px;
+}
+
+.isi-scroll-content {
+  font-size: 8px;
+  color: #4A4A4A;
+  line-height: 1.4;
+  /* NO position: absolute - breaks scrollHeight */
+}
+```
+
+**JavaScript:**
+```javascript
+setTimeout(function() {
+  var wrapper = document.querySelector('.isi-scroll-wrapper');
+  var content = document.querySelector('.isi-scroll-content');
+  if (wrapper && content) {
+    var scrollPos = 0;
+    var scrollSpeed = 0.3;
+    function animateISI() {
+      var maxScroll = content.scrollHeight - wrapper.clientHeight;
+      if (maxScroll > 0) {
+        scrollPos += scrollSpeed;
+        if (scrollPos >= maxScroll) { scrollPos = 0; }
+        content.style.transform = 'translateY(-' + scrollPos + 'px)';
+      }
+      requestAnimationFrame(animateISI);
+    }
+    requestAnimationFrame(animateISI);
+  }
+}, 100);
+```
+
+#### Reference RAG Claim Mapping (lib/reference-rag.ts)
+
+| Claim Type | References |
+|------------|------------|
+| FDA-approved | 1 |
+| First and only | 1, 2 |
+| MC4R pathway | 1, 2 |
+| MC4R impairment | 2, 5, 8, 9 |
+| Re-establish pathway | 1, 45, 46 |
+| Weight/BMI reduction | 1, 47, 48 |
+| Hunger reduction | 1, 47 |
+| Ages 2-<6 efficacy | 1, 48 |
+| Ages 6-17 efficacy | 1, 47 |
+| Adult efficacy | 1, 47 |
+| Early-onset obesity | 2, 5 |
+| Hyperphagia | 1, 2 |
+| Safety profile | 1, 48, 54 |
+| Rhythm InTune | 50 |
+| Clinical trial | 47, 48 |
+| VENTURE trial | 48 |
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `lib/content-templates/imcivree-banners.ts` | Fixed ISI CSS/JS in patient-support template |
+| `lib/reference-rag.ts` | Expanded CLAIM_PATTERNS, updated reference functions |
+
+### Recent Commits (Nov 30, Session 4)
+
+```
+35bab3e Expand RAG reference system with complete CVA 2025 mappings
 ```
 
 ---
