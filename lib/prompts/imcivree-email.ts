@@ -141,15 +141,15 @@ Each subject line gets a complementary preheader that:
 **Required Structure:**
 
 \`\`\`html
-<!-- Top Brand Bar - White background with full-color logo and lime-green rule -->
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#ffffff;padding:16px 20px;border-bottom:4px solid #97D700;">
+<!-- Top Brand Bar - TEAL background (#1c7b80) with white logo and text -->
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#1c7b80;padding:16px 20px;">
   <tr>
     <td style="vertical-align:middle;"><img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE Logo" width="160"></td>
-    <td style="text-align:right;vertical-align:middle;color:#4a4f55;font-size:12px;font-weight:bold;">[FOR U.S. HEALTHCARE PROFESSIONALS or appropriate audience indicator]</td>
+    <td style="text-align:right;vertical-align:middle;color:#ffffff;font-size:12px;font-weight:bold;text-transform:uppercase;">[FOR U.S. HEALTHCARE PROFESSIONALS or appropriate audience indicator]</td>
   </tr>
 </table>
 
-<!-- Hero Block (TEXT ONLY - no images) -->
+<!-- Hero Block - Light background with white card containing hero image -->
 <table role="presentation" width="100%" cellspacing="0" cellpadding="40" style="background:#f6fbfb;">
   <tr>
     <td align="center">
@@ -158,7 +158,9 @@ Each subject line gets a complementary preheader that:
           <td style="text-align:left;">
             <div style="color:#007a80;font-size:12px;text-transform:uppercase;font-weight:bold;margin-bottom:8px;">[EYEBROW]</div>
             <div style="color:#007a80;font-size:24px;font-weight:bold;margin-bottom:16px;">[HEADLINE]</div>
-            <p style="margin:0;line-height:1.6;color:#4a4f55;">[INTRO PARAGRAPH WITH SUPERSCRIPTS]</p>
+            <p style="margin:0;line-height:1.6;color:#4a4f55;margin-bottom:20px;">[INTRO PARAGRAPH WITH SUPERSCRIPTS]</p>
+            <!-- Hero Image - changes based on email type -->
+            <img src="[HERO_IMAGE_URL]" alt="[ALT TEXT]" style="width:100%;max-width:400px;border-radius:8px;margin-top:16px;">
           </td>
         </tr>
       </table>
@@ -173,20 +175,18 @@ Each subject line gets a complementary preheader that:
       <table role="presentation" width="100%" style="max-width:640px;">
         <tr><td>
           <h2 style="color:#007a80;font-size:20px;margin:0 0 16px 0;">[SUBHEAD]</h2>
-          <p style="line-height:1.6;margin:0 0 16px 0;">[BODY WITH REFERENCES]</p>
+          <p style="line-height:1.6;margin:0 0 16px 0;color:#4a4f55;">[BODY PARAGRAPH WITH REFERENCES]</p>
 
-          <ul style="padding-left:20px;margin:0 0 24px 0;line-height:1.6;">
-            <li style="margin-bottom:8px;">[BULLET POINT 1]</li>
-            <li style="margin-bottom:8px;">[BULLET POINT 2]</li>
+          <!-- Bullet list with inline icons -->
+          <ul style="padding-left:0;margin:0 0 24px 0;line-height:1.8;list-style:none;">
+            <li style="margin-bottom:12px;color:#4a4f55;"><img src="https://www.imcivree.com/static/learning-16a302a10874bd1676177c6ebe63cf9a.svg" alt="" width="18" style="vertical-align:middle;margin-right:8px;">[BULLET POINT 1]</li>
+            <li style="margin-bottom:12px;color:#4a4f55;"><img src="https://www.imcivree.com/static/deciding-7d8ad39aafa2238baac466e8d01b8e67.svg" alt="" width="18" style="vertical-align:middle;margin-right:8px;">[BULLET POINT 2]</li>
+            <li style="margin-bottom:12px;color:#4a4f55;"><img src="https://www.imcivree.com/static/learning-16a302a10874bd1676177c6ebe63cf9a.svg" alt="" width="18" style="vertical-align:middle;margin-right:8px;">[BULLET POINT 3]</li>
           </ul>
 
-          <!-- Supporting Image (placed AFTER body content, not at top) -->
-          <div style="text-align:center;margin:24px 0;">
-            <img src="[HERO_IMAGE_URL]" alt="[ALT TEXT]" style="width:100%;max-width:400px;border-radius:8px;">
-          </div>
-
+          <!-- CTA Button - Teal pill -->
           <div style="text-align:center;margin:32px 0;">
-            <a href="[CTA_URL]" style="background:#007a80;color:#ffffff;padding:14px 28px;border-radius:30px;text-decoration:none;font-size:16px;display:inline-block;">Learn more</a>
+            <a href="[CTA_URL]" style="background:#007a80;color:#ffffff;padding:14px 28px;border-radius:30px;text-decoration:none;font-size:16px;font-weight:bold;display:inline-block;">Learn more</a>
           </div>
         </td></tr>
       </table>
