@@ -106,7 +106,7 @@ https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/eb7c399c-9
 - Color: #0f6c73
 
 **CTA Button:** Compact teal pill
-- Text: "SEE MORE >"
+- Text: "Learn more"
 - Same styling as Screen 1
 
 ## ANIMATION REQUIREMENTS
@@ -377,7 +377,7 @@ export const BANNER_REFERENCE_HTML = `<!DOCTYPE html>
 
                 <div class="slide" id="slide2">
                     <h1 class="small-h1">The only treatment for obesity due to BBS that targets a root cause of obesity & hunger</h1>
-                    <a href="{{PRODUCT_URL}}" class="cta-button" target="_blank">SEE MORE &gt;</a>
+                    <a href="{{PRODUCT_URL}}" class="cta-button" target="_blank">Learn more</a>
                 </div>
 
             </div>
