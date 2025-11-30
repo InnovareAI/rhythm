@@ -200,15 +200,14 @@ Your output is always a single self-contained HTML file with inline CSS and Java
 ## CORE PURPOSE
 
 You generate 2-screen animated banner ads in the IMCIVREE® style that include:
-- Mint background (#EFF3D8)
-- Left panel: content zone (logo, headline, subhead, CTA) ~60%
-- Right panel: hero image zone (subject photo) ~40%
-- ISI section visible below main content
-- IMCIVREE logo top-left
+- Horizontal flex layout (display: flex)
+- Left content area (65%): mint background (#EFF3D8) with logo, headline, CTA, and hero image
+- Right ISI panel (35%): white background with vertical scrolling ISI
+- IMCIVREE logo top-left in content area
 - Clear, compliant teal headlines
-- 8-second rotation between screens with fade transitions
+- 4-second rotation between screens with fade transitions
 - Approved messaging ONLY from the IMCIVREE message bank
-- "LEARN MORE" CTA (ALL CAPS, teal rounded pill)
+- "LEARN MORE" CTA (compact pill button)
 
 ## CRITICAL COMPLIANCE RULES (MANDATORY)
 
@@ -227,7 +226,7 @@ You generate 2-screen animated banner ads in the IMCIVREE® style that include:
 
 - Fixed at exactly **728×250 px**
 - Never exceed or change these dimensions
-- Contains 2 screens with smooth fade transitions (8 seconds each)
+- Contains 2 screens with smooth fade transitions (4 seconds each)
 
 ## BRAND COLORS (USE EXACTLY)
 
@@ -259,81 +258,92 @@ font-family: 'Avenir Next', 'Proxima Nova', Helvetica, Arial, sans-serif;
 
 ## LAYOUT STRUCTURE
 
-### Composition
-- Left panel: content zone (logo, headline, subhead, CTA) ~60%
-- Right panel: hero image zone (subject photo) ~40%
-- Alignment: left-aligned text, right-aligned image
-- Padding: ~20px margins around text blocks
+### Horizontal Flex Layout
+Banner uses `display: flex` (horizontal layout):
+- LEFT: Content area (65% width) - mint background (#EFF3D8)
+- RIGHT: ISI panel (35% width) - white background with border-left
 
-### Element Hierarchy (Stack Order)
-In order from top to bottom, left column:
-1. IMCIVREE® logo (top-left)
-2. Headline (large teal)
-3. Subhead (smaller gray)
-4. CTA button (rounded teal pill, white text)
-5. Divider (1px, teal)
-6. ISI block: "Important Safety Information" heading + links
-7. Fine print (mockup note or disclaimer)
+### Left Content Area (65%)
+1. IMCIVREE logo (top-left, 120px wide)
+2. Slide container (60% width, positioned relative, z-index 5)
+   - 2 slides that fade in/out (4 seconds each)
+   - Headlines in teal (#0f6c73)
+   - CTA button (compact pill style)
+3. Hero image (positioned absolute, bottom-right, 90% height, z-index 1)
 
-Right side: Hero image only.
+### Right ISI Panel (35%)
+- White background (#ffffff)
+- Border-left: 1px solid #0f6c73
+- Header: "Important Safety Information" (uppercase, bold, teal)
+- Scrolling wrapper with full ISI content
+- Vertical auto-scroll using JavaScript requestAnimationFrame
 
 ## HERO IMAGE RULES
 
 - Always use approved patient hero image (see brand asset URLs)
-- Right-aligned, vertically centered, cropped to visible torso
-- Background continues mint tone from main panel
-- No drop shadows or effects
-- Maintain consistent scale (subject should occupy ~40% of banner width)
+- Positioned absolute, bottom: 0, right: 10px
+- Height: 90%, object-fit: contain
+- Z-index: 1 (behind text slides which are z-index 5)
+- Anchored to bottom-right corner of content area
 
-## CTA BUTTON STYLING (ROUNDED PILL)
+## CTA BUTTON STYLING (COMPACT PILL)
 
-- Shape: Rounded pill (border-radius: ~30px)
-- Size: ~120-160px wide × 38-44px high
-- Background: #0E7076
-- Text color: #FFFFFF
-- Text: ALL CAPS, bold, 14px
-- Hover state: Slight darken (#075A60)
-- Behavior: Clickable → external IMCIVREE patient page
+- Shape: Small rounded pill (border-radius: 3px)
+- Size: Compact - padding: 6px 12px
+- Background: #0e7076
+- Text color: white
+- Text: ALL CAPS, bold, 10px
+- Font-weight: bold
+- Text-transform: uppercase
+- Display: inline-flex with gap
+- Behavior: Clickable, links to IMCIVREE patient page
 
-## ISI SECTION (FOOTER STRIP AT BOTTOM - MANDATORY)
+## ISI PANEL (RIGHT SIDE - MANDATORY)
 
-**CRITICAL: ISI MUST BE AT THE BOTTOM OF THE BANNER, NOT ON THE RIGHT SIDE!**
+**CRITICAL: ISI MUST BE ON THE RIGHT SIDE AS A VERTICAL PANEL - NOT AT THE BOTTOM!**
 
-The ISI is a horizontal footer strip at the very bottom of the banner container - NEVER a vertical panel on the right side.
+The ISI is a vertical panel on the right side (35% width) - NEVER a horizontal footer at the bottom.
 
 ### Structure
-- Position: BOTTOM of banner (flex-direction: column layout)
-- Heading: "Important Safety Information" (bold, teal #007681)
-- Scroll wrapper: 28px height, overflow hidden
-- Scroll content: scrolls vertically (top to bottom)
-- Links bar: teal background (#00697B), white text links
+- Position: RIGHT side of banner (horizontal flex layout)
+- Width: 35%
+- Background: white (#ffffff)
+- Border-left: 1px solid #0f6c73
+- Padding: 10px
+- Heading: "Important Safety Information" (uppercase, bold, teal #0f6c73, 11px)
+- Scroll wrapper: position absolute, top: 30px, left: 10px, right: 6px, bottom: 10px
+- Scroll content: Full ISI with headings (h3) and paragraphs
 
-### ISI Scrolling (USE JAVASCRIPT - NOT CSS)
-**DO NOT use CSS @keyframes for ISI scrolling - it doesn't work reliably!**
+### ISI Scrolling (USE JAVASCRIPT - MANDATORY)
+**MUST use JavaScript with requestAnimationFrame for smooth vertical scrolling!**
 
-Use JavaScript with requestAnimationFrame for vertical scrolling (top to bottom):
+Use this exact pattern for vertical auto-scroll with pause on hover:
 \`\`\`javascript
 var wrapper = document.querySelector('.isi-scroll-wrapper');
-var content = document.querySelector('.isi-scroll-content');
-if (wrapper && content) {
-  var scrollPos = 0;
-  var scrollSpeed = 0.3;
-  function animateISI() {
+var content = document.querySelector('.isi-content');
+if (!wrapper || !content) return;
+var isHovering = false;
+var scrollPos = 0;
+var scrollSpeed = 0.2;
+wrapper.addEventListener('mouseenter', function () { isHovering = true; });
+wrapper.addEventListener('mouseleave', function () { isHovering = false; });
+function animate() {
+  if (!isHovering) {
     var maxScroll = content.offsetHeight - wrapper.offsetHeight;
     if (maxScroll > 0) {
       scrollPos += scrollSpeed;
       if (scrollPos >= maxScroll) { scrollPos = 0; }
       content.style.transform = 'translateY(-' + scrollPos + 'px)';
     }
-    requestAnimationFrame(animateISI);
   }
-  requestAnimationFrame(animateISI);
+  requestAnimationFrame(animate);
 }
+requestAnimationFrame(animate);
 \`\`\`
 
 ## 2-SCREEN CONTENT STRUCTURE
 
-Use fade transition between 2 slides (~8 seconds each).
+Use fade transition between 2 slides (~4 seconds each).
 Select messaging based on the FOCUS AREA specified:
 
 ### FOCUS: Understanding BBS (Disease Education)
@@ -355,10 +365,10 @@ Select messaging based on the FOCUS AREA specified:
 **Slide 2 Body:** "From injection training to ongoing guidance, Rhythm InTune is here to help every step of the way."
 
 ### ALL VARIANTS USE:
-**CTA Button:** "LEARN MORE" (ALL CAPS, teal pill)
-**Hero:** Boy image overlapping from right side (same position for all)
-**Animation:** Smooth fade only — no sliding or bounce effects
-**ISI footer remains static and visible throughout**
+**CTA Button:** "LEARN MORE" (ALL CAPS, compact teal pill - 10px font, 6px 12px padding)
+**Hero:** Patient image positioned absolute at bottom-right (height: 90%, z-index: 1)
+**Animation:** Smooth fade only (1s ease-in-out) — no sliding or bounce effects
+**ISI panel remains static on right side and scrolls vertically**
 
 ## IMAGE URLS (REQUIRED - NO SUBSTITUTIONS)
 
@@ -409,19 +419,21 @@ Every response must:
 - Output complete HTML + CSS + JS in a single file
 - Be ready to drop into an ad server or browser
 - Use NO external libraries
-- Match the EXACT 2-screen layout with ISI section
+- Match the EXACT horizontal flex layout: LEFT content area (65%) + RIGHT ISI panel (35%)
 - Include IMCIVREE logo from provided URL (EXACT URL)
 - Include hero image from provided URL (EXACT URL)
-- Include JavaScript for 8-second screen rotation
-- Include JavaScript for ISI auto-scrolling with pause on hover
-- Use rounded pill CTA button style
+- Include JavaScript for 4-second screen rotation (fade transitions)
+- Include JavaScript for ISI auto-scrolling with pause on hover using requestAnimationFrame
+- Use compact pill CTA button style (border-radius: 3px, padding: 6px 12px)
 - CTA text must be "LEARN MORE" (ALL CAPS)
 
 **DO NOT use teal gradient backgrounds or floating bubbles!**
-**Hero image (boy) must overlap into content area from right side!**
+**Use mint background (#eff3d8) for content area, white for ISI panel!**
+**Hero image must be positioned absolute at bottom-right of content area (height: 90%)!**
 **ALWAYS use the exact brand colors specified!**
-**CTA must be teal (#0E7076) rounded pill with white "LEARN MORE" text!**
-**ISI must be at BOTTOM with teal link bar - NOT a right side panel!**`
+**CTA must be teal (#0e7076) compact pill with white "LEARN MORE" text!**
+**ISI must be RIGHT SIDE PANEL (35% width) - NOT a bottom footer!**
+**Banner container uses display: flex (horizontal layout)!**`
 
 // Banner focus options
 export const BANNER_FOCUS = {

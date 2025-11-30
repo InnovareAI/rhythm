@@ -522,94 +522,93 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
   <meta charset="UTF-8" />
   <title>IMCIVREE Patient Banner – Understanding BBS</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Avenir Next', 'Proxima Nova', Helvetica, Arial, sans-serif; }
-    body { background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    .banner-container { width: 728px; height: 250px; background-color: #EFF3D8; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-    .main-content { flex: 1; position: relative; padding: 15px 20px; }
-    .logo-container { margin-bottom: 8px; }
-    .logo { height: 28px; width: auto; }
-    .logo-tagline { font-size: 9px; color: #007681; margin-top: 2px; }
-    .hero-image { position: absolute; bottom: 0; right: 20px; height: 95%; object-fit: contain; object-position: bottom right; z-index: 1; }
-    .slide-container { position: relative; z-index: 2; max-width: 48%; }
-    .slide { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; transition: opacity 0.5s ease-in-out; }
-    h1 { color: #007681; font-size: 20px; line-height: 1.2; margin-bottom: 8px; font-weight: bold; }
-    .body-text { color: #4A4A4A; font-size: 12px; line-height: 1.35; margin-bottom: 12px; }
-    .cta-button { display: inline-block; background-color: #0E7076; color: #FFFFFF; text-decoration: none; padding: 12px 28px; border-radius: 30px; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: background-color 0.2s; }
-    .cta-button:hover { background-color: #075A60; }
-    #slide1 { animation: fadeOut 0.5s forwards; animation-delay: 8s; opacity: 1; }
-    #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 8.5s; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Avenir', 'Proxima Nova', 'Proxima', Arial, Helvetica, sans-serif; }
+    body { background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .banner-container { width: 728px; height: 250px; background-color: #eff3d8; border: 1px solid #0f6c73; position: relative; overflow: hidden; display: flex; }
+    .content-area { width: 65%; height: 100%; position: relative; padding: 20px; display: flex; flex-direction: column; }
+    .logo { width: 120px; height: auto; margin-bottom: 10px; z-index: 10; }
+    .hero-image { position: absolute; bottom: 0; right: 10px; align-self: flex-end; height: 90%; object-fit: contain; z-index: 1; }
+    .slide-container { position: relative; z-index: 5; width: 60%; margin-top: 20px; }
+    .slide { position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out; }
+    h1 { color: #0f6c73; font-size: 22px; line-height: 1.2; margin-bottom: 15px; }
+    .headline-highlight { color: #00697b; font-weight: 700; }
+    .small-h1 { font-size: 16px; font-weight: bold; }
+    .cta-button { display: inline-flex; align-items: center; gap: 4px; background-color: #0e7076; color: white; text-decoration: none; padding: 6px 12px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
+    .cta-button .arrow { font-size: 10px; }
+    #slide1 { animation: fadeOut 0.5s forwards; animation-delay: 4s; opacity: 1; }
+    #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 4.5s; }
     @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
-    .isi-section { background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
-    .isi-header { color: #007681; font-size: 11px; font-weight: bold; padding: 4px 20px 2px; }
-    .isi-scroll-wrapper { height: 28px; overflow: hidden; position: relative; padding: 0 20px; }
-    .isi-scroll-content { position: relative; font-size: 9px; color: #4A4A4A; line-height: 1.3; }
-    .isi-link-bar { background-color: #00697B; padding: 6px 20px; }
-    .isi-link-bar a { color: #FFFFFF; font-size: 10px; text-decoration: underline; }
-    .isi-link-bar span { color: #FFFFFF; margin: 0 6px; }
+    .isi-panel { width: 35%; height: 100%; background-color: #ffffff; border-left: 1px solid #0f6c73; padding: 10px; position: relative; overflow: hidden; font-size: 10px; color: #4a4a4a; line-height: 1.4; }
+    .isi-header { font-size: 11px; color: #0f6c73; margin-bottom: 5px; text-transform: uppercase; font-weight: bold; }
+    .isi-scroll-wrapper { position: absolute; top: 30px; left: 10px; right: 6px; bottom: 10px; overflow: hidden; }
+    .isi-content { position: relative; }
+    .isi-content h3 { font-size: 10px; font-weight: bold; margin-top: 8px; margin-bottom: 2px; color: #0f6c73; }
+    .isi-content ul { padding-left: 15px; margin-bottom: 5px; }
+    .isi-content p { margin-bottom: 5px; }
   </style>
 </head>
 <body>
   <div class="banner-container">
-    <div class="main-content">
-      <div class="logo-container">
-        <img src="${IMAGES.logo}" alt="IMCIVREE" class="logo" />
-        <div class="logo-tagline">(setmelanotide) injection</div>
-      </div>
-
+    <div class="content-area">
+      <img src="${IMAGES.logo}" alt="IMCIVREE Logo" class="logo">
+      <img src="${IMAGES.patientHero}" alt="Person" class="hero-image">
       <div class="slide-container">
         <div class="slide" id="slide1">
-          <h1>Understanding obesity and<br>hunger in BBS.</h1>
-          <p class="body-text">Bardet-Biedl syndrome (BBS) is a rare genetic disease that can cause early-onset obesity and constant, hard-to-control hunger.</p>
+          <h1>Understanding obesity and hunger in BBS.</h1>
           <a href="${PRODUCT_URLS.patient}" class="cta-button" target="_blank">LEARN MORE</a>
         </div>
-
         <div class="slide" id="slide2">
-          <h1>The only treatment for<br>obesity due to BBS that<br>targets a root cause.</h1>
-          <p class="body-text">IMCIVREE is indicated for adults and pediatric patients 2 years and older with obesity due to BBS.</p>
+          <h1 class="small-h1">The only treatment for obesity due to BBS that targets a root cause of obesity & hunger</h1>
           <a href="${PRODUCT_URLS.patient}" class="cta-button" target="_blank">LEARN MORE</a>
         </div>
       </div>
-
-      <img src="${IMAGES.patientHero}" alt="Patient" class="hero-image" />
     </div>
-
-    <div class="isi-section">
+    <div class="isi-panel">
       <div class="isi-header">Important Safety Information</div>
       <div class="isi-scroll-wrapper">
-        <div class="isi-scroll-content">
-          <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.<br><strong>Warnings:</strong> Disturbance in sexual arousal, depression and suicidal ideation, skin hyperpigmentation, and risk of serious adverse reactions due to benzyl alcohol preservative in neonates.<br><strong>Adverse Reactions:</strong> Most common (≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression.
+        <div class="isi-content">
+          <h3>Indication</h3>
+          <p>IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with obesity due to Bardet-Biedl syndrome (BBS).</p>
+          <h3>Limitations of Use</h3>
+          <p>IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective:</p>
+          <ul>
+            <li>Other types of obesity not related to BBS or other FDA-approved indications.</li>
+            <li>Obesity associated with other genetic syndromes and general (polygenic) obesity.</li>
+          </ul>
+          <h3>Contraindications</h3>
+          <p>Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</p>
+          <h3>Warnings and Precautions</h3>
+          <ul>
+            <li><strong>Disturbance in sexual arousal:</strong> Spontaneous penile erections in males and sexual adverse reactions in females have occurred.</li>
+            <li><strong>Depression and suicidal ideation:</strong> Depression, suicidal ideation, and depressed mood have been reported.</li>
+            <li><strong>Hypersensitivity reactions:</strong> Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</li>
+            <li><strong>Skin pigmentation:</strong> Darkening of pre-existing nevi, and development of new skin pigmentation.</li>
+            <li><strong>Risk of serious adverse reactions due to benzyl alcohol preservative:</strong> Risk of serious adverse reactions in neonates and infants.</li>
+          </ul>
+          <h3>Adverse Reactions</h3>
+          <p>Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection.</p>
+          <h3>Use in Specific Populations</h3>
+          <p>Treatment with IMCIVREE is not recommended when breastfeeding. Discontinue IMCIVREE when pregnancy is recognized unless the benefits of therapy outweigh the potential risks to the fetus.</p>
+          <h3>Adverse Event Reporting</h3>
+          <p>To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088.</p>
+          <p style="margin-top: 20px;"><em>Please see full Prescribing Information.</em></p>
         </div>
-      </div>
-      <div class="isi-link-bar">
-        <a href="https://www.imcivree.com/bbs/safety/" target="_blank">Important Safety Information</a>
-        <span>|</span>
-        <a href="https://www.imcivree.com/bbs/medication-guide/" target="_blank">Medication Guide</a>
       </div>
     </div>
   </div>
-
   <script>
   (function () {
-    var slide1 = document.getElementById("slide1");
-    var slide2 = document.getElementById("slide2");
-    function resetAnimation() {
-      slide1.style.animation = 'none';
-      slide2.style.animation = 'none';
-      slide1.offsetHeight;
-      slide2.offsetHeight;
-      slide1.style.animation = null;
-      slide2.style.animation = null;
-    }
-    setInterval(resetAnimation, 16000);
-
-    // ISI vertical scroll (top to bottom)
     var wrapper = document.querySelector('.isi-scroll-wrapper');
-    var content = document.querySelector('.isi-scroll-content');
-    if (wrapper && content) {
-      var scrollPos = 0;
-      var scrollSpeed = 0.3;
-      function animateISI() {
+    var content = document.querySelector('.isi-content');
+    if (!wrapper || !content) return;
+    var isHovering = false;
+    var scrollPos = 0;
+    var scrollSpeed = 0.2;
+    wrapper.addEventListener('mouseenter', function () { isHovering = true; });
+    wrapper.addEventListener('mouseleave', function () { isHovering = false; });
+    function animate() {
+      if (!isHovering) {
         var maxScroll = content.offsetHeight - wrapper.offsetHeight;
         if (maxScroll > 0) {
           scrollPos += scrollSpeed;
@@ -618,10 +617,10 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
           }
           content.style.transform = 'translateY(-' + scrollPos + 'px)';
         }
-        requestAnimationFrame(animateISI);
       }
-      requestAnimationFrame(animateISI);
+      requestAnimationFrame(animate);
     }
+    requestAnimationFrame(animate);
   })();
   </script>
 </body>
@@ -641,94 +640,93 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
   <meta charset="UTF-8" />
   <title>IMCIVREE Patient Banner – Path Forward</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Avenir Next', 'Proxima Nova', Helvetica, Arial, sans-serif; }
-    body { background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    .banner-container { width: 728px; height: 250px; background-color: #EFF3D8; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-    .main-content { flex: 1; position: relative; padding: 15px 20px; }
-    .logo-container { margin-bottom: 8px; }
-    .logo { height: 28px; width: auto; }
-    .logo-tagline { font-size: 9px; color: #007681; margin-top: 2px; }
-    .hero-image { position: absolute; bottom: 0; right: 20px; height: 95%; object-fit: contain; object-position: bottom right; z-index: 1; }
-    .slide-container { position: relative; z-index: 2; max-width: 48%; }
-    .slide { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; transition: opacity 0.5s ease-in-out; }
-    h1 { color: #007681; font-size: 20px; line-height: 1.2; margin-bottom: 8px; font-weight: bold; }
-    .body-text { color: #4A4A4A; font-size: 12px; line-height: 1.35; margin-bottom: 12px; }
-    .cta-button { display: inline-block; background-color: #0E7076; color: #FFFFFF; text-decoration: none; padding: 12px 28px; border-radius: 30px; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: background-color 0.2s; }
-    .cta-button:hover { background-color: #075A60; }
-    #slide1 { animation: fadeOut 0.5s forwards; animation-delay: 8s; opacity: 1; }
-    #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 8.5s; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Avenir', 'Proxima Nova', 'Proxima', Arial, Helvetica, sans-serif; }
+    body { background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .banner-container { width: 728px; height: 250px; background-color: #eff3d8; border: 1px solid #0f6c73; position: relative; overflow: hidden; display: flex; }
+    .content-area { width: 65%; height: 100%; position: relative; padding: 20px; display: flex; flex-direction: column; }
+    .logo { width: 120px; height: auto; margin-bottom: 10px; z-index: 10; }
+    .hero-image { position: absolute; bottom: 0; right: 10px; align-self: flex-end; height: 90%; object-fit: contain; z-index: 1; }
+    .slide-container { position: relative; z-index: 5; width: 60%; margin-top: 20px; }
+    .slide { position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out; }
+    h1 { color: #0f6c73; font-size: 22px; line-height: 1.2; margin-bottom: 15px; }
+    .headline-highlight { color: #00697b; font-weight: 700; }
+    .small-h1 { font-size: 16px; font-weight: bold; }
+    .cta-button { display: inline-flex; align-items: center; gap: 4px; background-color: #0e7076; color: white; text-decoration: none; padding: 6px 12px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
+    .cta-button .arrow { font-size: 10px; }
+    #slide1 { animation: fadeOut 0.5s forwards; animation-delay: 4s; opacity: 1; }
+    #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 4.5s; }
     @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
-    .isi-section { background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
-    .isi-header { color: #007681; font-size: 11px; font-weight: bold; padding: 4px 20px 2px; }
-    .isi-scroll-wrapper { height: 28px; overflow: hidden; position: relative; padding: 0 20px; }
-    .isi-scroll-content { position: relative; font-size: 9px; color: #4A4A4A; line-height: 1.3; }
-    .isi-link-bar { background-color: #00697B; padding: 6px 20px; }
-    .isi-link-bar a { color: #FFFFFF; font-size: 10px; text-decoration: underline; }
-    .isi-link-bar span { color: #FFFFFF; margin: 0 6px; }
+    .isi-panel { width: 35%; height: 100%; background-color: #ffffff; border-left: 1px solid #0f6c73; padding: 10px; position: relative; overflow: hidden; font-size: 10px; color: #4a4a4a; line-height: 1.4; }
+    .isi-header { font-size: 11px; color: #0f6c73; margin-bottom: 5px; text-transform: uppercase; font-weight: bold; }
+    .isi-scroll-wrapper { position: absolute; top: 30px; left: 10px; right: 6px; bottom: 10px; overflow: hidden; }
+    .isi-content { position: relative; }
+    .isi-content h3 { font-size: 10px; font-weight: bold; margin-top: 8px; margin-bottom: 2px; color: #0f6c73; }
+    .isi-content ul { padding-left: 15px; margin-bottom: 5px; }
+    .isi-content p { margin-bottom: 5px; }
   </style>
 </head>
 <body>
   <div class="banner-container">
-    <div class="main-content">
-      <div class="logo-container">
-        <img src="${IMAGES.logo}" alt="IMCIVREE" class="logo" />
-        <div class="logo-tagline">(setmelanotide) injection</div>
-      </div>
-
+    <div class="content-area">
+      <img src="${IMAGES.logo}" alt="IMCIVREE Logo" class="logo">
+      <img src="${IMAGES.patientHero}" alt="Person" class="hero-image">
       <div class="slide-container">
         <div class="slide" id="slide1">
-          <h1>There is a path forward<br>for managing BBS.</h1>
-          <p class="body-text">IMCIVREE is the first and only FDA-approved treatment that targets a root cause of obesity and hunger in BBS.</p>
+          <h1>There is a path forward for managing BBS.</h1>
           <a href="${PRODUCT_URLS.patient}" class="cta-button" target="_blank">LEARN MORE</a>
         </div>
-
         <div class="slide" id="slide2">
-          <h1>A different kind of<br>treatment for a rare disease.</h1>
-          <p class="body-text">IMCIVREE works differently—targeting the impaired MC4R pathway to help reduce hunger and body weight.</p>
+          <h1 class="small-h1">A different kind of treatment for a rare disease targeting the MC4R pathway</h1>
           <a href="${PRODUCT_URLS.patient}" class="cta-button" target="_blank">LEARN MORE</a>
         </div>
       </div>
-
-      <img src="${IMAGES.patientHero}" alt="Patient" class="hero-image" />
     </div>
-
-    <div class="isi-section">
+    <div class="isi-panel">
       <div class="isi-header">Important Safety Information</div>
       <div class="isi-scroll-wrapper">
-        <div class="isi-scroll-content">
-          <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.<br><strong>Warnings:</strong> Disturbance in sexual arousal, depression and suicidal ideation, skin hyperpigmentation, and risk of serious adverse reactions due to benzyl alcohol preservative in neonates.<br><strong>Adverse Reactions:</strong> Most common (≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression.
+        <div class="isi-content">
+          <h3>Indication</h3>
+          <p>IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with obesity due to Bardet-Biedl syndrome (BBS).</p>
+          <h3>Limitations of Use</h3>
+          <p>IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective:</p>
+          <ul>
+            <li>Other types of obesity not related to BBS or other FDA-approved indications.</li>
+            <li>Obesity associated with other genetic syndromes and general (polygenic) obesity.</li>
+          </ul>
+          <h3>Contraindications</h3>
+          <p>Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</p>
+          <h3>Warnings and Precautions</h3>
+          <ul>
+            <li><strong>Disturbance in sexual arousal:</strong> Spontaneous penile erections in males and sexual adverse reactions in females have occurred.</li>
+            <li><strong>Depression and suicidal ideation:</strong> Depression, suicidal ideation, and depressed mood have been reported.</li>
+            <li><strong>Hypersensitivity reactions:</strong> Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</li>
+            <li><strong>Skin pigmentation:</strong> Darkening of pre-existing nevi, and development of new skin pigmentation.</li>
+            <li><strong>Risk of serious adverse reactions due to benzyl alcohol preservative:</strong> Risk of serious adverse reactions in neonates and infants.</li>
+          </ul>
+          <h3>Adverse Reactions</h3>
+          <p>Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection.</p>
+          <h3>Use in Specific Populations</h3>
+          <p>Treatment with IMCIVREE is not recommended when breastfeeding. Discontinue IMCIVREE when pregnancy is recognized unless the benefits of therapy outweigh the potential risks to the fetus.</p>
+          <h3>Adverse Event Reporting</h3>
+          <p>To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088.</p>
+          <p style="margin-top: 20px;"><em>Please see full Prescribing Information.</em></p>
         </div>
-      </div>
-      <div class="isi-link-bar">
-        <a href="https://www.imcivree.com/bbs/safety/" target="_blank">Important Safety Information</a>
-        <span>|</span>
-        <a href="https://www.imcivree.com/bbs/medication-guide/" target="_blank">Medication Guide</a>
       </div>
     </div>
   </div>
-
   <script>
   (function () {
-    var slide1 = document.getElementById("slide1");
-    var slide2 = document.getElementById("slide2");
-    function resetAnimation() {
-      slide1.style.animation = 'none';
-      slide2.style.animation = 'none';
-      slide1.offsetHeight;
-      slide2.offsetHeight;
-      slide1.style.animation = null;
-      slide2.style.animation = null;
-    }
-    setInterval(resetAnimation, 16000);
-
-    // ISI vertical scroll (top to bottom)
     var wrapper = document.querySelector('.isi-scroll-wrapper');
-    var content = document.querySelector('.isi-scroll-content');
-    if (wrapper && content) {
-      var scrollPos = 0;
-      var scrollSpeed = 0.3;
-      function animateISI() {
+    var content = document.querySelector('.isi-content');
+    if (!wrapper || !content) return;
+    var isHovering = false;
+    var scrollPos = 0;
+    var scrollSpeed = 0.2;
+    wrapper.addEventListener('mouseenter', function () { isHovering = true; });
+    wrapper.addEventListener('mouseleave', function () { isHovering = false; });
+    function animate() {
+      if (!isHovering) {
         var maxScroll = content.offsetHeight - wrapper.offsetHeight;
         if (maxScroll > 0) {
           scrollPos += scrollSpeed;
@@ -737,10 +735,10 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
           }
           content.style.transform = 'translateY(-' + scrollPos + 'px)';
         }
-        requestAnimationFrame(animateISI);
       }
-      requestAnimationFrame(animateISI);
+      requestAnimationFrame(animate);
     }
+    requestAnimationFrame(animate);
   })();
   </script>
 </body>
@@ -760,94 +758,93 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
   <meta charset="UTF-8" />
   <title>IMCIVREE Patient Banner – Support Available</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Avenir Next', 'Proxima Nova', Helvetica, Arial, sans-serif; }
-    body { background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    .banner-container { width: 728px; height: 250px; background-color: #EFF3D8; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-    .main-content { flex: 1; position: relative; padding: 15px 20px; }
-    .logo-container { margin-bottom: 8px; }
-    .logo { height: 28px; width: auto; }
-    .logo-tagline { font-size: 9px; color: #007681; margin-top: 2px; }
-    .hero-image { position: absolute; bottom: 0; right: 20px; height: 95%; object-fit: contain; object-position: bottom right; z-index: 1; }
-    .slide-container { position: relative; z-index: 2; max-width: 48%; }
-    .slide { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; transition: opacity 0.5s ease-in-out; }
-    h1 { color: #007681; font-size: 20px; line-height: 1.2; margin-bottom: 8px; font-weight: bold; }
-    .body-text { color: #4A4A4A; font-size: 12px; line-height: 1.35; margin-bottom: 12px; }
-    .cta-button { display: inline-block; background-color: #0E7076; color: #FFFFFF; text-decoration: none; padding: 12px 28px; border-radius: 30px; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: background-color 0.2s; }
-    .cta-button:hover { background-color: #075A60; }
-    #slide1 { animation: fadeOut 0.5s forwards; animation-delay: 8s; opacity: 1; }
-    #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 8.5s; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Avenir', 'Proxima Nova', 'Proxima', Arial, Helvetica, sans-serif; }
+    body { background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .banner-container { width: 728px; height: 250px; background-color: #eff3d8; border: 1px solid #0f6c73; position: relative; overflow: hidden; display: flex; }
+    .content-area { width: 65%; height: 100%; position: relative; padding: 20px; display: flex; flex-direction: column; }
+    .logo { width: 120px; height: auto; margin-bottom: 10px; z-index: 10; }
+    .hero-image { position: absolute; bottom: 0; right: 10px; align-self: flex-end; height: 90%; object-fit: contain; z-index: 1; }
+    .slide-container { position: relative; z-index: 5; width: 60%; margin-top: 20px; }
+    .slide { position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out; }
+    h1 { color: #0f6c73; font-size: 22px; line-height: 1.2; margin-bottom: 15px; }
+    .headline-highlight { color: #00697b; font-weight: 700; }
+    .small-h1 { font-size: 16px; font-weight: bold; }
+    .cta-button { display: inline-flex; align-items: center; gap: 4px; background-color: #0e7076; color: white; text-decoration: none; padding: 6px 12px; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
+    .cta-button .arrow { font-size: 10px; }
+    #slide1 { animation: fadeOut 0.5s forwards; animation-delay: 4s; opacity: 1; }
+    #slide2 { opacity: 0; animation: fadeIn 0.5s forwards; animation-delay: 4.5s; }
     @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
-    .isi-section { background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
-    .isi-header { color: #007681; font-size: 11px; font-weight: bold; padding: 4px 20px 2px; }
-    .isi-scroll-wrapper { height: 28px; overflow: hidden; position: relative; padding: 0 20px; }
-    .isi-scroll-content { position: relative; font-size: 9px; color: #4A4A4A; line-height: 1.3; }
-    .isi-link-bar { background-color: #00697B; padding: 6px 20px; }
-    .isi-link-bar a { color: #FFFFFF; font-size: 10px; text-decoration: underline; }
-    .isi-link-bar span { color: #FFFFFF; margin: 0 6px; }
+    .isi-panel { width: 35%; height: 100%; background-color: #ffffff; border-left: 1px solid #0f6c73; padding: 10px; position: relative; overflow: hidden; font-size: 10px; color: #4a4a4a; line-height: 1.4; }
+    .isi-header { font-size: 11px; color: #0f6c73; margin-bottom: 5px; text-transform: uppercase; font-weight: bold; }
+    .isi-scroll-wrapper { position: absolute; top: 30px; left: 10px; right: 6px; bottom: 10px; overflow: hidden; }
+    .isi-content { position: relative; }
+    .isi-content h3 { font-size: 10px; font-weight: bold; margin-top: 8px; margin-bottom: 2px; color: #0f6c73; }
+    .isi-content ul { padding-left: 15px; margin-bottom: 5px; }
+    .isi-content p { margin-bottom: 5px; }
   </style>
 </head>
 <body>
   <div class="banner-container">
-    <div class="main-content">
-      <div class="logo-container">
-        <img src="${IMAGES.logo}" alt="IMCIVREE" class="logo" />
-        <div class="logo-tagline">(setmelanotide) injection</div>
-      </div>
-
+    <div class="content-area">
+      <img src="${IMAGES.logo}" alt="IMCIVREE Logo" class="logo">
+      <img src="${IMAGES.patientHero}" alt="Person" class="hero-image">
       <div class="slide-container">
         <div class="slide" id="slide1">
-          <h1>Support for your<br>IMCIVREE journey.</h1>
-          <p class="body-text">Rhythm InTune provides personalized support for patients and caregivers throughout treatment.</p>
+          <h1>Support for your IMCIVREE journey.</h1>
           <a href="${PRODUCT_URLS.patient}" class="cta-button" target="_blank">LEARN MORE</a>
         </div>
-
         <div class="slide" id="slide2">
-          <h1>You're not alone<br>on this journey.</h1>
-          <p class="body-text">From injection training to ongoing guidance, Rhythm InTune is here to help every step of the way.</p>
+          <h1 class="small-h1">You're not alone - Rhythm InTune provides personalized support every step of the way</h1>
           <a href="${PRODUCT_URLS.patient}" class="cta-button" target="_blank">LEARN MORE</a>
         </div>
       </div>
-
-      <img src="${IMAGES.patientHero}" alt="Patient" class="hero-image" />
     </div>
-
-    <div class="isi-section">
+    <div class="isi-panel">
       <div class="isi-header">Important Safety Information</div>
       <div class="isi-scroll-wrapper">
-        <div class="isi-scroll-content">
-          <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.<br><strong>Warnings:</strong> Disturbance in sexual arousal, depression and suicidal ideation, skin hyperpigmentation, and risk of serious adverse reactions due to benzyl alcohol preservative in neonates.<br><strong>Adverse Reactions:</strong> Most common (≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression.
+        <div class="isi-content">
+          <h3>Indication</h3>
+          <p>IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with obesity due to Bardet-Biedl syndrome (BBS).</p>
+          <h3>Limitations of Use</h3>
+          <p>IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective:</p>
+          <ul>
+            <li>Other types of obesity not related to BBS or other FDA-approved indications.</li>
+            <li>Obesity associated with other genetic syndromes and general (polygenic) obesity.</li>
+          </ul>
+          <h3>Contraindications</h3>
+          <p>Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</p>
+          <h3>Warnings and Precautions</h3>
+          <ul>
+            <li><strong>Disturbance in sexual arousal:</strong> Spontaneous penile erections in males and sexual adverse reactions in females have occurred.</li>
+            <li><strong>Depression and suicidal ideation:</strong> Depression, suicidal ideation, and depressed mood have been reported.</li>
+            <li><strong>Hypersensitivity reactions:</strong> Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</li>
+            <li><strong>Skin pigmentation:</strong> Darkening of pre-existing nevi, and development of new skin pigmentation.</li>
+            <li><strong>Risk of serious adverse reactions due to benzyl alcohol preservative:</strong> Risk of serious adverse reactions in neonates and infants.</li>
+          </ul>
+          <h3>Adverse Reactions</h3>
+          <p>Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection.</p>
+          <h3>Use in Specific Populations</h3>
+          <p>Treatment with IMCIVREE is not recommended when breastfeeding. Discontinue IMCIVREE when pregnancy is recognized unless the benefits of therapy outweigh the potential risks to the fetus.</p>
+          <h3>Adverse Event Reporting</h3>
+          <p>To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088.</p>
+          <p style="margin-top: 20px;"><em>Please see full Prescribing Information.</em></p>
         </div>
-      </div>
-      <div class="isi-link-bar">
-        <a href="https://www.imcivree.com/bbs/safety/" target="_blank">Important Safety Information</a>
-        <span>|</span>
-        <a href="https://www.imcivree.com/bbs/medication-guide/" target="_blank">Medication Guide</a>
       </div>
     </div>
   </div>
-
   <script>
   (function () {
-    var slide1 = document.getElementById("slide1");
-    var slide2 = document.getElementById("slide2");
-    function resetAnimation() {
-      slide1.style.animation = 'none';
-      slide2.style.animation = 'none';
-      slide1.offsetHeight;
-      slide2.offsetHeight;
-      slide1.style.animation = null;
-      slide2.style.animation = null;
-    }
-    setInterval(resetAnimation, 16000);
-
-    // ISI vertical scroll (top to bottom)
     var wrapper = document.querySelector('.isi-scroll-wrapper');
-    var content = document.querySelector('.isi-scroll-content');
-    if (wrapper && content) {
-      var scrollPos = 0;
-      var scrollSpeed = 0.3;
-      function animateISI() {
+    var content = document.querySelector('.isi-content');
+    if (!wrapper || !content) return;
+    var isHovering = false;
+    var scrollPos = 0;
+    var scrollSpeed = 0.2;
+    wrapper.addEventListener('mouseenter', function () { isHovering = true; });
+    wrapper.addEventListener('mouseleave', function () { isHovering = false; });
+    function animate() {
+      if (!isHovering) {
         var maxScroll = content.offsetHeight - wrapper.offsetHeight;
         if (maxScroll > 0) {
           scrollPos += scrollSpeed;
@@ -856,10 +853,10 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
           }
           content.style.transform = 'translateY(-' + scrollPos + 'px)';
         }
-        requestAnimationFrame(animateISI);
       }
-      requestAnimationFrame(animateISI);
+      requestAnimationFrame(animate);
     }
+    requestAnimationFrame(animate);
   })();
   </script>
 </body>
