@@ -54,15 +54,33 @@ Use these EXACT mappings - do not deviate:
 - "Meaningful weight reduction typically begins within 6–8 weeks<sup>1</sup>"
 - "In clinical trials, patients experienced meaningful hunger reduction<sup>2</sup>"
 
-### REQUIRED: The References block MUST appear before the ISI block:
+### DYNAMIC REFERENCES - CRITICAL RULE
+
+**ONLY include references that are actually cited in the email body.** Do NOT include all 3 references by default.
+
+**Rules:**
+1. Track which reference numbers you use as superscripts in the email body
+2. In the References block, ONLY list the references that were actually cited
+3. If you only cite Reference 1, only show Reference 1 in the block
+4. If you cite References 1 and 2, show both (but not Reference 3)
+5. Renumber references sequentially (1, 2, 3) based on order of first appearance
+
+**Example - MOA email (only uses ref 1):**
+\`\`\`html
+<strong>References:</strong><br>
+1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.
+\`\`\`
+
+**Example - Efficacy email (uses refs 1 and 2):**
 \`\`\`html
 <strong>References:</strong><br>
 1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
-2. Haqq AM, et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.<br>
-3. Data on file. Rhythm Pharmaceuticals, Inc.
+2. Haqq AM, et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.
 \`\`\`
 
-VIOLATION: Creating fake references, citing non-existent studies, or inventing data will cause MLR rejection.
+**The References block MUST appear before the ISI block.**
+
+VIOLATION: Creating fake references, citing non-existent studies, inventing data, or including uncited references will cause MLR rejection.
 
 ## IMCIVREE APPROVED INDICATION
 
