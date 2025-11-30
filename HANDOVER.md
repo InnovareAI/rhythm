@@ -2,7 +2,7 @@
 
 **Project:** IMCIVREE Creative Hub
 **Client:** Rhythm Pharmaceuticals / 3cubed
-**Last Updated:** November 29, 2025 (Session 2)
+**Last Updated:** November 30, 2025 (Session 3)
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
 **Repository:** https://github.com/InnovareAI/rhythm.git
 
@@ -22,7 +22,8 @@
 10. [Compliance Requirements](#compliance-requirements)
 11. [Deployment](#deployment)
 12. [Recent Changes (Session 2)](#recent-changes-november-29-2025---session-2)
-13. [Known Issues & Future Work](#known-issues--future-work)
+13. [Recent Changes (Session 3)](#recent-changes-november-30-2025---session-3)
+14. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
@@ -35,8 +36,8 @@ The IMCIVREE Creative Hub is a pharmaceutical marketing content generation platf
 | Feature | Route | Description |
 |---------|-------|-------------|
 | HCP + Patient Email Generator | `/chat` | AI-powered HTML email creation with ISI and references |
-| HCP + Patient Banner Ads | `/banner-generator` | 728x250 animated banners with scrolling ISI |
-| Ziflow Reviews | `/reviews` | View MLR feedback, address comments, resubmit content |
+| HCP + Patient Banner Ads | `/banner-generator` | 728x250 animated 5-frame banners with scrolling ISI |
+| Content Review & Feedback | `/reviews` | View feedback, address comments, resubmit content |
 | Approval Queue | `/approvals` | Ziflow MLR integration for tracking approvals |
 | Content History | `/content-history` | View and download previously generated content |
 
@@ -185,24 +186,34 @@ User Input → Next.js API → OpenRouter (Claude) → HTML Generation → Supab
 
 **Specifications:**
 - **Dimensions:** 728×250 pixels (IAB Leaderboard format)
-- **Animation:** CSS-only two-screen fade (4s per screen)
-- **ISI Panel:** 35% width, auto-scrolling at 0.2px/frame using CSS transform
-- **Fonts:** Avenir, Proxima Nova, Arial fallback
+- **Animation:** 5-frame rotation (5s per frame) with fade transitions
+- **ISI Bar:** 52px black bar at bottom with CSS-only upward scroll
+- **Fonts:** System UI, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif
 
 **Layout Structure:**
 ```
-┌──────────────────────────────┬────────────────┐
-│       Content Area (65%)     │  ISI Panel     │
-│   ┌──────────────────────┐   │    (35%)       │
-│   │ IMCIVREE Logo        │   │                │
-│   └──────────────────────┘   │  Important     │
-│   ┌──────────────────────┐   │  Safety Info   │
-│   │ Headline (animated)  │   │                │
-│   │ CTA Button          │   │  [scrolling]   │
-│   └──────────────────────┘   │                │
-│           [Hero Image]        │                │
-└──────────────────────────────┴────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│  Teal Gradient Background with Floating Bubbles         │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │  HEADLINE (fade in/out per frame)               │    │
+│  │  Subcopy text                                   │    │
+│  │                            [Learn more] (frame5)│    │
+│  └─────────────────────────────────────────────────┘    │
+├─────────────────────────────────────────────────────────┤
+│  BLACK ISI BAR (52px) - Scrolling upward                │
+│  Important Safety Information...                         │
+└─────────────────────────────────────────────────────────┘
 ```
+
+**5-Frame Narrative Structure:**
+
+| Frame | Topic | Key Message |
+|-------|-------|-------------|
+| 1 | Disease Problem | BBS causes early-onset obesity and hard-to-control hunger |
+| 2 | MC4R Pathway | Hunger comes from the brain due to impaired signaling |
+| 3 | Product Introduction | IMCIVREE is first and only FDA-approved treatment |
+| 4 | Efficacy | Weight reduction across children and adults |
+| 5 | Treatment Expectations + CTA | 6-8 weeks timeline, "Learn more" button |
 
 **Focus Options:**
 
@@ -212,10 +223,12 @@ User Input → Next.js API → OpenRouter (Claude) → HTML Generation → Supab
 | Patient | Understanding BBS, Path Forward, Support Available |
 
 **Technical Details:**
-- Complete HTML template in `lib/prompts/imcivree-banner.ts` (495 lines)
-- Uses CSS `@keyframes` for slide transitions (fadeIn/fadeOut)
-- Uses `requestAnimationFrame` + CSS `transform: translateY()` for smooth ISI scroll
-- ISI pauses on hover
+- Complete HTML template in `lib/prompts/imcivree-banner.ts`
+- Dark teal gradient background (`#0F7C8F` → `#0C5F73`)
+- JavaScript `setInterval` for 5-second frame rotation with fade transitions
+- 4 floating bubble animations using `@keyframes floatUp`
+- CSS-only ISI scroll animation (35s duration, upward direction)
+- Lime green CTA button (`#8CD038`) on final frame only
 - Template includes placeholder `{{PRODUCT_URL}}` replaced based on audience
 
 ### 3. Approval Queue (`/approvals`)
@@ -439,13 +452,14 @@ const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
 | Element | Hex Code | Usage |
 |---------|----------|-------|
 | Primary Teal | #007a80 | Headlines, CTAs, links |
-| Header Teal | #1c7b80 | Top bars, email headers |
 | Light Background | #f6fbfb | Page backgrounds |
 | ISI Background | #fafafa | ISI blocks in emails |
 | Text Gray | #4a4f55 | Body text |
-| Banner Background | #eff3d8 | Banner creative area |
-| Banner Border | #0f6c73 | Banner ISI panel border |
-| Banner CTA | #0e7076 | Banner buttons |
+| Lime Green | #97D700 | Email header rule, primary accent |
+| Banner Gradient Start | #0F7C8F | Banner teal gradient (top) |
+| Banner Gradient End | #0C5F73 | Banner teal gradient (bottom) |
+| Banner ISI Bar | #000000 | Black ISI bar at bottom |
+| Banner CTA | #8CD038 | Lime green CTA button |
 
 ### Typography
 
@@ -521,7 +535,7 @@ Located in `lib/knowledge/imcivree-bbs.ts`:
 ### ISI Requirements
 
 - **Emails:** Full ISI must appear after References block
-- **Banners:** 35% width right panel with scrolling ISI at 0.2px/frame
+- **Banners:** 52px black bar at bottom with CSS-only upward scroll (35s animation)
 - **ISI text:** Defined in `lib/knowledge/imcivree-bbs.ts` - **DO NOT MODIFY**
 
 ---
@@ -642,6 +656,127 @@ f45cc96 Fix header label to show Banner vs Email dynamically
 
 ---
 
+## Recent Changes (November 30, 2025 - Session 3)
+
+### 1. Content Type Mislabeling Fix
+
+**Issue:** Banners were being labeled as "imcivree-email" in Ziflow and content history, causing incorrect categorization.
+
+**Root Cause:** Hardcoded `contentType: 'imcivree-email'` in multiple places in `app/chat/page.tsx`
+
+**Fix:** Changed to use the dynamic `contentType` state variable:
+- Line 244: `saveContentToDatabase()` call
+- Line 340: `generateEmail()` function
+- Line 461: `sendMessage()` function
+- Line 599: `submit-for-approval` API call
+
+### 2. Email Header Logo Update
+
+**Issue:** Email templates used a teal header background with white/knocked-out logo. Brand guidelines require full-color logo on white background with lime-green rule.
+
+**Changes in `lib/prompts/imcivree-email.ts`:**
+- Header background: `#1c7b80` (teal) → `#ffffff` (white)
+- Logo: White version → Full-color version (`imcivree-logo-big.png`)
+- Added 4px lime-green rule (`#97D700`) below header
+
+**New Header Structure:**
+```html
+<table width="100%" style="background:#ffffff;border-bottom:4px solid #97D700;">
+  <tr>
+    <td><img src="https://rhythmtx.com/.../imcivree-logo-big.png" /></td>
+    <td style="color:#4a4f55;">[FOR U.S. HEALTHCARE PROFESSIONALS...]</td>
+  </tr>
+</table>
+```
+
+### 3. Landing Page Label Rename
+
+**Change:** Renamed "MLR Feedback" / "Ziflow Reviews" to "Content Review & Feedback"
+
+**Rationale:** Reviews happen before AND after MLR approval, so "MLR Feedback" was misleading.
+
+**File:** `app/page.tsx`
+- Card title: "Content Review & Feedback"
+- Description: "View feedback and address reviewer comments"
+
+### 4. Content History Preview Fix
+
+**Issue:** Banner animations weren't playing in preview iframes because `allow-scripts` was missing from sandbox attribute.
+
+**Fix in `app/content-history/page.tsx`:**
+```tsx
+// Before
+sandbox="allow-same-origin"
+
+// After
+sandbox="allow-same-origin allow-scripts"
+```
+
+### 5. Banner CTA Consistency Fix
+
+**Issue:** Banner prompt instructions said "Learn more" but template output showed "SEE MORE >"
+
+**Fix in `lib/prompts/imcivree-banner.ts`:**
+- Changed CTA button text from "SEE MORE >" to "Learn more"
+- Ensures consistency between prompt instructions and generated output
+
+### 6. Complete Banner Template Redesign
+
+**Major Change:** Completely rewrote the banner template from a 2-screen design to a 5-frame narrative structure based on user-provided reference HTML.
+
+**Old Design (2-screen):**
+- Pale yellow/cream background (#eff3d8)
+- 2 alternating screens with fade animation
+- ISI in right panel (35% width)
+- Static layout with hero image
+
+**New Design (5-frame):**
+- Dark teal gradient background (`#0F7C8F` → `#0C5F73`)
+- 5 frames with 5-second rotation
+- Full-width content with ISI bar at bottom
+- Floating bubble animations
+- Lime green CTA button on final frame
+
+**5-Frame Narrative Structure:**
+
+| Frame | Topic | Content |
+|-------|-------|---------|
+| 1 | Disease Problem | BBS causes early-onset obesity and hard-to-control hunger |
+| 2 | MC4R Pathway | Hunger comes from the brain due to impaired signaling |
+| 3 | Product Introduction | IMCIVREE is first and only FDA-approved treatment |
+| 4 | Efficacy | Weight reduction across children and adults |
+| 5 | Treatment Expectations + CTA | 6-8 weeks timeline, "Learn more" button |
+
+**Technical Changes:**
+- **Dimensions:** 728×250 (unchanged)
+- **Frame Rotation:** JavaScript `setInterval` with 5-second duration
+- **ISI Bar:** 52px black bar at bottom with CSS-only upward scroll
+- **Bubbles:** 4 floating circles with `@keyframes floatUp` animation
+- **CTA Button:** Lime green (`#8CD038`) on frame 5 only
+
+**Layout Structure:**
+```
+┌─────────────────────────────────────────────────────────┐
+│  Teal Gradient Background with Floating Bubbles         │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │  HEADLINE (fade in/out per frame)               │    │
+│  │  Subcopy text                                   │    │
+│  │                            [Learn more] (frame5)│    │
+│  └─────────────────────────────────────────────────┘    │
+├─────────────────────────────────────────────────────────┤
+│  BLACK ISI BAR (52px) - Scrolling upward                │
+│  Important Safety Information...                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Recent Commits (Nov 30, Session 3)
+
+```
+b62b040 Update HANDOVER.md with Session 2 changes
+```
+
+---
+
 ## Known Issues & Future Work
 
 ### Completed Features (Previously Limitations)
@@ -705,8 +840,8 @@ f45cc96 Fix header label to show Banner vs Email dynamically
 |------|-------|-------|---------|
 | HCP + Patient Emails | Teal | `/chat` | Email generation |
 | HCP + Patient Banner Ads | Teal | `/banner-generator` | Banner generation |
-| Approval Queue | Purple | `/approvals` | Ziflow tracking |
-| Content History | Amber | `/content-history` | View past content |
+| Content Review & Feedback | Teal | `/reviews` | View and address reviewer feedback |
+| Content History | Teal | `/content-history` | View past content |
 
 ### Key Files
 
@@ -738,4 +873,4 @@ f45cc96 Fix header label to show Banner vs Email dynamically
 
 ---
 
-*Document generated: November 29, 2025*
+*Document generated: November 30, 2025*
