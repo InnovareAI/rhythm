@@ -309,55 +309,169 @@ export const FOOTER = {
 }
 
 // =============================================================================
-// OFFICIAL VERIFIED REFERENCES - USE ONLY THESE, NEVER INVENT REFERENCES
+// OFFICIAL VERIFIED REFERENCES - CVA 2025 APPROVED (US-SET-2200068 - 08.01/2025)
 // =============================================================================
 
 export const REFERENCES = {
-  // Master list of ALL approved references
+  // Master list of ALL 60 approved references from CVA 2025
   all: {
-    1: 'IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.',
-    2: 'Haqq AM, et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.',
-    3: 'Data on file. Rhythm Pharmaceuticals, Inc.',
+    1: 'IMCIVREE [prescribing information]. Boston, MA. Rhythm Pharmaceuticals, Inc.',
+    2: 'Eneli I et al. Appl Clin Genet. 2019;12:87-93. doi:10.2147/TACG.S199092',
+    3: 'Hampl SE et al. Pediatrics. 2023;151(2):e2022060640. doi:10.1542/peds.2022-060640',
+    4: 'Manara E et al. Ital J Pediatr. 2019;45(1):72. doi:10.1186/s13052-019-0659-1',
+    5: 'Huvenne H et al. Obes Facts. 2016;9(3):158-173. doi:10.1159/000445061',
+    6: 'Tondt J et al. Obesity Algorithm. 2023. https://obesitymedicine.org/obesity-algorithm',
+    7: 'Kalinderi K et al. Children. 2024;11(2):153. doi:10.3390/children11020153',
+    8: 'Blaess S et al. J Clin Invest. 2021;131(8):e148903. doi:10.1172/JCI148903',
+    9: 'Seo S et al. Hum Mol Genet. 2009;18(7):1323-1331. doi:10.1093/hmg/ddp031',
+    10: 'Haqq AM et al. Child Obes. 2021;17(4):229-240. doi:10.1089/chi.2021.0003',
+    11: 'Espel-Huynh HM et al. Obes Sci Pract. 2018;4(3):238-249. doi:10.1002/osp4.161',
+    12: 'Tanajewski et al. Food Qual Prefer. 2023;109:104889. doi:0.1016/j.foodqual.2023.104889',
+    13: 'NIH. Symptoms and Causes of Binge Eating Disorder. https://www.niddk.nih.gov',
+    14: 'Summerfield SB et al. Obesity (Silver Spring). 2014;22(suppl 1):S1-S17. doi:10.1002/oby.20646',
+    15: 'Forsythe E et al. Orphanet J Rare Dis. 2023;18(1):12. doi:10.1186/s13023-023-02723-4',
+    16: 'Ervin C et al. Adv Ther. 2023;40(5):2394-2411. doi:10.1007/s12325-023-02443-y',
+    17: 'Sherafat-Kazemzadeh R et al. Pediatr Obes. 2013;8(5):e64-e67. doi:10.1111/j.2047-6310.2013.00182.x',
+    18: 'Forsythe E et al. Front Pediatr. 2018;6:23. doi:10.3389/fped.2018.00023',
+    19: 'Pala R et al. Int J Mol Sci. 2017;18(11):2272. doi:10.3390/ijms18112272',
+    20: 'Beales PL et al. J Med Genet. 1999;36(6):437-446.',
+    21: 'Forsyth R et al. Bardet-Biedl syndrome overview. In: Adam MP et al, eds. GeneReviews. University of Washington; 2003. Updated July 23, 2020.',
+    22: 'Florea L et al. Genes (Basel). 2021;12(9):1353. doi:10.3390/genes12091353',
+    23: 'Forsythe E et al. Eur J Hum Genet. 2023;21(1):8-13. doi:10.1038/ejhg.2012.115',
+    24: 'Majumdar U et al. BMJ Case Rep. 2012;2012:bcr1220115320. doi:10.1136/bcr.12.2011.5320',
+    25: 'Styne DM et al. J Clin Endocrinol Metab. 2017;102(3):709-757. doi:10.1210/jc.2016-2573',
+    26: 'Growth Charts - Data file for CDC Extended BMI-for-Age Growth Charts. www.cdc.gov',
+    27: 'Obesity and overweight. World Health Organization. Published June 9, 2021.',
+    28: 'Developmental Screening. Ages & Stages Questionnaire. https://agesandstages.com',
+    29: 'The Language Development Survey (LDS). Achenbach System of Empirically Based Assessment. www.aseba.org',
+    30: 'The MacArthur-Bates Communicative Development Inventories (MB-CDIs). www.mb-cdi.stanford.edu',
+    31: 'Meng X et al. Front Cell Dev Biol. 2021;9:635216. doi:10.3389/fcell.2021.635216',
+    32: 'Putoux A et al. Pediatr Nephrol. 2012;27(1):7-15. doi:10.1007/s00467-010-1751-3',
+    33: 'Panny A et al. J Dent Res. 2017;96(12):1361-1369.',
+    34: 'Sandilands EA et al. Br J Clin Pharmacol. 2013;76(4):504-515. doi:10.1111/bcp.12198',
+    35: 'Dollfus H et al. Eur J Hum Genet. 2024;32(11):1347-1360. doi:10.1038/s41431-024-01634-7',
+    36: 'Uncovering Rare Obesity Program. https://uncoveringrrareobesity.com',
+    37: 'Khan OA et al. Cureus. 2019;11(2):e4114. doi:10.7759/cureus.4114',
+    38: 'Agrawal H et al. Pediatr Rev. 2018;39(5):e21-e23. doi:10.1542/pir.2017-0136',
+    39: 'Vlahovic AM et al. Pediatric and Adolescent Plastic Surgery for the Clinician. Springer; 2017:89-105.',
+    40: 'Pomeroy J et al. Pediatr Obes. 2021;16(2):e12703. doi:10.1111/ijpo.12703',
+    41: 'Katsanis N et al. Hum Mol Genet. 2001;10(20):2293-2299. doi:10.1093/hmg/10.20.2293',
+    42: 'Weihbrecht K et al. Med Res Arch. 2017;5(9):10.18103/mra.v5i9.1526',
+    43: 'Roy NV et al. Endocrinol Diabetes Metab Case Rep. 2023;2023(4):23-0055. doi:10.1530/EDM-23-0055',
+    44: 'Suspitsin EN et al. Mol Syndromol. 2016;7(2):62-71.',
+    45: 'Trapp CM et al. Curr Opin Endocrinol Diabetes Obes. 2023;30(2):136-140. doi:10.1097/MED.0000000000000798',
+    46: 'Haws R et al. Diabetes Obes Metab. 2020;22(11):2133-2140. doi:10.1111/dom.14133',
+    47: 'Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868. doi:10.1016/S2213-8587(22)00277-7',
+    48: 'Argente J et al. Lancet Diabetes Endocrinol. 2025;13(1):29-37. doi:10.1016/S2213-8587(24)00273-0',
+    49: 'Centers for Disease Control and Prevention. 2000 CDC Growth Charts for the United States. https://www.cdc.gov/nchs/data/series/sr_11/sr11_246.pdf',
+    50: 'Data on file. Rhythm Pharmaceuticals, Inc. Boston, MA.',
+    51: 'Data on file. Rhythm Pharmaceuticals, Inc. Boston, MA.',
+    52: 'Turkkahraman D et al. J Endocrinol Invest. 2022;45(5):1031-1037. doi:10.1007/s40618-021-01737-8',
+    53: 'Grossman DC et al; US Preventive Services Task Force. JAMA. 2017;317(23):2417-2426. doi:10.1001/jama.2017.6803',
+    54: 'Argente J et al. Endocrine Society Annual Meeting. Poster ODP606. June 11-14, 2022.',
+    55: 'Gulati AK et al. Pediatrics. 2012;130(6):1136-1140. doi:10.1542/peds.2012-0596',
+    56: 'Varni JW et al. PedsQL. Version 20. Mapi Research Trust. https://www.pedsql.org/PedsQL-Scoring.pdf',
+    57: 'Crosby RD et al. J Clin Epidemiol. 2004;57(11):1153-60. doi:10.1016/j.jclinepi.2004.04.004',
+    58: 'Data on file. Rhythm Pharmaceuticals, Inc. Boston, MA.',
+    59: 'Clément K et al. Lancet Diabetes Endocrinol. [Supplementary appendix] 2020;8(12):960-970. doi:10.1016/S2213-8587(20)30364-8',
+    60: 'Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.',
   },
 
-  // Which claims map to which references - STRICT MAPPING
+  // Which claims map to which references - STRICT MAPPING (from CVA 2025)
   claimToReference: {
     // Indication claims → Reference 1 (PI)
     'FDA-approved': '1',
-    'first and only': '1',
+    'first and only': '1,2',
     'ages 2 years and older': '1',
     'pediatric patients': '1',
     'adults': '1',
     'BBS indication': '1',
     'reduce excess body weight': '1',
     'maintain weight reduction': '1',
+    'precision medicine': '1,2',
 
-    // Efficacy claims → Reference 1,2
-    'weight loss': '1,2',
-    'weight reduction': '1,2',
-    'BMI reduction': '1,2',
-    'meaningful weight reduction': '1,2',
-    '6-8 weeks': '1',
-    'hunger reduction': '1,2',
-
-    // Clinical trial data → Reference 2
-    'clinical trial': '2',
-    'study results': '2',
-    'patients in trial': '2',
-
-    // MOA claims → Reference 1
-    'MC4R pathway': '1',
+    // MC4R pathway claims → References from CVA page 3
+    'MC4R pathway': '1,2',
+    'MC4R pathway impairment': '2,5,8,9',
     'mechanism of action': '1',
-    'hypothalamic': '1',
+    'hypothalamic': '1,2',
+    'MC4R agonist': '1',
+    're-establish MC4R pathway': '1,45,46',
+    'MC4R neuron': '1,2',
+    'alpha-MSH': '1,18',
 
-    // Data on file → Reference 3
-    'internal data': '3',
-    'real-world': '3',
+    // Disease burden / hyperphagia
+    'hyperphagia': '1,2',
+    'insatiable hunger': '2',
+    'early-onset obesity': '2,5',
+    'BBS disease burden': '2,5,15,16',
+
+    // Efficacy claims → References 1,47,48
+    'weight loss': '1,47',
+    'weight reduction': '1,47,48',
+    'BMI reduction': '1,47,48',
+    'meaningful weight reduction': '1,47',
+    '6-8 weeks': '1',
+    'hunger reduction': '1,47',
+    'clinically meaningful': '1,47,48',
+
+    // Age-specific efficacy
+    'efficacy aged 2 to <6': '1,48',
+    'efficacy aged 6 to <18': '1,47',
+    'efficacy aged ≥18': '1,47',
+    'young children efficacy': '1,48',
+
+    // Clinical trial data
+    'clinical trial': '47',
+    'study results': '47,48',
+    'patients in trial': '47',
+    'VENTURE trial': '48',
+
+    // Continuous treatment
+    'continuous treatment': '1,47',
+    'long-term treatment': '1,47',
+    'foundational treatment': '1',
+
+    // Safety
+    'safety profile': '1,48,54',
+    'tolerability': '1,48',
+    'adverse reactions': '1',
+
+    // Support program
+    'Rhythm InTune': '50',
+    'patient support': '50',
+
+    // Data on file
+    'internal data': '50,51,58',
+    'real-world': '50',
   },
 
-  // Formatted reference block for emails
+  // Helper function to get references for a set of claims
+  getReferencesForClaims: (claims: string[]): number[] => {
+    const refSet = new Set<number>();
+    const mapping = REFERENCES.claimToReference;
+
+    claims.forEach(claim => {
+      const claimLower = claim.toLowerCase();
+      Object.entries(mapping).forEach(([key, refs]) => {
+        if (claimLower.includes(key.toLowerCase())) {
+          refs.split(',').forEach(r => refSet.add(parseInt(r.trim())));
+        }
+      });
+    });
+
+    return Array.from(refSet).sort((a, b) => a - b);
+  },
+
+  // Format references for output (max 3 for banners)
+  formatReferences: (refNumbers: number[], maxRefs: number = 3): string => {
+    const refs = refNumbers.slice(0, maxRefs);
+    return refs.map(n => `${n}. ${REFERENCES.all[n as keyof typeof REFERENCES.all]}`).join('<br>');
+  },
+
+  // Legacy formatted block (for backwards compatibility)
   formattedBlock: `<strong>References:</strong><br>
-1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
-2. Haqq AM, et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.<br>
-3. Data on file. Rhythm Pharmaceuticals, Inc.`,
+1. IMCIVREE [prescribing information]. Boston, MA. Rhythm Pharmaceuticals, Inc.<br>
+47. Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.<br>
+50. Data on file. Rhythm Pharmaceuticals, Inc. Boston, MA.`,
 }
