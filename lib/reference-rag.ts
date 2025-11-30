@@ -11,103 +11,246 @@
 
 import { REFERENCES } from './knowledge/imcivree-bbs'
 
-// DEMO SIMPLIFIED: Only 3 core references for demo
-// Reference 1 (PI), Reference 47 (Haqq 2022), Reference 50 (Rhythm InTune)
-// Claim patterns with their associated reference numbers
-// More specific patterns take precedence
+// CVA 2025 APPROVED (US-SET-2200068 - 08.01/2025)
+// Complete claim-to-reference mappings per official CVA specification
+// More specific patterns take precedence (higher priority)
 const CLAIM_PATTERNS: Array<{
   pattern: RegExp
   refs: number[]
   priority: number
   description: string
 }> = [
-  // Age-specific efficacy - simplified to use Ref 1 and 47
+  // =============================================================================
+  // AGE-SPECIFIC EFFICACY CLAIMS (Highest Priority)
+  // =============================================================================
   {
-    pattern: /(?:children|pediatric|patients?)\s*(?:aged?\s*)?(?:2|two)\s*(?:years?\s*)?(?:and\s*older|to\s*<?5|to\s*<?6|\+)/i,
-    refs: [1],
+    pattern: /(?:children|pediatric|patients?)\s*(?:aged?\s*)?(?:2|two)\s*(?:years?\s*)?(?:to\s*<?5|to\s*<?6)/i,
+    refs: [1, 48],
     priority: 100,
-    description: 'Young children efficacy'
+    description: 'Young children 2-<6 years efficacy (VENTURE trial)'
   },
   {
-    pattern: /(?:children|pediatric)\s*(?:aged?\s*)?(?:6|six)\s*(?:years?\s*)?(?:and\s*older|to\s*<?18)/i,
+    pattern: /(?:children|pediatric)\s*(?:aged?\s*)?(?:6|six)\s*(?:years?\s*)?(?:to\s*<?12|to\s*<?18)/i,
     refs: [1, 47],
-    priority: 95,
+    priority: 98,
     description: 'Children 6-17 years efficacy'
   },
   {
     pattern: /(?:adults?|≥18|18\s*years?\s*and\s*older)/i,
     refs: [1, 47],
-    priority: 90,
+    priority: 95,
     description: 'Adult efficacy'
   },
-
-  // Efficacy claims - simplified
   {
-    pattern: /(?:meaningful|significant|clinically)\s*(?:weight|BMI)\s*(?:loss|reduction)/i,
-    refs: [1, 47],
-    priority: 80,
-    description: 'Meaningful weight/BMI reduction'
-  },
-  {
-    pattern: /(?:reduced?|reduction\s*in)\s*(?:hunger|hyperphagia)/i,
-    refs: [1, 47],
-    priority: 80,
-    description: 'Hunger reduction'
-  },
-  {
-    pattern: /(?:6[-–]8|six\s*to\s*eight)\s*weeks?/i,
+    pattern: /(?:2|two)\s*years?\s*(?:and\s*older|\+|or\s*older)/i,
     refs: [1],
-    priority: 75,
-    description: 'Timeline claim'
-  },
-  {
-    pattern: /clinical\s*(?:trial|study|studies|data)/i,
-    refs: [1, 47],
-    priority: 70,
-    description: 'Clinical trial reference'
+    priority: 92,
+    description: 'Ages 2 years and older indication'
   },
 
-  // Product claims
+  // =============================================================================
+  // PRODUCT CLAIMS - FIRST AND ONLY
+  // =============================================================================
   {
-    pattern: /first\s*and\s*only\s*(?:FDA[-\s]?approved|treatment)/i,
-    refs: [1, 47],
-    priority: 85,
+    pattern: /first\s*and\s*only\s*(?:FDA[-\s]?approved|treatment|precision\s*medicine)/i,
+    refs: [1, 2],
+    priority: 90,
     description: 'First and only claim'
+  },
+  {
+    pattern: /precision\s*medicine/i,
+    refs: [1, 2],
+    priority: 88,
+    description: 'Precision medicine claim'
   },
   {
     pattern: /FDA[-\s]?approved/i,
     refs: [1],
-    priority: 80,
+    priority: 85,
     description: 'FDA approval'
   },
+
+  // =============================================================================
+  // MC4R PATHWAY CLAIMS
+  // =============================================================================
   {
-    pattern: /MC4R\s*pathway/i,
+    pattern: /re[-\s]?establish\s*(?:MC4R|pathway)/i,
+    refs: [1, 45, 46],
+    priority: 88,
+    description: 'Re-establish MC4R pathway'
+  },
+  {
+    pattern: /MC4R\s*pathway\s*impair/i,
+    refs: [2, 5, 8, 9],
+    priority: 86,
+    description: 'MC4R pathway impairment'
+  },
+  {
+    pattern: /MC4R\s*(?:pathway|agonist|neuron)/i,
+    refs: [1, 2],
+    priority: 84,
+    description: 'MC4R pathway general'
+  },
+  {
+    pattern: /hypothalamic/i,
+    refs: [1, 2],
+    priority: 82,
+    description: 'Hypothalamic pathway'
+  },
+  {
+    pattern: /alpha[-\s]?MSH/i,
+    refs: [1, 18],
+    priority: 80,
+    description: 'Alpha-MSH mechanism'
+  },
+  {
+    pattern: /mechanism\s*of\s*action/i,
     refs: [1],
-    priority: 75,
-    description: 'MC4R pathway'
+    priority: 78,
+    description: 'Mechanism of action'
   },
 
-  // Disease claims
+  // =============================================================================
+  // EFFICACY CLAIMS - WEIGHT REDUCTION
+  // =============================================================================
+  {
+    pattern: /(?:meaningful|significant|clinically)\s*(?:weight|BMI)\s*(?:loss|reduction)/i,
+    refs: [1, 47, 48],
+    priority: 85,
+    description: 'Meaningful weight/BMI reduction'
+  },
+  {
+    pattern: /(?:6[-–]8|six\s*to\s*eight)\s*weeks?/i,
+    refs: [1],
+    priority: 83,
+    description: '6-8 weeks timeline'
+  },
+  {
+    pattern: /weight\s*(?:loss|reduction)/i,
+    refs: [1, 47],
+    priority: 80,
+    description: 'Weight loss/reduction'
+  },
+  {
+    pattern: /BMI\s*(?:reduction|decrease|change)/i,
+    refs: [1, 47, 48],
+    priority: 80,
+    description: 'BMI reduction'
+  },
+
+  // =============================================================================
+  // EFFICACY CLAIMS - HUNGER REDUCTION
+  // =============================================================================
+  {
+    pattern: /(?:reduced?|reduction\s*in)\s*(?:hunger|hyperphagia)/i,
+    refs: [1, 47],
+    priority: 82,
+    description: 'Hunger reduction'
+  },
+
+  // =============================================================================
+  // CLINICAL TRIAL CLAIMS
+  // =============================================================================
+  {
+    pattern: /VENTURE\s*(?:trial|study)/i,
+    refs: [48],
+    priority: 88,
+    description: 'VENTURE trial'
+  },
+  {
+    pattern: /clinical\s*(?:trial|study|studies|data)/i,
+    refs: [47, 48],
+    priority: 75,
+    description: 'Clinical trial reference'
+  },
+  {
+    pattern: /(?:study|trial)\s*results?/i,
+    refs: [47, 48],
+    priority: 73,
+    description: 'Study results'
+  },
+  {
+    pattern: /patients?\s*in\s*(?:the\s*)?(?:trial|study)/i,
+    refs: [47],
+    priority: 72,
+    description: 'Patients in trial'
+  },
+
+  // =============================================================================
+  // DISEASE BURDEN / HYPERPHAGIA CLAIMS
+  // =============================================================================
   {
     pattern: /hyperphagia\s*(?:is\s*)?(?:chronic|insatiable)/i,
-    refs: [1],
-    priority: 70,
+    refs: [1, 2],
+    priority: 78,
     description: 'Hyperphagia description'
   },
   {
+    pattern: /insatiable\s*hunger/i,
+    refs: [2],
+    priority: 76,
+    description: 'Insatiable hunger'
+  },
+  {
     pattern: /early[-\s]?onset\s*obesity/i,
-    refs: [1],
-    priority: 70,
+    refs: [2, 5],
+    priority: 75,
     description: 'Early-onset obesity'
   },
   {
+    pattern: /BBS\s*disease\s*burden/i,
+    refs: [2, 5, 15, 16],
+    priority: 74,
+    description: 'BBS disease burden'
+  },
+  {
     pattern: /BBS\s*(?:causes?|leads?\s*to)/i,
-    refs: [1],
-    priority: 65,
+    refs: [1, 2],
+    priority: 72,
     description: 'BBS causation'
   },
 
-  // Support program
+  // =============================================================================
+  // CONTINUOUS/LONG-TERM TREATMENT
+  // =============================================================================
+  {
+    pattern: /(?:continuous|long[-\s]?term)\s*treatment/i,
+    refs: [1, 47],
+    priority: 72,
+    description: 'Continuous/long-term treatment'
+  },
+  {
+    pattern: /foundational\s*treatment/i,
+    refs: [1],
+    priority: 70,
+    description: 'Foundational treatment'
+  },
+  {
+    pattern: /maintain\s*(?:weight\s*)?reduction/i,
+    refs: [1],
+    priority: 68,
+    description: 'Maintain reduction'
+  },
+
+  // =============================================================================
+  // SAFETY CLAIMS
+  // =============================================================================
+  {
+    pattern: /(?:safety|tolerability)\s*(?:profile|data)/i,
+    refs: [1, 48, 54],
+    priority: 70,
+    description: 'Safety profile'
+  },
+  {
+    pattern: /adverse\s*(?:reactions?|events?)/i,
+    refs: [1],
+    priority: 68,
+    description: 'Adverse reactions'
+  },
+
+  // =============================================================================
+  // SUPPORT PROGRAM
+  // =============================================================================
   {
     pattern: /Rhythm\s*InTune/i,
     refs: [50],
@@ -123,38 +266,34 @@ const CLAIM_PATTERNS: Array<{
   {
     pattern: /injection\s*training/i,
     refs: [50],
-    priority: 80,
+    priority: 82,
     description: 'Injection training'
   },
 
-  // Long-term treatment
+  // =============================================================================
+  // DATA ON FILE / INTERNAL DATA
+  // =============================================================================
   {
-    pattern: /(?:long[-\s]?term|continuous|ongoing)\s*treatment/i,
-    refs: [1],
-    priority: 70,
-    description: 'Long-term treatment'
-  },
-  {
-    pattern: /maintain\s*(?:weight\s*)?reduction/i,
-    refs: [1],
-    priority: 70,
-    description: 'Maintain reduction'
+    pattern: /(?:internal|real[-\s]?world)\s*data/i,
+    refs: [50, 51, 58],
+    priority: 65,
+    description: 'Internal/real-world data'
   },
 
-  // Safety
-  {
-    pattern: /(?:safety|tolerability)\s*(?:profile|data)?/i,
-    refs: [1],
-    priority: 60,
-    description: 'Safety profile'
-  },
-
-  // Indication (base level)
+  // =============================================================================
+  // BASE INDICATION CLAIMS (Lower Priority - Catch-all)
+  // =============================================================================
   {
     pattern: /(?:indicated|approved)\s*(?:for|to)\s*(?:reduce|treat)/i,
     refs: [1],
-    priority: 50,
+    priority: 55,
     description: 'Indication statement'
+  },
+  {
+    pattern: /reduce\s*excess\s*body\s*weight/i,
+    refs: [1],
+    priority: 53,
+    description: 'Reduce excess body weight'
   },
   {
     pattern: /Bardet[-\s]?Biedl\s*syndrome|BBS/i,
@@ -286,28 +425,49 @@ export function validateReferences(htmlContent: string): {
 
 /**
  * Get recommended references for an email type and audience
- * DEMO SIMPLIFIED: Only 3 core refs (1, 47, 50)
+ * CVA 2025 APPROVED - Complete reference mapping
  */
 export function getRecommendedReferences(
   emailType: string,
   audience: 'hcp' | 'patient'
 ): number[] {
-  // Simplified for demo: HCP gets [1, 47], Patient gets [1, 50]
+  // Patient content - always includes PI and support references
   if (audience === 'patient') {
-    return [1, 50]
+    const patientBase = [1, 50] // PI + Rhythm InTune
+
+    if (emailType === 'getting-started' || emailType === 'support') {
+      return [1, 50]
+    }
+    if (emailType === 'what-to-expect') {
+      return [1, 47, 50] // Add efficacy reference
+    }
+    return patientBase
   }
 
-  // HCP content
-  const efficacyTypes = ['efficacy', 'moa', 'summary', 'dosing']
-  if (efficacyTypes.includes(emailType)) {
-    return [1, 47]
+  // HCP content - more specific reference requirements
+  switch (emailType) {
+    case 'moa':
+      return [1, 2, 45, 46] // PI, Eneli, mechanism refs
+    case 'efficacy':
+    case 'efficacy-weight':
+    case 'efficacy-hunger':
+      return [1, 47, 48] // PI, Haqq 2022, VENTURE trial
+    case 'summary':
+      return [1, 2, 47] // PI, Eneli, Haqq
+    case 'dosing':
+      return [1] // PI only for dosing
+    case 'treatment':
+      return [1, 47, 50] // PI, efficacy, support
+    case 'safety':
+      return [1, 48, 54] // PI, VENTURE, safety poster
+    default:
+      return [1, 47] // Default: PI + main efficacy
   }
-
-  return [1]
 }
 
 /**
  * Build context for LLM prompt with relevant references
+ * CVA 2025 APPROVED - Complete reference guidance
  */
 export function buildReferenceContext(
   emailType: string,
@@ -336,12 +496,32 @@ Use ONLY these references. Cite as superscripts (e.g., <sup>1</sup>, <sup>1,47</
 
 ${refDetails}
 
-## REFERENCE USAGE RULES (SIMPLIFIED FOR DEMO)
+## REFERENCE USAGE RULES (CVA 2025 APPROVED)
 
-Only 3 core references:
-1. **Reference 1 (PI)**: Use for ALL indication, dosing, mechanism, safety claims
-2. **Reference 47 (Haqq 2022)**: Use for clinical efficacy data (HCP content only)
-3. **Reference 50 (Data on file)**: Use for Rhythm InTune support program (Patient content only)
+### Core References:
+- **Reference 1 (PI)**: ALL indication, dosing, mechanism, safety claims - REQUIRED for any IMCIVREE content
+- **Reference 2 (Eneli 2019)**: "First and only" claims, precision medicine, MC4R pathway
+- **Reference 47 (Haqq 2022)**: Clinical efficacy data for ages 6+ and adults
+- **Reference 48 (Argente 2025/VENTURE)**: Efficacy data for young children (ages 2-<6)
+- **Reference 50 (Data on file)**: Rhythm InTune support program
+
+### Claim-Specific References:
+| Claim Type | Required References |
+|------------|---------------------|
+| FDA-approved | 1 |
+| First and only | 1, 2 |
+| MC4R pathway | 1, 2 |
+| MC4R impairment | 2, 5, 8, 9 |
+| Re-establish pathway | 1, 45, 46 |
+| Weight/BMI reduction | 1, 47, 48 |
+| Hunger reduction | 1, 47 |
+| Ages 2-<6 efficacy | 1, 48 |
+| Ages 6-17 efficacy | 1, 47 |
+| Adult efficacy | 1, 47 |
+| Early-onset obesity | 2, 5 |
+| Hyperphagia | 1, 2 |
+| Safety profile | 1, 48, 54 |
+| Rhythm InTune | 50 |
 
 **IMPORTANT: Only cite references that appear in your AVAILABLE REFERENCES list above.**
 **Only include cited references in the References block.**`

@@ -539,8 +539,8 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
     .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
     .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 4px 15px 3px; }
-    .isi-scroll-wrapper { height: 60px; overflow: hidden; position: relative; padding: 0 15px; }
-    .isi-scroll-content { position: absolute; top: 0; left: 15px; right: 15px; font-size: 8px; color: #4A4A4A; line-height: 1.3; }
+    .isi-scroll-wrapper { height: 65px; overflow: hidden; position: relative; padding: 0 15px; }
+    .isi-scroll-content { font-size: 8px; color: #4A4A4A; line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -582,22 +582,24 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       slide2.style.animation = null;
     }
     setInterval(resetAnimation, 16000);
-    var wrapper = document.querySelector('.isi-scroll-wrapper');
-    var content = document.querySelector('.isi-scroll-content');
-    if (wrapper && content) {
-      var scrollPos = 0;
-      var scrollSpeed = 0.3;
-      function animateISI() {
-        var maxScroll = content.offsetHeight - wrapper.offsetHeight;
-        if (maxScroll > 0) {
-          scrollPos += scrollSpeed;
-          if (scrollPos >= maxScroll) { scrollPos = 0; }
-          content.style.transform = 'translateY(-' + scrollPos + 'px)';
+    setTimeout(function() {
+      var wrapper = document.querySelector('.isi-scroll-wrapper');
+      var content = document.querySelector('.isi-scroll-content');
+      if (wrapper && content) {
+        var scrollPos = 0;
+        var scrollSpeed = 0.3;
+        function animateISI() {
+          var maxScroll = content.scrollHeight - wrapper.clientHeight;
+          if (maxScroll > 0) {
+            scrollPos += scrollSpeed;
+            if (scrollPos >= maxScroll) { scrollPos = 0; }
+            content.style.transform = 'translateY(-' + scrollPos + 'px)';
+          }
+          requestAnimationFrame(animateISI);
         }
         requestAnimationFrame(animateISI);
       }
-      requestAnimationFrame(animateISI);
-    }
+    }, 100);
   })();
   </script>
 </body>
@@ -634,8 +636,8 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
     .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
     .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 4px 15px 3px; }
-    .isi-scroll-wrapper { height: 60px; overflow: hidden; position: relative; padding: 0 15px; }
-    .isi-scroll-content { position: absolute; top: 0; left: 15px; right: 15px; font-size: 8px; color: #4A4A4A; line-height: 1.3; }
+    .isi-scroll-wrapper { height: 65px; overflow: hidden; position: relative; padding: 0 15px; }
+    .isi-scroll-content { font-size: 8px; color: #4A4A4A; line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -677,22 +679,24 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       slide2.style.animation = null;
     }
     setInterval(resetAnimation, 16000);
-    var wrapper = document.querySelector('.isi-scroll-wrapper');
-    var content = document.querySelector('.isi-scroll-content');
-    if (wrapper && content) {
-      var scrollPos = 0;
-      var scrollSpeed = 0.3;
-      function animateISI() {
-        var maxScroll = content.offsetHeight - wrapper.offsetHeight;
-        if (maxScroll > 0) {
-          scrollPos += scrollSpeed;
-          if (scrollPos >= maxScroll) { scrollPos = 0; }
-          content.style.transform = 'translateY(-' + scrollPos + 'px)';
+    setTimeout(function() {
+      var wrapper = document.querySelector('.isi-scroll-wrapper');
+      var content = document.querySelector('.isi-scroll-content');
+      if (wrapper && content) {
+        var scrollPos = 0;
+        var scrollSpeed = 0.3;
+        function animateISI() {
+          var maxScroll = content.scrollHeight - wrapper.clientHeight;
+          if (maxScroll > 0) {
+            scrollPos += scrollSpeed;
+            if (scrollPos >= maxScroll) { scrollPos = 0; }
+            content.style.transform = 'translateY(-' + scrollPos + 'px)';
+          }
+          requestAnimationFrame(animateISI);
         }
         requestAnimationFrame(animateISI);
       }
-      requestAnimationFrame(animateISI);
-    }
+    }, 100);
   })();
   </script>
 </body>
@@ -729,8 +733,8 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     @keyframes fadeIn { to { opacity: 1; pointer-events: auto; } }
     .isi-section { height: 85px; background-color: #FFFFFF; border-top: 1px solid #0F6C73; }
     .isi-header { color: #007681; font-size: 10px; font-weight: bold; padding: 4px 15px 3px; }
-    .isi-scroll-wrapper { height: 60px; overflow: hidden; position: relative; padding: 0 15px; }
-    .isi-scroll-content { position: absolute; top: 0; left: 15px; right: 15px; font-size: 8px; color: #4A4A4A; line-height: 1.3; }
+    .isi-scroll-wrapper { height: 65px; overflow: hidden; position: relative; padding: 0 15px; }
+    .isi-scroll-content { font-size: 8px; color: #4A4A4A; line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -772,22 +776,24 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       slide2.style.animation = null;
     }
     setInterval(resetAnimation, 16000);
-    var wrapper = document.querySelector('.isi-scroll-wrapper');
-    var content = document.querySelector('.isi-scroll-content');
-    if (wrapper && content) {
-      var scrollPos = 0;
-      var scrollSpeed = 0.3;
-      function animateISI() {
-        var maxScroll = content.offsetHeight - wrapper.offsetHeight;
-        if (maxScroll > 0) {
-          scrollPos += scrollSpeed;
-          if (scrollPos >= maxScroll) { scrollPos = 0; }
-          content.style.transform = 'translateY(-' + scrollPos + 'px)';
+    setTimeout(function() {
+      var wrapper = document.querySelector('.isi-scroll-wrapper');
+      var content = document.querySelector('.isi-scroll-content');
+      if (wrapper && content) {
+        var scrollPos = 0;
+        var scrollSpeed = 0.3;
+        function animateISI() {
+          var maxScroll = content.scrollHeight - wrapper.clientHeight;
+          if (maxScroll > 0) {
+            scrollPos += scrollSpeed;
+            if (scrollPos >= maxScroll) { scrollPos = 0; }
+            content.style.transform = 'translateY(-' + scrollPos + 'px)';
+          }
+          requestAnimationFrame(animateISI);
         }
         requestAnimationFrame(animateISI);
       }
-      requestAnimationFrame(animateISI);
-    }
+    }, 100);
   })();
   </script>
 </body>
