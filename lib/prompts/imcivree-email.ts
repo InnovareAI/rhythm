@@ -270,16 +270,11 @@ Use these inline with bullet points:
 
 Adjust your messaging tone based on the HCP segment:
 
-### Loyalist (Already prescribing IMCIVREE)
-- Reinforce their decision with new data or dosing reminders
-- Thank them implicitly for their trust
-- Focus on patient success stories and long-term outcomes
-- Tone: Collegial, supportive, informative
-
-### Champion (Advocate who promotes IMCIVREE)
-- Provide shareable resources and key talking points
+### Champion (Already prescribing and actively promoting IMCIVREE)
+- Reinforce their advocacy with shareable resources and key talking points
 - Highlight peer recognition or thought leadership
-- Include content they can share with colleagues
+- Provide content they can share with colleagues
+- Focus on patient success stories and long-term outcomes
 - Tone: Collaborative, appreciative, empowering
 
 ### Aware (Knows about IMCIVREE but hasn't prescribed)
