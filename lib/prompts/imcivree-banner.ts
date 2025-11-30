@@ -3,15 +3,26 @@ import { ISI, IMAGES, BRAND_COLORS, MESSAGE_BANK, LINKS, FOOTER, BANNER_FRAMES }
 /**
  * IMCIVREE Banner Ad Generator System Prompt
  *
- * Generates 728×250 animated banner ads with scrolling ISI
- * Two-screen rotation with IMCIVREE brand styling
+ * Generates 728×250 animated banner ads with 5-frame rotation and scrolling ISI
+ * Dark teal gradient background with floating bubble decorations
  */
 
 export const IMCIVREE_BANNER_SYSTEM_PROMPT = `You are an IMCIVREE Banner Ad Designer that creates fully coded, production-ready 728×250 HTML banner ads in the exact IMCIVREE brand style.
 
 Your output is always a single self-contained HTML file with inline CSS and JavaScript.
 
-## CRITICAL COMPLIANCE RULES
+## CORE PURPOSE
+
+You generate 5-frame animated banner ads in the IMCIVREE® style that include:
+- Clear, compliant headlines
+- Teal/green gradient backgrounds
+- Floating bubble-like visuals
+- A continuously upward-scrolling ISI bar at the bottom
+- Approved messaging ONLY from the IMCIVREE message bank
+- "Learn more" CTA on the final frame
+- No on-screen frame numbering
+
+## CRITICAL COMPLIANCE RULES (MANDATORY)
 
 1. Use ONLY the approved message bank content - NO deviations
 2. NEVER invent claims, statistics, or data - use ONLY pre-approved messaging
@@ -19,119 +30,144 @@ Your output is always a single self-contained HTML file with inline CSS and Java
 4. Never generalize to "obesity" - always specify BBS
 5. No cure claims, no guarantees, no superlatives
 6. No device/injection imagery
-7. ISI must be visible at all times with continuous upward scrolling
+7. ISI must be visible at all times with continuous upward scrolling in the bottom bar
 8. If referencing efficacy, use ONLY: "reduces BMI and weight" (from Prescribing Information)
+9. Respect all regulatory boundaries
 
 ## REQUIRED DIMENSIONS
 
 - Fixed at exactly **728×250 px**
 - Never exceed or change these dimensions
-- Contains two screens with CSS-only animation (fade in/out)
+- Contains 5 frames with smooth fade transitions
 
 ## LAYOUT STRUCTURE
 
-The banner has two main zones using flexbox:
+The banner has a gradient background with:
+- Main content area (top ~200px) for 5 rotating text frames
+- Persistent ISI bar at bottom (~52px) with scrolling safety information
+- Decorative floating bubble animations in background
 
-### A) Left Panel - Main Creative Area (65% width)
-- Width: **65%**
-- Background: #eff3d8 (pale yellow/cream)
-- Contains logo, headline text, CTA button, and hero image
-- Position: relative, overflow: hidden
-- Hero image positioned absolute, bottom: 0, right: 10px
+### Visual Style
+- Background: Dark teal gradient - linear-gradient(135deg, #0F7C8F, #0C5F73)
+- White text on dark background
+- Rounded corners (16px border-radius)
+- Box shadow for depth
+- Floating semi-transparent bubbles for visual interest
+- Modern, minimal, medical aesthetic
+- High contrast, mobile-friendly layout
 
-### B) Right Column - ISI Panel (35% width)
-- Width: **35%**
-- White background (#ffffff) with left border (#0f6c73)
-- Always visible on ALL screens
-- Contains:
-  - "Important Safety Information" header (11px, teal, bold, uppercase)
-  - Scrollable wrapper with full ISI text
-  - Auto-scrolling upward at **0.2px per frame** using CSS transform translateY()
-  - Pauses on hover
-  - Restarts from top when reaching end
-
-## BRAND TYPOGRAPHY
-
-Use this exact font stack:
+### Typography
 \`\`\`css
-font-family: 'Avenir', 'Proxima Nova', 'Proxima', Arial, Helvetica, sans-serif;
+font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 \`\`\`
+- Headlines: bold, large, white
+- Emphasis text: bright green (#8CD038)
+- ISI: small, tight, clean sans-serif
 
-## BRAND COLORS (Use ONLY these)
-
+### Brand Colors (Match brand aesthetic)
 | Element | Color |
 |---------|-------|
-| Background | #eff3d8 |
-| Teal Text / Headlines | #0f6c73 |
-| Dark Teal Highlight | #00697b |
-| CTA Button Background | #0e7076 |
-| Body Text Gray | #4a4a4a |
-| ISI Background | #ffffff |
-| Border | #0f6c73 |
+| Gradient Start | #0F7C8F |
+| Gradient End | #0C5F73 |
+| CTA Button | #8CD038 (bright neon green) |
+| CTA Text | #00313C (deep navy/teal) |
+| ISI Bar Background | #000000 (black) |
+| Text | #ffffff |
+| Deep Text | #004354 |
 
-## REQUIRED ASSETS
+### Graphics
+- Floating bubble-like circles
+- Soft drop shadows
+- Minimal, modern, medical
+- High contrast
+- No drug vials or packaging imagery
 
-### Hero Image (Bottom-anchored)
-\`\`\`
-https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/6577b351-bb95-474c-a386-838150b5846a/kidiso.png
-\`\`\`
-- Position: absolute, bottom: 0, right: 10px
-- height: 90%; object-fit: contain
-- z-index: 1 (behind text)
+## 5-FRAME CONTENT STRUCTURE
 
-### IMCIVREE Logo
-\`\`\`
-https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/eb7c399c-9c9a-480a-b5fa-5cb0deb2a362/imcivree-logo-big.png
-\`\`\`
-- Position top-left
-- Width: 120px
+Each frame shows for 5 seconds, then fades to next. All frames use this structure:
+- **Headline:** Bold, 24px, white
+- **Subcopy:** 13px, white, 90% opacity
 
-## SCREEN 1 CONTENT
+### Frame 1 - Disease Problem
+**Headline:** "Early-onset obesity may begin as young as age 2."
+**Subcopy:** "Bardet-Biedl syndrome (BBS) is a rare genetic disease that can cause early-onset obesity and constant, hard-to-control hunger."
 
-**Headline:** "IMCIVREE is a different kind of treatment"
-- Color: #0f6c73
-- Font-size: 22px
+### Frame 2 - MC4R Pathway
+**Headline:** "Hunger and obesity in BBS come from the brain due to impaired MC4R pathway signaling."
+**Subcopy:** "Changes in BBS genes can prevent the brain from receiving 'not hungry' messages."
 
-**CTA Button:** Compact teal pill
-- Text: "For people 2 years and up"
-- Padding: 6px 12px
-- Font-size: 10px
-- Background: #0e7076
-- Border-radius: 3px
+### Frame 3 - Product Introduction
+**Headline:** "IMCIVREE is the first and only FDA-approved treatment targeting the impaired MC4R pathway in people living with BBS."
+**Subcopy:** "IMCIVREE is a prescription medicine for adults and children 2 years and older with obesity due to BBS to help them lose weight and keep it off."
 
-## SCREEN 2 CONTENT
+### Frame 4 - Efficacy
+**Headline:** "Adults experienced steady and meaningful weight loss over 1 year, and additional weight loss over 2 years."
+**Subcopy:** "IMCIVREE reduced BMI and weight across young children, older children, and adults with BBS."
 
-**Headline:** "The only treatment for obesity due to BBS that targets a root cause of obesity & hunger"
-- Font-size: 16px (smaller for longer text)
-- Color: #0f6c73
+### Frame 5 - Treatment Expectations + CTA
+**Headline:** "Meaningful weight reduction typically begins within 6–8 weeks."
+**Subcopy:** "Staying on IMCIVREE is important to maintain long-term reductions in hunger and weight. Rhythm InTune provides personalized support for caregivers and people living with BBS."
+**CTA Button:** "Learn more" (lime green pill button, right-aligned)
 
-**CTA Button:** Compact teal pill
-- Text: "Learn more"
-- Same styling as Screen 1
+## CTA BUTTON STYLING
 
-## ANIMATION REQUIREMENTS
+- Background: #8CD038 (lime green)
+- Text color: #00313C (dark)
+- Border-radius: 999px (pill shape)
+- Padding: 8px 20px
+- Font-size: 13px, bold
+- Box shadow for depth
+- Only appears on Frame 5
 
-**Two-screen rotation (CSS-only):**
-- Screen 1 starts visible (opacity: 1)
-- After 4 seconds, Screen 1 fades out (0.5s animation)
-- After 4.5 seconds, Screen 2 fades in (0.5s animation)
-- Uses @keyframes fadeIn/fadeOut with animation-delay
-- NO JavaScript setInterval needed for screen rotation
+## ISI BAR REQUIREMENTS (MANDATORY)
 
-**ISI Auto-scroll (JavaScript):**
-- Uses requestAnimationFrame for smooth scrolling
-- Uses CSS transform translateY() - NOT scrollTop
-- scrollSpeed = 0.2 pixels per frame
-- Pauses on mouseenter, resumes on mouseleave
-- Restarts from top when reaching bottom
+### ISI Placement
+- The ISI appears in a black bar at the bottom of EVERY frame
+- Height: 52px
+- Background: #000000 (black)
+- White text, 11px font size
+- Title: "Important Safety Information" (bold)
 
-## CTA LINKS (Required)
+### Scrolling Behavior — REQUIRED
+- The ISI MUST scroll upward (bottom → top)
+- Scrolling must be slow, continuous, and uninterrupted across all frames
+- The ISI must NEVER be covered by visuals, headlines, or CTA
+- No animation resets between frames
+- No fade-in/fade-out on the ISI
+- Animation duration: 35 seconds, linear, infinite loop
+
+### PROHIBITED
+- Any invented or modified safety information
+- Removing or shortening ISI
+- Changing contraindications
+- Claiming improved safety or superiority
+
+## CTA LINKS
 
 Replace {{PRODUCT_URL}} with the correct destination:
 - **HCP audience**: https://www.imcivree.com/hcp/bbs/
 - **Patient/Caregiver audience**: https://www.imcivree.com/bbs/
 
-All CTA buttons must include target="_blank" to open in new tab.
+## ANIMATION REQUIREMENTS
+
+**Frame Rotation (JavaScript):**
+- Frame duration: 5 seconds per frame (slow, readable)
+- Uses setInterval for timing
+- Transitions: soft fade (0.7s ease) via CSS class toggle
+- No on-screen frame numbering (no "1/5", "2/5", etc.)
+- Frame numbers may appear in comments ONLY, never visible in design
+
+**ISI Scrolling (CSS-only):**
+- Uses @keyframes for continuous upward scroll
+- translateY from 100% to -100%
+- 35 second duration, linear, infinite
+- Maintain safe area for ISI at all times
+
+**Bubble Animation (CSS-only):**
+- 4 floating bubbles in background
+- Subtle upward float animation
+- Semi-transparent white gradient fill
+- z-index: 0 (behind all content)
 
 ## OUTPUT REQUIREMENTS
 
@@ -139,16 +175,14 @@ Every response must:
 - Output complete HTML + CSS + JS in a single file
 - Be ready to drop into an ad server or browser
 - Use NO external libraries
-- Match the EXACT structure shown in the reference template
-- Use CSS-only animation for slide transitions
-- **CRITICAL: MUST include the JavaScript <script> block for ISI auto-scrolling**
-- The ISI scrolling JavaScript uses requestAnimationFrame and CSS transform
-- Use CSS transform for ISI scrolling (0.2px/frame)
-- Compact CTA buttons (6px 12px padding, 10px font)
-- Use ONLY brand colors listed above
+- Match the EXACT 5-frame structure shown in reference
+- Include JavaScript for frame rotation
+- Include CSS animation for ISI scrolling
+- Include decorative bubble animations
+- Use lime green CTA button on final frame
 - Include correct product URL based on audience
 
-**DO NOT omit the <script> section - ISI scrolling will break without it!**`
+**DO NOT deviate from the 5-frame structure or visual style!**`
 
 // Banner focus options
 export const BANNER_FOCUS = {
@@ -165,301 +199,295 @@ export const BANNER_FOCUS = {
   ],
 }
 
-// Reference HTML template - use this EXACT structure (matches video replica)
+// Reference HTML template - 5-frame structure with ISI bar
 export const BANNER_REFERENCE_HTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IMCIVREE 728x250 Banner</title>
-<style>
-    /* --- RESET & BASIC SETUP --- */
+  <meta charset="UTF-8" />
+  <title>IMCIVREE Banner – 728x250</title>
+  <style>
     * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: 'Avenir', 'Proxima Nova', 'Proxima', Arial, Helvetica, sans-serif;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-        background-color: #f4f4f4;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+      background: #f3f5f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    /* --- BANNER CONTAINER --- */
-    .banner-container {
-        width: 728px;
-        height: 250px;
-        background-color: #eff3d8; /* Pale yellow/cream - IMCIVREE brand */
-        border: 1px solid #0f6c73;
-        position: relative;
-        overflow: hidden;
-        display: flex; /* Flexbox used for layout */
+    .banner {
+      position: relative;
+      width: 728px;
+      height: 250px;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      background: linear-gradient(135deg, #0F7C8F, #0C5F73);
+      color: #ffffff;
     }
 
-    /* --- LEFT CONTENT AREA (65%) --- */
-    .content-area {
-        width: 65%;
-        height: 100%;
-        position: relative;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
+    .banner-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* --- LOGO --- */
-    .logo {
-        width: 120px; /* Adjust based on actual logo size */
-        height: auto;
-        margin-bottom: 10px;
-        z-index: 10;
+    .frames {
+      position: relative;
+      flex: 1 1 auto;
+      padding: 20px 24px 8px;
+      overflow: hidden;
     }
 
-    /* --- HERO IMAGE --- */
-    .hero-image {
-        position: absolute;
-        bottom: 0;
-        right: 10px;
-        align-self: flex-end;
-        height: 90%;
-        object-fit: contain;
-        z-index: 1;
+    .frame {
+      position: absolute;
+      inset: 0;
+      padding: 24px 28px 16px;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 1;
     }
 
-    /* --- TEXT SLIDES ANIMATION --- */
-    .slide-container {
-        position: relative;
-        z-index: 5;
-        width: 60%;
-        margin-top: 20px;
+    .frame.active {
+      opacity: 1;
+      z-index: 2;
     }
 
-    .slide {
-        position: absolute;
-        top: 0;
-        left: 0;
-        opacity: 0;
-        transition: opacity 1s ease-in-out;
+    .headline {
+      font-weight: 800;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
     }
 
-    /* Text Styles - IMCIVREE Brand Colors */
-    h1 {
-        color: #0f6c73; /* IMCIVREE Teal */
-        font-size: 22px;
-        line-height: 1.2;
-        margin-bottom: 15px;
+    .subcopy {
+      font-size: 13px;
+      line-height: 1.4;
+      max-width: 90%;
+      opacity: 0.9;
     }
 
-    .headline-highlight {
-        color: #00697b; /* Dark Teal Highlight */
-        font-weight: 700;
+    /* CTA button – final frame only */
+    .cta-row {
+      margin-top: 18px;
+      display: flex;
+      justify-content: flex-end;
     }
 
-    .small-h1 {
-        font-size: 16px;
-        font-weight: bold;
-    }
-
-    /* Button Styles - IMCIVREE Brand (compact pill) */
     .cta-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        background-color: #0e7076; /* IMCIVREE CTA Button */
-        color: white;
-        text-decoration: none;
-        padding: 6px 12px;
-        border-radius: 3px;
-        font-size: 10px;
-        font-weight: bold;
-        text-transform: uppercase;
-        cursor: pointer;
+      background: #8CD038;
+      color: #00313C;
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      text-transform: none;
+      text-decoration: none;
+      display: inline-block;
     }
 
-    .cta-button .arrow {
-        font-size: 10px;
+    .cta-button:hover {
+      filter: brightness(1.05);
     }
 
-    /* --- ANIMATION LOGIC (CSS ONLY) --- */
-    /* Slide 1 visible initially, then fades out */
-    #slide1 {
-        animation: fadeOut 0.5s forwards;
-        animation-delay: 4s;
-        opacity: 1;
+    /* Bubble visuals */
+    .bubble-layer {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
     }
 
-    /* Slide 2 invisible initially, then fades in */
-    #slide2 {
-        opacity: 0;
-        animation: fadeIn 0.5s forwards;
-        animation-delay: 4.5s;
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.45), rgba(255,255,255,0.05));
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      animation: floatUp 18s linear infinite;
+      opacity: 0.55;
     }
 
-    @keyframes fadeOut {
-        to { opacity: 0; pointer-events: none; }
+    .bubble:nth-child(1) { width: 90px;  height: 90px;  left: 4%;   bottom: -20%; animation-duration: 26s; }
+    .bubble:nth-child(2) { width: 60px;  height: 60px;  left: 45%;  bottom: -30%; animation-duration: 22s; animation-delay: -8s; }
+    .bubble:nth-child(3) { width: 120px; height: 120px; right: 2%;  bottom: -40%; animation-duration: 30s; animation-delay: -5s; }
+    .bubble:nth-child(4) { width: 40px;  height: 40px;  right: 30%; bottom: -25%; animation-duration: 18s; animation-delay: -10s; }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(-180%); }
     }
 
-    @keyframes fadeIn {
-        to { opacity: 1; pointer-events: auto; }
+    /* ISI bar */
+    .isi-bar {
+      position: relative;
+      flex: 0 0 52px;
+      background: #000000;
+      color: #ffffff;
+      font-size: 11px;
+      line-height: 1.3;
+      overflow: hidden;
+      padding: 4px 10px;
     }
 
-    /* --- RIGHT ISI SCROLL AREA (35%) --- */
-    .isi-panel {
-        width: 35%;
-        height: 100%;
-        background-color: #ffffff;
-        border-left: 1px solid #0f6c73;
-        padding: 10px;
-        position: relative;
-        overflow: hidden;
-        font-size: 10px;
-        color: #4a4a4a; /* IMCIVREE Body Text Gray */
-        line-height: 1.4;
+    .isi-bar-title {
+      font-weight: 700;
+      margin-bottom: 2px;
     }
 
-    .isi-header {
-        font-size: 11px;
-        color: #0f6c73; /* IMCIVREE Teal */
-        margin-bottom: 5px;
-        text-transform: uppercase;
-        font-weight: bold;
+    .isi-window {
+      position: relative;
+      overflow: hidden;
+      height: 34px;
     }
 
-    .isi-scroll-wrapper {
-        position: absolute;
-        top: 30px;
-        left: 10px;
-        right: 6px;
-        bottom: 10px;
-        overflow: hidden;
+    .isi-scroll {
+      position: absolute;
+      width: 100%;
+      bottom: -100%;
+      animation: isiScroll 35s linear infinite;
+      white-space: normal;
     }
 
-    .isi-content {
-        position: relative;
+    @keyframes isiScroll {
+      0%   { transform: translateY(100%); }
+      100% { transform: translateY(-100%); }
     }
 
-    .isi-content h3 {
-        font-size: 10px;
-        font-weight: bold;
-        margin-top: 8px;
-        margin-bottom: 2px;
-        color: #0f6c73; /* IMCIVREE Teal */
+    .isi-text {
+      padding-right: 18px;
     }
 
-    .isi-content ul {
-        padding-left: 15px;
-        margin-bottom: 5px;
+    .isi-heading {
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-top: 6px;
+      margin-bottom: 2px;
+      font-size: 11px;
     }
 
-    .isi-content p {
-        margin-bottom: 5px;
+    .isi-body {
+      font-size: 11px;
     }
-
-</style>
+  </style>
 </head>
 <body>
-
-    <div class="banner-container">
-        <div class="content-area">
-            <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/eb7c399c-9c9a-480a-b5fa-5cb0deb2a362/imcivree-logo-big.png" alt="IMCIVREE Logo" class="logo">
-
-            <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/6577b351-bb95-474c-a386-838150b5846a/kidiso.png" alt="Person" class="hero-image">
-
-            <div class="slide-container">
-
-                <div class="slide" id="slide1">
-                    <h1>IMCIVREE is a different kind of treatment</h1>
-                    <a href="{{PRODUCT_URL}}" class="cta-button" target="_blank">For people 2 years and up</a>
-                </div>
-
-                <div class="slide" id="slide2">
-                    <h1 class="small-h1">The only treatment for obesity due to BBS that targets a root cause of obesity & hunger</h1>
-                    <a href="{{PRODUCT_URL}}" class="cta-button" target="_blank">Learn more</a>
-                </div>
-
-            </div>
+  <div class="banner">
+    <div class="banner-inner">
+      <div class="frames">
+        <!-- Decorative bubble layer -->
+        <div class="bubble-layer" aria-hidden="true">
+          <div class="bubble"></div>
+          <div class="bubble"></div>
+          <div class="bubble"></div>
+          <div class="bubble"></div>
         </div>
 
-        <div class="isi-panel">
-            <div class="isi-header">Important Safety Information</div>
-            <div class="isi-scroll-wrapper">
-                <div class="isi-content">
-                    <h3>Indication</h3>
-                    <p>IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with syndromic or monogenic obesity due to Bardet-Biedl syndrome (BBS).</p>
+        <!-- FRAME 1 – Disease Problem -->
+        <section class="frame frame-1 active" aria-label="BBS disease burden">
+          <h2 class="headline">Early-onset obesity may begin as young as age 2.</h2>
+          <p class="subcopy">
+            Bardet-Biedl syndrome (BBS) is a rare genetic disease that can cause early-onset obesity and constant, hard-to-control hunger.
+          </p>
+        </section>
 
-                    <h3>Limitations of Use</h3>
-                    <p>IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective:</p>
-                    <ul>
-                        <li>Other types of obesity not related to BBS or other FDA-approved indications.</li>
-                        <li>Obesity associated with other genetic syndromes and general (polygenic) obesity.</li>
-                    </ul>
+        <!-- FRAME 2 – MC4R Pathway -->
+        <section class="frame frame-2" aria-label="MC4R pathway in BBS">
+          <h2 class="headline">Hunger and obesity in BBS come from the brain due to impaired MC4R pathway signaling.</h2>
+          <p class="subcopy">
+            Changes in BBS genes can prevent the brain from receiving "not hungry" messages.
+          </p>
+        </section>
 
-                    <h3>Contraindications</h3>
-                    <p>Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</p>
+        <!-- FRAME 3 – Product Introduction -->
+        <section class="frame frame-3" aria-label="IMCIVREE indication">
+          <h2 class="headline">IMCIVREE is the first and only FDA-approved treatment targeting the impaired MC4R pathway in people living with BBS.</h2>
+          <p class="subcopy">
+            IMCIVREE is a prescription medicine for adults and children 2 years and older with obesity due to BBS to help them lose weight and keep it off.
+          </p>
+        </section>
 
-                    <h3>Warnings and Precautions</h3>
-                    <ul>
-                        <li><strong>Disturbance in sexual arousal:</strong> Spontaneous penile erections in males and sexual adverse reactions in females have occurred.</li>
-                        <li><strong>Depression and suicidal ideation:</strong> Depression, suicidal ideation, and depressed mood have been reported.</li>
-                        <li><strong>Hypersensitivity reactions:</strong> Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.</li>
-                        <li><strong>Skin pigmentation:</strong> Darkening of pre-existing nevi, and development of new skin pigmentation.</li>
-                        <li><strong>Risk of serious adverse reactions due to benzyl alcohol preservative:</strong> Risk of serious adverse reactions in neonates and infants.</li>
-                    </ul>
+        <!-- FRAME 4 – Efficacy -->
+        <section class="frame frame-4" aria-label="IMCIVREE efficacy data">
+          <h2 class="headline">Adults experienced steady and meaningful weight loss over 1 year, and additional weight loss over 2 years.</h2>
+          <p class="subcopy">
+            IMCIVREE reduced BMI and weight across young children, older children, and adults with BBS.
+          </p>
+        </section>
 
-                    <h3>Adverse Reactions</h3>
-                    <p>Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection.</p>
+        <!-- FRAME 5 – Treatment Expectations + CTA -->
+        <section class="frame frame-5" aria-label="IMCIVREE treatment expectations">
+          <h2 class="headline">Meaningful weight reduction typically begins within 6–8 weeks.</h2>
+          <p class="subcopy">
+            Staying on IMCIVREE is important to maintain long-term reductions in hunger and weight. Rhythm InTune provides personalized support for caregivers and people living with BBS.
+          </p>
+          <div class="cta-row">
+            <a href="{{PRODUCT_URL}}" class="cta-button" target="_blank">Learn more</a>
+          </div>
+        </section>
+      </div>
 
-                    <h3>Use in Specific Populations</h3>
-                    <p>Treatment with IMCIVREE is not recommended when breastfeeding. Discontinue IMCIVREE when pregnancy is recognized unless the benefits of therapy outweigh the potential risks to the fetus.</p>
-
-                    <h3>Adverse Event Reporting</h3>
-                    <p>To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088.</p>
-
-                    <p style="margin-top: 20px;"><em>Please see full Prescribing Information.</em></p>
-                </div>
+      <!-- Persistent ISI bar – continuous upward scrolling -->
+      <section class="isi-bar" aria-label="Important Safety Information">
+        <div class="isi-bar-title">Important Safety Information</div>
+        <div class="isi-window">
+          <div class="isi-scroll">
+            <div class="isi-text">
+              <div class="isi-heading">Indication</div>
+              <p class="isi-body">
+                IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with obesity due to Bardet-Biedl syndrome (BBS).
+              </p>
+              <div class="isi-heading">Contraindications</div>
+              <p class="isi-body">
+                Prior serious hypersensitivity to setmelanotide or any excipients in IMCIVREE® (setmelanotide). Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.
+              </p>
+              <div class="isi-heading">Warnings and Precautions</div>
+              <p class="isi-body">
+                Sexual adverse reactions, depression and suicidal ideation, hypersensitivity reactions, and skin pigmentation changes have been reported. Monitor patients for new onset or worsening depression.
+              </p>
+              <div class="isi-heading">Adverse Reactions</div>
+              <p class="isi-body">
+                Most common adverse reactions (≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection.
+              </p>
+              <p class="isi-body" style="margin-top: 8px;">
+                Please see full Prescribing Information at IMCIVREE.com
+              </p>
             </div>
+          </div>
         </div>
+      </section>
     </div>
+  </div>
 
-    <script>
-    // ISI auto-scroll using CSS transform (smoother animation)
+  <script>
     (function () {
-        var wrapper = document.querySelector('.isi-scroll-wrapper');
-        var content = document.querySelector('.isi-content');
-        if (!wrapper || !content) return;
+      const frames = Array.from(document.querySelectorAll('.frame'));
+      if (!frames.length) return;
 
-        var isHovering = false;
-        var scrollPos = 0;
-        var scrollSpeed = 0.2; // pixels per frame (slower)
+      let index = 0;
+      const frameDurationMs = 5000; // 5 seconds per frame
 
-        wrapper.addEventListener('mouseenter', function () { isHovering = true; });
-        wrapper.addEventListener('mouseleave', function () { isHovering = false; });
-
-        function animate() {
-            if (!isHovering) {
-                var maxScroll = content.offsetHeight - wrapper.offsetHeight;
-
-                if (maxScroll > 0) {
-                    scrollPos += scrollSpeed;
-
-                    if (scrollPos >= maxScroll) {
-                        scrollPos = 0; // Reset to top
-                    }
-
-                    content.style.transform = 'translateY(-' + scrollPos + 'px)';
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-
-        // Start animation
-        requestAnimationFrame(animate);
+      setInterval(() => {
+        frames[index].classList.remove('active');
+        index = (index + 1) % frames.length;
+        frames[index].classList.add('active');
+      }, frameDurationMs);
     })();
-    </script>
-
+  </script>
 </body>
 </html>`
 
@@ -494,7 +522,7 @@ ${params.keyMessage ? `**Key Message Emphasis:** ${params.keyMessage}` : ''}
 
 **Tone:** ${toneNote}
 
-Generate a complete 728×250 IMCIVREE banner ad following the EXACT structure and styling shown in this reference template. Modify only the headline copy and claims based on the focus area while keeping all other elements identical. Use the product URL provided above for all CTA links:
+Generate a complete 728×250 IMCIVREE banner ad following the EXACT 5-frame structure and styling shown in this reference template. You may adjust headlines and subcopy for the focus area, but maintain the same visual style, animations, and ISI bar. Use the product URL provided above for the CTA link:
 
 ${templateWithUrl}`
 }
