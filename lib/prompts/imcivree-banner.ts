@@ -744,18 +744,20 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       flex-direction: column;
     }
 
-    /* Main content area - full width with hero overlapping from right */
+    /* Main content area - fixed height with overflow hidden */
     .main-content {
-      flex: 1;
+      height: 180px;
       position: relative;
-      padding: 15px 20px;
+      padding: 12px 20px;
+      overflow: hidden;
     }
 
     .logo {
-      width: 120px;
+      width: 100px;
       height: auto;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
       z-index: 10;
+      position: relative;
     }
 
     /* Hero image overlapping from right side */
@@ -763,7 +765,7 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       position: absolute;
       bottom: 0;
       right: 20px;
-      height: 95%;
+      height: 100%;
       object-fit: contain;
       z-index: 1;
     }
@@ -772,7 +774,6 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       position: relative;
       z-index: 5;
       width: 55%;
-      margin-top: 8px;
     }
 
     .slide {
@@ -785,17 +786,17 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
 
     h1 {
       color: #007681;
-      font-size: 26px;
+      font-size: 20px;
       line-height: 1.15;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
       font-weight: bold;
     }
 
     .body-text {
       color: #4A4A4A;
-      font-size: 14px;
-      line-height: 1.4;
-      margin-bottom: 12px;
+      font-size: 12px;
+      line-height: 1.3;
+      margin-bottom: 8px;
     }
 
     .cta-button {
@@ -803,9 +804,9 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       background-color: #0E7076;
       color: #FFFFFF;
       text-decoration: none;
-      padding: 12px 28px;
+      padding: 8px 20px;
       border-radius: 30px;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
       text-transform: uppercase;
       cursor: pointer;
@@ -835,8 +836,9 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       to { opacity: 1; pointer-events: auto; }
     }
 
-    /* ISI Footer Section - at bottom */
+    /* ISI Footer Section - at bottom with fixed height */
     .isi-section {
+      height: 70px;
       background-color: #FFFFFF;
       border-top: 1px solid #0F6C73;
     }
