@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, Suspense } from 'react'
 import Link from 'next/link'
+import { hasBannerTemplate, getBannerTemplate } from '@/lib/content-templates/imcivree-banners'
 
 type Message = {
   role: 'user' | 'assistant'
@@ -91,7 +92,7 @@ function BannerContent() {
 ${keyMessage ? `Your key message focus: "${keyMessage}"` : ''}
 
 I'm generating your compliant animated banner now with:
-- 5-frame structure with approved messaging
+- ${audience === 'hcp' ? '5-frame' : '2-screen'} structure with approved messaging
 - Continuous scrolling ISI (Important Safety Information)
 - IMCIVREE brand colors and styling
 - Smooth frame transitions
@@ -104,7 +105,8 @@ Give me a moment...`
       // Auto-generate the banner
       generateBanner()
     }
-  }, [step])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, audience, bannerFocus])
 
   const [streamingContent, setStreamingContent] = useState('')
   const [processingBanner, setProcessingBanner] = useState(false)
@@ -124,6 +126,60 @@ Give me a moment...`
   const generateBanner = async () => {
     setIsLoading(true)
     setStreamingContent('')
+
+    // Check for hardcoded template first (unless custom keyMessage is provided)
+    if (!keyMessage && hasBannerTemplate(audience, bannerFocus)) {
+      const template = getBannerTemplate(audience, bannerFocus)
+      if (template) {
+        // Use hardcoded template with simulated coding animation
+        console.log('[BANNER] Using hardcoded template:', audience, bannerFocus)
+
+        // Simulate coding animation over 60 seconds
+        const htmlContent = template.html
+        const totalDuration = 60000 // 60 seconds
+        const chunkSize = Math.ceil(htmlContent.length / 100) // ~100 chunks
+        const chunkDelay = totalDuration / (htmlContent.length / chunkSize)
+
+        let currentIndex = 0
+
+        const simulateTyping = () => {
+          return new Promise<void>((resolve) => {
+            const interval = setInterval(() => {
+              currentIndex += chunkSize
+              if (currentIndex >= htmlContent.length) {
+                setStreamingContent(htmlContent)
+                clearInterval(interval)
+                resolve()
+              } else {
+                setStreamingContent(htmlContent.substring(0, currentIndex))
+              }
+            }, chunkDelay)
+          })
+        }
+
+        await simulateTyping()
+
+        // Brief pause then show final result
+        setStreamingContent('')
+        setProcessingBanner(true)
+        await new Promise(resolve => setTimeout(resolve, 500))
+        setProcessingBanner(false)
+
+        setGeneratedContent(htmlContent)
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: `Your banner is ready! You can ask me to make modifications, or download as-is.`
+        }])
+
+        // Save to Supabase
+        saveContentToDatabase(htmlContent)
+        setIsLoading(false)
+        return
+      }
+    }
+
+    // Otherwise, use LLM generation for custom variations
+    console.log('[BANNER] Using LLM generation for custom banner')
 
     try {
       const response = await fetch('/api/chat', {

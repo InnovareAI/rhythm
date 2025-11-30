@@ -136,7 +136,7 @@ export default function ApprovalsPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-[#007a80]">Approval Queue</h1>
-            <p className="text-[#4a4f55] mt-1">Track content submissions and MLR feedback</p>
+            <p className="text-[#4a4f55] mt-1">Track content submissions and reviewer feedback</p>
           </div>
           <button
             onClick={fetchApprovals}

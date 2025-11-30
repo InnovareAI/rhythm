@@ -84,7 +84,7 @@ function ChatContent() {
   // Helper function to build feedback summary message
   const buildFeedbackMessage = (content: any, feedback: any) => {
     if (!feedback?.comments?.length) {
-      return `I've loaded your ${content.content_type === 'imcivree-email' ? 'email' : 'banner'} that's currently in MLR review.\n\n**Status:** Waiting for reviewer feedback\n\nYou can make edits now or wait for reviewer comments. Any changes you make can be resubmitted for approval.`
+      return `I've loaded your ${content.content_type === 'imcivree-email' ? 'email' : 'banner'} that's currently in review.\n\n**Status:** Waiting for reviewer feedback\n\nYou can make edits now or wait for reviewer comments. Any changes you make can be resubmitted for approval.`
     }
 
     // Build detailed feedback summary with action items
@@ -111,7 +111,7 @@ function ChatContent() {
       })
       .join('\n\n---\n\n')
 
-    return `# 📋 MLR Review Feedback
+    return `# 📋 Reviewer Feedback
 
 Your ${content.content_type === 'imcivree-email' ? 'email' : 'banner'} has **${feedback.comments.length} comment${feedback.comments.length > 1 ? 's' : ''}** from the review team.
 
@@ -213,12 +213,12 @@ What would you like me to do?`
           setZiflowFeedback(data.ziflow_feedback)
           setMessages([{
             role: 'assistant',
-            content: `I've loaded your content with MLR feedback.\n\n${data.ziflow_feedback.comments.map((c: any) => `**${c.authorName}:** ${c.text}`).join('\n\n')}\n\nHow would you like me to address this feedback?`
+            content: `I've loaded your content with reviewer feedback.\n\n${data.ziflow_feedback.comments.map((c: any) => `**${c.authorName}:** ${c.text}`).join('\n\n')}\n\nHow would you like me to address this feedback?`
           }])
         } else if (data.ziflow_proof_id) {
           setMessages([{
             role: 'assistant',
-            content: `I've loaded your content that's in MLR review. No feedback yet.`
+            content: `I've loaded your content that's in review. No feedback yet.`
           }])
         }
       } catch (e) {
@@ -918,7 +918,7 @@ Give me a moment...`
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                       </svg>
                     </div>
-                    <h3 className="font-bold text-[#007a80]">MLR Review Feedback</h3>
+                    <h3 className="font-bold text-[#007a80]">Reviewer Feedback</h3>
                     <span className="ml-auto px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-semibold rounded-full">
                       {ziflowFeedback.comments.length} action{ziflowFeedback.comments.length > 1 ? 's' : ''} needed
                     </span>

@@ -141,12 +141,16 @@ Each subject line gets a complementary preheader that:
 **Required Structure:**
 
 \`\`\`html
-<!-- Top Brand Bar - TEAL background (#1c7b80) with white logo and text -->
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#1c7b80;padding:16px 20px;">
+<!-- Top Brand Bar - WHITE background with full-color logo and teal text -->
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#ffffff;padding:16px 20px;">
   <tr>
     <td style="vertical-align:middle;"><img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE Logo" width="160"></td>
-    <td style="text-align:right;vertical-align:middle;color:#ffffff;font-size:12px;font-weight:bold;text-transform:uppercase;">[FOR U.S. HEALTHCARE PROFESSIONALS or appropriate audience indicator]</td>
+    <td style="text-align:right;vertical-align:middle;color:#007a80;font-size:13px;font-weight:600;">For U.S. Healthcare Professionals</td>
   </tr>
+</table>
+<!-- Lime-green rule below header -->
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+  <tr><td style="height:4px;background:#84bd00;"></td></tr>
 </table>
 
 <!-- Hero Block - Light background with white card containing hero image -->
@@ -242,7 +246,7 @@ Use these inline with bullet points:
 ## IMPORTANT SAFETY INFORMATION (ISI) - USE EXACTLY
 
 \`\`\`html
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#fafafa;border-top:6px solid #1c7b80;padding:30px 20px;line-height:1.6;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#fafafa;border-top:4px solid #84bd00;padding:30px 20px;line-height:1.6;">
   <tr>
     <td align="center">
       <table role="presentation" width="100%" style="max-width:640px;color:#4a4f55;font-size:14px;">

@@ -57,11 +57,13 @@ const ICONS = {
 }
 
 // CSS Styles shared across all templates
+// Updated to match official email template: white header, full-color logo, lime-green rule
 const CSS_STYLES = `<style>
   body { font-family: Arial, Helvetica, sans-serif; margin:0; padding:0; background:#ffffff; color:#4a4f55; }
-  .brand-bar { background:#1c7b80; padding:12px 20px; display:flex; justify-content:space-between; align-items:center; }
-  .brand-bar img { height:32px; }
-  .brand-bar span { color:#ffffff; font-size:12px; letter-spacing:0.5px; }
+  .brand-bar { background:#ffffff; padding:16px 20px; display:flex; justify-content:space-between; align-items:center; }
+  .brand-bar img { height:40px; }
+  .brand-bar span { color:#007a80; font-size:13px; font-weight:600; letter-spacing:0.3px; }
+  .brand-rule { height:4px; background:#84bd00; margin:0; }
   .hero { background:#f6fbfb; padding:30px 20px; }
   .hero-card { background:#ffffff; border-radius:12px; padding:25px; max-width:600px; margin:0 auto; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
   h1, h2 { color:#007a80; }
@@ -69,7 +71,7 @@ const CSS_STYLES = `<style>
   .cta:hover { background:#00686d; }
   ul { padding-left:20px; }
   .refs, .isi { max-width:700px; margin:0 auto; padding:20px; font-size:13px; }
-  .isi { background:#fafafa; border-top:4px solid #1c7b80; margin-top:40px; }
+  .isi { background:#fafafa; border-top:4px solid #84bd00; margin-top:40px; }
   .isi h2 { font-size:18px; font-weight:bold; color:#007a80; margin-top:0; }
 </style>`
 
@@ -128,8 +130,9 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
@@ -144,7 +147,7 @@ ${CSS_STYLES}
 <!-- Main Content -->
 <div style="max-width:700px; margin:40px auto; padding:0 20px;">
   <h2>IMCIVREE Targets a Root Cause</h2>
-  <p>IMCIVREE is the first and only FDA-approved treatment targeting the impaired MC4R pathway in people with BBS.<sup>1,2</sup> The MC4R pathway plays a critical role in regulating hunger, satiety, and energy expenditure.<sup>1</sup></p>
+  <p>IMCIVREE is the first and only FDA-approved treatment targeting the impaired MC4R pathway in people with BBS.<sup>1,47</sup> The MC4R pathway plays a critical role in regulating hunger, satiety, and energy expenditure.<sup>1</sup></p>
 
   <ul>
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Hyperphagia in BBS is chronic, insatiable, and not a matter of willpower<sup>1</sup></li>
@@ -155,21 +158,21 @@ ${CSS_STYLES}
 
   <p>Share these key talking points with colleagues who may benefit from understanding this mechanism and how it impacts treatment decisions for patients with BBS.</p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">Learn More About MOA</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
   <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
-  2. Data on file. Rhythm Pharmaceuticals, Inc.</p>
+  47. Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1, 2],
+    references: [1, 47],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -191,8 +194,9 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
@@ -207,7 +211,7 @@ ${CSS_STYLES}
 <!-- Main Content -->
 <div style="max-width:700px; margin:40px auto; padding:0 20px;">
   <h2>How IMCIVREE Works</h2>
-  <p>IMCIVREE is the first and only FDA-approved treatment targeting the impaired MC4R pathway in people with BBS.<sup>1,2</sup> The MC4R pathway regulates hunger, satiety, and energy expenditure—key factors in managing weight in BBS patients.<sup>1</sup></p>
+  <p>IMCIVREE is the first and only FDA-approved treatment targeting the impaired MC4R pathway in people with BBS.<sup>1,47</sup> The MC4R pathway regulates hunger, satiety, and energy expenditure—key factors in managing weight in BBS patients.<sup>1</sup></p>
 
   <ul>
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Hyperphagia in BBS is chronic and insatiable, not a behavioral issue<sup>1</sup></li>
@@ -218,21 +222,21 @@ ${CSS_STYLES}
 
   <p>Ready to learn more about how IMCIVREE works and how our patient support program, Rhythm InTune, can help guide you and your patients through the treatment journey?</p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">Learn More About MOA</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
   <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
-  2. Data on file. Rhythm Pharmaceuticals, Inc.</p>
+  47. Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1, 2],
+    references: [1, 47],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -254,8 +258,9 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
@@ -272,7 +277,7 @@ ${CSS_STYLES}
   <h2>Understanding the MC4R Pathway</h2>
   <p>The MC4R pathway plays a central role in regulating hunger, satiety, and energy expenditure.<sup>1</sup> In patients with BBS, this pathway is impaired, leading to hyperphagia—constant, insatiable hunger that traditional approaches cannot adequately address.<sup>1</sup></p>
 
-  <p>IMCIVREE is the first and only FDA-approved treatment targeting the impaired MC4R pathway in people with BBS.<sup>1,2</sup></p>
+  <p>IMCIVREE is the first and only FDA-approved treatment targeting the impaired MC4R pathway in people with BBS.<sup>1,47</sup></p>
 
   <ul>
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">BBS affects approximately 1 in 140,000 to 1 in 160,000 newborns in North America<sup>1</sup></li>
@@ -283,21 +288,21 @@ ${CSS_STYLES}
 
   <p>Discover how targeting the MC4R pathway with IMCIVREE can make a meaningful difference for your patients with BBS.</p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">Learn More About MOA</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
   <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
-  2. Data on file. Rhythm Pharmaceuticals, Inc.</p>
+  47. Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1, 2],
+    references: [1, 47],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -322,15 +327,16 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
   <div class="hero-card">
     <div style="text-transform:uppercase; color:#007a80; font-size:12px; font-weight:bold;">Treatment Summary</div>
     <h1>IMCIVREE: The First Targeted Treatment for BBS</h1>
-    <p>As a champion of IMCIVREE, you know the difference a targeted treatment can make. IMCIVREE is the first and only FDA-approved treatment specifically designed to address the root cause of obesity in patients with Bardet-Biedl syndrome (BBS).<sup>1,2</sup></p>
+    <p>As a champion of IMCIVREE, you know the difference a targeted treatment can make. IMCIVREE is the first and only FDA-approved treatment specifically designed to address the root cause of obesity in patients with Bardet-Biedl syndrome (BBS).<sup>1,47</sup></p>
     <img src="${HERO_IMAGES.summary}" alt="IMCIVREE Treatment" style="width:100%; margin-top:20px; border-radius:8px;" />
   </div>
 </div>
@@ -349,21 +355,21 @@ ${CSS_STYLES}
 
   <p>Help spread the word about IMCIVREE to colleagues who may have patients with BBS who could benefit from a targeted treatment approach.</p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">View Full Treatment Information</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
   <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
-  2. Data on file. Rhythm Pharmaceuticals, Inc.</p>
+  47. Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1, 2],
+    references: [1, 47],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -385,15 +391,16 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
   <div class="hero-card">
     <div style="text-transform:uppercase; color:#007a80; font-size:12px; font-weight:bold;">Treatment Summary</div>
     <h1>A Targeted Approach to BBS Obesity</h1>
-    <p>For your patients with Bardet-Biedl syndrome (BBS), there is now a treatment option that targets the root cause. IMCIVREE is the first and only FDA-approved treatment designed to address the impaired MC4R pathway in BBS.<sup>1,2</sup></p>
+    <p>For your patients with Bardet-Biedl syndrome (BBS), there is now a treatment option that targets the root cause. IMCIVREE is the first and only FDA-approved treatment designed to address the impaired MC4R pathway in BBS.<sup>1,47</sup></p>
     <img src="${HERO_IMAGES.summary}" alt="IMCIVREE Treatment" style="width:100%; margin-top:20px; border-radius:8px;" />
   </div>
 </div>
@@ -412,21 +419,21 @@ ${CSS_STYLES}
 
   <p>Learn how IMCIVREE can help your patients with BBS achieve meaningful reductions in hunger and body weight.</p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">View Full Treatment Information</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
   <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
-  2. Data on file. Rhythm Pharmaceuticals, Inc.</p>
+  47. Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1, 2],
+    references: [1, 47],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -448,15 +455,16 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
   <div class="hero-card">
     <div style="text-transform:uppercase; color:#007a80; font-size:12px; font-weight:bold;">Treatment Summary</div>
     <h1>Introducing IMCIVREE for BBS</h1>
-    <p>Bardet-Biedl syndrome (BBS) is a rare genetic disorder that causes severe obesity and insatiable hunger. IMCIVREE is the first and only FDA-approved treatment specifically designed to target the root cause of obesity in BBS.<sup>1,2</sup></p>
+    <p>Bardet-Biedl syndrome (BBS) is a rare genetic disorder that causes severe obesity and insatiable hunger. IMCIVREE is the first and only FDA-approved treatment specifically designed to target the root cause of obesity in BBS.<sup>1,47</sup></p>
     <img src="${HERO_IMAGES.summary}" alt="IMCIVREE Treatment" style="width:100%; margin-top:20px; border-radius:8px;" />
   </div>
 </div>
@@ -469,7 +477,7 @@ ${CSS_STYLES}
   <p>IMCIVREE offers a targeted approach by activating the MC4R pathway to help reduce hunger and body weight.<sup>1</sup></p>
 
   <ul>
-    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">First and only FDA-approved treatment targeting MC4R pathway in BBS<sup>1,2</sup></li>
+    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">First and only FDA-approved treatment targeting MC4R pathway in BBS<sup>1,47</sup></li>
     <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Indicated for adults and pediatric patients aged 2 years and older<sup>1</sup></li>
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Once-daily subcutaneous injection administered at home<sup>1</sup></li>
     <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Comprehensive patient support through Rhythm InTune<sup>1</sup></li>
@@ -477,21 +485,21 @@ ${CSS_STYLES}
 
   <p>Discover how IMCIVREE can provide a new treatment option for patients with BBS in your practice.</p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">View Full Treatment Information</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
   <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
-  2. Data on file. Rhythm Pharmaceuticals, Inc.</p>
+  47. Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1, 2],
+    references: [1, 47],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -516,8 +524,9 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
@@ -538,7 +547,7 @@ ${CSS_STYLES}
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;"><strong>Adults (≥18 years):</strong> Starting dose of 2 mg once daily; may increase to 3 mg if additional weight loss is needed<sup>1</sup></li>
     <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;"><strong>Pediatric (12-17 years, ≥50 kg):</strong> Same as adult dosing<sup>1</sup></li>
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;"><strong>Pediatric (6-11 years or &lt;50 kg):</strong> Weight-based dosing starting at 1 mg once daily<sup>1</sup></li>
-    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;"><strong>Young Children (2-5 years):</strong> Weight-based dosing with careful titration<sup>1</sup></li>
+    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;"><strong>Young Children (2-5 years):</strong> Weight-based dosing with careful titration<sup>1,48</sup></li>
   </ul>
 
   <h2>Administration Tips</h2>
@@ -548,20 +557,21 @@ ${CSS_STYLES}
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Rhythm InTune provides injection training and ongoing support<sup>1</sup></li>
   </ul>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/dosing/" class="cta">View Full Dosing Guide</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/dosing/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
-  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.</p>
+  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
+  48. Argente J et al. Lancet Diabetes Endocrinol. 2025;13(1):29-37.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1],
+    references: [1, 48],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -583,8 +593,9 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
@@ -605,26 +616,27 @@ ${CSS_STYLES}
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;"><strong>Adults:</strong> Start at 2 mg once daily; may titrate to 3 mg based on response<sup>1</sup></li>
     <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;"><strong>Adolescents ≥50 kg:</strong> Follow adult dosing recommendations<sup>1</sup></li>
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;"><strong>Pediatric &lt;50 kg:</strong> Weight-based dosing starting at 1 mg daily<sup>1</sup></li>
-    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;"><strong>Ages 2-5:</strong> Lower starting doses with careful titration<sup>1</sup></li>
+    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;"><strong>Ages 2-5:</strong> Lower starting doses with careful titration<sup>1,48</sup></li>
   </ul>
 
   <h2>Patient Support</h2>
   <p>Rhythm InTune provides comprehensive support including injection training, titration guidance, and ongoing patient education to help ensure treatment success.<sup>1</sup></p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/dosing/" class="cta">View Full Dosing Guide</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/dosing/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
-  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.</p>
+  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
+  48. Argente J et al. Lancet Diabetes Endocrinol. 2025;13(1):29-37.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1],
+    references: [1, 48],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -646,8 +658,9 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
@@ -667,27 +680,28 @@ ${CSS_STYLES}
   <ul>
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Once-daily subcutaneous injection<sup>1</sup></li>
     <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Can be self-administered at home after training<sup>1</sup></li>
-    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Age-appropriate dosing for patients 2 years and older<sup>1</sup></li>
+    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Age-appropriate dosing for patients 2 years and older<sup>1,48</sup></li>
     <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Rhythm InTune provides injection training and ongoing support<sup>1</sup></li>
   </ul>
 
   <h2>Getting Started</h2>
   <p>The Rhythm InTune patient support program helps with enrollment, insurance navigation, and injection training to ensure a smooth start to treatment.<sup>1</sup></p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/dosing/" class="cta">View Full Dosing Guide</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/dosing/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
-  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.</p>
+  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
+  48. Argente J et al. Lancet Diabetes Endocrinol. 2025;13(1):29-37.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1],
+    references: [1, 48],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -712,8 +726,9 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
@@ -733,27 +748,29 @@ ${CSS_STYLES}
   <ul>
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Patients achieved clinically meaningful weight loss with continued treatment<sup>1</sup></li>
     <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Hunger scores improved, reflecting reduced hyperphagia<sup>1</sup></li>
-    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Benefits were observed in both pediatric and adult patients<sup>1</sup></li>
+    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Benefits were observed in both pediatric and adult patients<sup>1,47,48</sup></li>
     <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Long-term data shows sustained weight management with ongoing treatment<sup>1</sup></li>
   </ul>
 
   <h2>Real-World Impact</h2>
   <p>Beyond the clinical trial data, patients and caregivers report improvements in quality of life, including reduced food-seeking behaviors and improved relationships with food.<sup>1</sup></p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/efficacy/" class="cta">View Complete Efficacy Data</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/efficacy/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
-  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.</p>
+  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
+  47. Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.<br>
+  48. Argente J et al. Lancet Diabetes Endocrinol. 2025;13(1):29-37.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1],
+    references: [1, 47, 48],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -775,8 +792,9 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
@@ -796,26 +814,28 @@ ${CSS_STYLES}
   <ul>
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Significant weight reduction observed in treated patients<sup>1</sup></li>
     <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Improvements in hunger scores reflecting reduced hyperphagia<sup>1</sup></li>
-    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Efficacy demonstrated across age groups from 2 years and older<sup>1</sup></li>
+    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Efficacy demonstrated across age groups from 2 years and older<sup>1,47,48</sup></li>
     <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Continued treatment associated with sustained benefits<sup>1</sup></li>
   </ul>
 
   <p>Understanding these results can help you set appropriate expectations with patients and caregivers about what IMCIVREE can achieve.</p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/efficacy/" class="cta">View Complete Efficacy Data</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/efficacy/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
-  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.</p>
+  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
+  47. Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.<br>
+  48. Argente J et al. Lancet Diabetes Endocrinol. 2025;13(1):29-37.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1],
+    references: [1, 47, 48],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -837,8 +857,9 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. HEALTHCARE PROFESSIONALS</span>
+  <span>For U.S. Healthcare Professionals</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
@@ -858,27 +879,28 @@ ${CSS_STYLES}
   <ul>
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">IMCIVREE demonstrated weight reduction in patients with BBS<sup>1</sup></li>
     <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Hunger scores improved during treatment<sup>1</sup></li>
-    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Results observed in both children (≥2 years) and adults<sup>1</sup></li>
-    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">The first and only FDA-approved treatment targeting MC4R pathway in BBS<sup>1,2</sup></li>
+    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Results observed in both children (≥2 years) and adults<sup>1,47,48</sup></li>
+    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">The first and only FDA-approved treatment targeting MC4R pathway in BBS<sup>1,47</sup></li>
   </ul>
 
   <p>For patients with BBS who have struggled with traditional weight management approaches, IMCIVREE offers a targeted treatment option backed by clinical evidence.</p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/efficacy/" class="cta">View Complete Efficacy Data</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/hcp/bbs/efficacy/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
   <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
-  2. Data on file. Rhythm Pharmaceuticals, Inc.</p>
+  47. Haqq AM et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.<br>
+  48. Argente J et al. Lancet Diabetes Endocrinol. 2025;13(1):29-37.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1, 2],
+    references: [1, 47, 48],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'hcp',
@@ -903,15 +925,16 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. PATIENTS AND CAREGIVERS</span>
+  <span>For U.S. Patients and Caregivers</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
   <div class="hero-card">
     <div style="text-transform:uppercase; color:#007a80; font-size:12px; font-weight:bold;">Getting Started</div>
     <h1>Support for Beginning IMCIVREE Treatment</h1>
-    <p>Starting a new treatment can feel overwhelming. Rhythm InTune is here to help you and your family every step of the way—from understanding your insurance to learning how to give injections at home.<sup>1</sup></p>
+    <p>Starting a new treatment can feel overwhelming. Rhythm InTune is here to help you and your family every step of the way—from understanding your insurance to learning how to give injections at home.<sup>50</sup></p>
     <img src="${HERO_IMAGES.patient}" alt="Getting Started" style="width:100%; margin-top:20px; border-radius:8px;" />
   </div>
 </div>
@@ -919,31 +942,32 @@ ${CSS_STYLES}
 <!-- Main Content -->
 <div style="max-width:700px; margin:40px auto; padding:0 20px;">
   <h2>What to Expect When Starting IMCIVREE</h2>
-  <p>People starting IMCIVREE often work with their care team and Rhythm InTune to begin treatment with confidence. Injection training is offered, and caregivers or patients can learn step-by-step how to administer IMCIVREE at home.<sup>1</sup></p>
+  <p>People starting IMCIVREE often work with their care team and Rhythm InTune to begin treatment with confidence. Injection training is offered, and caregivers or patients can learn step-by-step how to administer IMCIVREE at home.<sup>1,50</sup></p>
 
   <ul>
-    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Personalized support from Rhythm InTune to understand insurance and delivery logistics<sup>1</sup></li>
-    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Training resources to help patients and caregivers feel confident giving injections<sup>1</sup></li>
+    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Personalized support from Rhythm InTune to understand insurance and delivery logistics<sup>50</sup></li>
+    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Training resources to help patients and caregivers feel confident giving injections<sup>50</sup></li>
     <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Guidance on maintaining a consistent daily injection routine at home<sup>1</sup></li>
-    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Ongoing support available by phone whenever you have questions<sup>1</sup></li>
+    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Ongoing support available by phone whenever you have questions<sup>50</sup></li>
   </ul>
 
   <p>The Rhythm InTune team is ready to help you get started on your IMCIVREE journey with personalized support tailored to your needs.</p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/bbs/getting-started/" class="cta">Learn More</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/bbs/getting-started/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
-  <p>1. IMCIVREE Patient Brochure: Getting Started section.</p>
+  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
+  50. Data on file. Rhythm Pharmaceuticals, Inc.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1],
+    references: [1, 50],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'patient',
@@ -964,8 +988,9 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. PATIENTS AND CAREGIVERS</span>
+  <span>For U.S. Patients and Caregivers</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
@@ -990,22 +1015,23 @@ ${CSS_STYLES}
   </ul>
 
   <h2>Support Along the Way</h2>
-  <p>Rhythm InTune is available to answer questions, provide resources, and help you stay on track with treatment. Don't hesitate to reach out when you need support.<sup>1</sup></p>
+  <p>Rhythm InTune is available to answer questions, provide resources, and help you stay on track with treatment. Don't hesitate to reach out when you need support.<sup>50</sup></p>
 
-  <p style="margin-top:30px;"><a href="https://www.imcivree.com/bbs/what-to-expect/" class="cta">Learn More</a></p>
+  <p style="margin-top:30px;"><a href="https://www.imcivree.com/bbs/what-to-expect/" class="cta">Learn more</a></p>
 </div>
 
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
-  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.</p>
+  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
+  50. Data on file. Rhythm Pharmaceuticals, Inc.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1],
+    references: [1, 50],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'patient',
@@ -1026,15 +1052,16 @@ ${CSS_STYLES}
 <!-- Brand Bar -->
 <div class="brand-bar">
   <img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE logo" />
-  <span>FOR U.S. PATIENTS AND CAREGIVERS</span>
+  <span>For U.S. Patients and Caregivers</span>
 </div>
+<div class="brand-rule"></div>
 
 <!-- Hero -->
 <div class="hero">
   <div class="hero-card">
     <div style="text-transform:uppercase; color:#007a80; font-size:12px; font-weight:bold;">Patient Support</div>
     <h1>Rhythm InTune: Here for You</h1>
-    <p>Living with BBS comes with unique challenges. Rhythm InTune provides personalized support to help you and your family navigate treatment and connect with resources.<sup>1</sup></p>
+    <p>Living with BBS comes with unique challenges. Rhythm InTune provides personalized support to help you and your family navigate treatment and connect with resources.<sup>50</sup></p>
     <img src="${HERO_IMAGES.patient}" alt="Patient Support" style="width:100%; margin-top:20px; border-radius:8px;" />
   </div>
 </div>
@@ -1042,18 +1069,18 @@ ${CSS_STYLES}
 <!-- Main Content -->
 <div style="max-width:700px; margin:40px auto; padding:0 20px;">
   <h2>What Rhythm InTune Offers</h2>
-  <p>From the moment you're prescribed IMCIVREE, a dedicated team is ready to help with the practical and emotional aspects of treatment.<sup>1</sup></p>
+  <p>From the moment you're prescribed IMCIVREE, a dedicated team is ready to help with the practical and emotional aspects of treatment.<sup>50</sup></p>
 
   <ul>
-    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Help understanding your insurance coverage and accessing IMCIVREE<sup>1</sup></li>
-    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Financial assistance programs for eligible patients<sup>1</sup></li>
-    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Injection training and educational resources<sup>1</sup></li>
-    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Ongoing support and check-ins throughout treatment<sup>1</sup></li>
-    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Connection to the BBS community and patient resources<sup>1</sup></li>
+    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Help understanding your insurance coverage and accessing IMCIVREE<sup>50</sup></li>
+    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Financial assistance programs for eligible patients<sup>50</sup></li>
+    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Injection training and educational resources<sup>50</sup></li>
+    <li><img src="${ICONS.deciding}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Ongoing support and check-ins throughout treatment<sup>50</sup></li>
+    <li><img src="${ICONS.learning}" width="18" alt="" style="vertical-align:middle;margin-right:6px;">Connection to the BBS community and patient resources<sup>50</sup></li>
   </ul>
 
   <h2>Get in Touch</h2>
-  <p>Rhythm InTune support specialists are available to answer your questions and provide guidance. Whether you're just getting started or have been on treatment for a while, help is just a phone call away.<sup>1</sup></p>
+  <p>Rhythm InTune support specialists are available to answer your questions and provide guidance. Whether you're just getting started or have been on treatment for a while, help is just a phone call away.<sup>50</sup></p>
 
   <p style="margin-top:30px;"><a href="https://www.imcivree.com/bbs/rhythm-intune/" class="cta">Contact Rhythm InTune</a></p>
 </div>
@@ -1061,14 +1088,15 @@ ${CSS_STYLES}
 <!-- References -->
 <div class="refs">
   <strong>References:</strong>
-  <p>1. Rhythm InTune Patient Support Program materials.</p>
+  <p>1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
+  50. Data on file. Rhythm Pharmaceuticals, Inc.</p>
 </div>
 
 ${ISI_BLOCK}
 
 </body>
 </html>`,
-    references: [1],
+    references: [1, 50],
     approved: true,
     lastUpdated: '2025-11-30',
     audience: 'patient',

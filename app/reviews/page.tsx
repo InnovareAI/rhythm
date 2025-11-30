@@ -125,7 +125,7 @@ export default function ReviewsPage() {
 
       <main className="mx-auto max-w-4xl px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#007a80]">MLR Review Feedback</h1>
+          <h1 className="text-3xl font-bold text-[#007a80]">Content Review & Feedback</h1>
           <p className="text-[#4a4f55] mt-1">Content awaiting review or with reviewer comments</p>
         </div>
 

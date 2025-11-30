@@ -10,6 +10,7 @@ import { searchBrandInfo } from '@/lib/brand-search'
 import { createConversation, updateConversation, saveMessage, saveGeneratedContent } from '@/lib/conversation-storage'
 import { getTemplate, hasTemplate, getTemplateKey } from '@/lib/content-templates/imcivree-emails'
 import { createSimulatedStreamWithId } from '@/lib/simulated-streaming'
+import { buildReferenceContext, postProcessReferences, extractReferencesFromContent } from '@/lib/reference-rag'
 // Temporarily disabled - canvas library has issues in serverless environment
 // import { generateSocialMockup } from '@/lib/social-mockup'
 
@@ -594,11 +595,19 @@ export async function POST(request: NextRequest) {
         }
 
         // Fallback to LLM generation (custom instructions or no template)
+        // Build RAG reference context for the LLM
+        const referenceContext = buildReferenceContext(
+          data.emailType,
+          data.audience as 'hcp' | 'patient',
+          data.keyMessage
+        )
+        console.log('[IMCIVREE RAG] Reference context built for:', data.emailType, data.audience)
+
         const systemPrompt = getImcivreeEmailPrompt({
           audience: data.audience,
           emailType: data.emailType,
           keyMessage: data.keyMessage
-        })
+        }) + '\n\n' + referenceContext
 
         const openrouter = getOpenRouter()
         console.log('[IMCIVREE] Using model:', defaultModel)
@@ -654,12 +663,20 @@ export async function POST(request: NextRequest) {
                 htmlContent = fullContent
               }
 
+              // Post-process to validate and fix references (RAG compliance check)
+              const { html: processedHtml, references, wasModified } = postProcessReferences(htmlContent)
+              if (wasModified) {
+                console.log('[IMCIVREE RAG] References post-processed. Final refs:', references)
+              }
+              htmlContent = processedHtml
+
               // Send final done message with the HTML
               controller.enqueue(encoder.encode(`data: ${JSON.stringify({
                 done: true,
                 message: 'Your IMCIVREE email has been generated.',
                 generatedContent: htmlContent,
-                conversationId: providedConversationId
+                conversationId: providedConversationId,
+                references: references
               })}\n\n`))
               controller.close()
             } catch (error: any) {
