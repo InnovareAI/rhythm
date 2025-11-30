@@ -99,9 +99,9 @@ export default function Home() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-[#007a80]">Ziflow Reviews</h3>
+                <h3 className="text-lg font-bold text-[#007a80]">Content Review & Feedback</h3>
                 <p className="text-sm text-[#4a4f55]">
-                  View MLR feedback and address reviewer comments
+                  View feedback and address reviewer comments
                 </p>
               </div>
               <svg className="h-5 w-5 text-[#007a80] transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
