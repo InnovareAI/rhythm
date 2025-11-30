@@ -259,7 +259,7 @@ font-family: 'Avenir Next', 'Proxima Nova', Helvetica, Arial, sans-serif;
 ## LAYOUT STRUCTURE
 
 ### Vertical Flex Layout
-Banner uses `display: flex; flex-direction: column` (vertical layout):
+Banner uses "display: flex; flex-direction: column" (vertical layout):
 - TOP: Main content area (flex: 1) - mint background (#EFF3D8)
 - BOTTOM: ISI footer section - white background with border-top
 
