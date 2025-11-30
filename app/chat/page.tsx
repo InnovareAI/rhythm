@@ -241,7 +241,7 @@ What would you like me to do?`
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contentType: 'imcivree-email',
+          contentType: contentType,
           audience,
           focus: emailType,
           keyMessage,
@@ -337,7 +337,7 @@ Give me a moment...`
             role: 'user',
             content: `Generate an IMCIVREE email for ${audience === 'hcp' ? 'healthcare professionals' : 'patients/caregivers'} about ${emailType}. ${segmentContext} ${keyMessage ? `Focus on: ${keyMessage}` : ''} ${variableContext}`
           }],
-          contentType: 'imcivree-email',
+          contentType: contentType,
           audience,
           emailType,
           keyMessage,
@@ -458,7 +458,7 @@ Give me a moment...`
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: [...messages, userMessage],
-          contentType: 'imcivree-email',
+          contentType: contentType,
           audience,
           emailType,
           conversationId
@@ -596,7 +596,7 @@ Give me a moment...`
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contentType: 'email',
+          contentType: contentType === 'imcivree-banner' ? 'banner' : 'email',
           name: emailTypeObj?.name || emailType,
           htmlContent: generatedContent,
           audience,

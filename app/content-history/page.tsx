@@ -438,7 +438,7 @@ export default function ContentHistoryPage() {
                       srcDoc={item.html_content}
                       className="w-full h-full pointer-events-none"
                       style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: '200%', height: '200%' }}
-                      sandbox="allow-same-origin"
+                      sandbox="allow-same-origin allow-scripts"
                     />
                   ) : (
                     <div className="flex items-center justify-center h-full">

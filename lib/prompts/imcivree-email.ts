@@ -123,11 +123,11 @@ Each subject line gets a complementary preheader that:
 **Required Structure:**
 
 \`\`\`html
-<!-- Top Brand Bar -->
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#1c7b80;padding:12px 20px;">
+<!-- Top Brand Bar - White background with full-color logo and lime-green rule -->
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#ffffff;padding:16px 20px;border-bottom:4px solid #97D700;">
   <tr>
-    <td style="vertical-align:middle;"><img src="/images/imcivree-logo-white.png" alt="IMCIVREE Logo" width="150"></td>
-    <td style="text-align:right;vertical-align:middle;color:#ffffff;font-size:12px;font-weight:bold;">[FOR U.S. HEALTHCARE PROFESSIONALS or appropriate audience indicator]</td>
+    <td style="vertical-align:middle;"><img src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png" alt="IMCIVREE Logo" width="160"></td>
+    <td style="text-align:right;vertical-align:middle;color:#4a4f55;font-size:12px;font-weight:bold;">[FOR U.S. HEALTHCARE PROFESSIONALS or appropriate audience indicator]</td>
   </tr>
 </table>
 
