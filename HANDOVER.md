@@ -780,49 +780,57 @@ b62b040 Update HANDOVER.md with Session 2 changes
 
 ## Recent Changes (November 30, 2025 - Session 4)
 
-### Summary: 15 Key Updates
+### Summary: 18 Key Updates
+
+#### Email Templates
+
+1. **Email Header Logo Update** - Changed header background from teal (#1c7b80) to white (#ffffff) with full-color logo per brand guidelines
+
+2. **Lime-Green Rule Added** - Added 4px lime-green rule (#97D700) below email header for brand consistency
+
+3. **Email Reference Mapping** - Reference RAG system now maps correct references to each email type:
+   - MOA emails → References 1, 2, 45, 46
+   - Efficacy emails → References 1, 47, 48
+   - Safety emails → References 1, 48, 54
+   - Support emails → References 1, 50
 
 #### Banner Templates & ISI
 
-1. **ISI Scrolling Fix (patient-support)** - Fixed ISI not scrolling in `patient-support` banner template by removing `position: absolute` from `.isi-scroll-content`
+4. **ISI Scrolling Fix (patient-support)** - Fixed ISI not scrolling in `patient-support` banner template by removing `position: absolute` from `.isi-scroll-content`
 
-2. **ISI Height Adjustment** - Increased `.isi-scroll-wrapper` height from 60px to 65px across all patient banner templates for better visibility
+5. **ISI Height Adjustment** - Increased `.isi-scroll-wrapper` height from 60px to 65px across all patient banner templates for better visibility
 
-3. **DOM Rendering Fix** - Added `setTimeout(100ms)` wrapper to ISI scroll JavaScript to ensure DOM is rendered before calculating heights
+6. **DOM Rendering Fix** - Added `setTimeout(100ms)` wrapper to ISI scroll JavaScript to ensure DOM is rendered before calculating heights
 
-4. **Height Calculation Fix** - Changed from `offsetHeight` to `scrollHeight`/`clientHeight` for accurate scroll bounds calculation
+7. **Height Calculation Fix** - Changed from `offsetHeight` to `scrollHeight`/`clientHeight` for accurate scroll bounds calculation
 
-5. **Full ISI Content** - All patient banner templates now include complete ISI with all required sections (Indication, Limitations, Contraindications, Warnings, Adverse Reactions, etc.)
+8. **Full ISI Content** - All patient banner templates now include complete ISI with all required sections (Indication, Limitations, Contraindications, Warnings, Adverse Reactions, etc.)
 
 #### Reference RAG System (CVA 2025 Compliance)
 
-6. **Complete Claim Pattern Expansion** - Expanded `CLAIM_PATTERNS` from ~20 to 35+ regex patterns for comprehensive claim coverage
+9. **Complete Claim Pattern Expansion** - Expanded `CLAIM_PATTERNS` from ~20 to 35+ regex patterns for comprehensive claim coverage
 
-7. **Reference 48 Added (VENTURE Trial)** - Added Argente 2025 reference for young children (ages 2-<6) efficacy claims
+10. **Reference 48 Added (VENTURE Trial)** - Added Argente 2025 reference for young children (ages 2-<6) efficacy claims
 
-8. **Reference 2 Added (Eneli 2019)** - Added for "first and only" and "precision medicine" claims
+11. **Reference 2 Added (Eneli 2019)** - Added for "first and only" and "precision medicine" claims
 
-9. **MC4R Impairment References** - Added References 5, 8, 9 for detailed MC4R pathway impairment claims
+12. **MC4R Impairment References** - Added References 5, 8, 9 for detailed MC4R pathway impairment claims
 
-10. **Re-establish Pathway References** - Added References 45, 46 for "re-establish MC4R pathway" claims
+13. **Re-establish Pathway References** - Added References 45, 46 for "re-establish MC4R pathway" claims
 
-11. **Safety References Updated** - Added Reference 54 (safety poster) for safety profile claims alongside 1 and 48
+14. **Safety References Updated** - Added Reference 54 (safety poster) for safety profile claims alongside 1 and 48
 
 #### Reference Recommendation Functions
 
-12. **getRecommendedReferences() Expanded** - Updated function with content-type-specific reference mappings:
-    - MOA → 1, 2, 45, 46
-    - Efficacy → 1, 47, 48
-    - Safety → 1, 48, 54
-    - Support → 50
+15. **getRecommendedReferences() Expanded** - Updated function with content-type-specific reference mappings for both emails and banners
 
-13. **buildReferenceContext() Enhanced** - Added comprehensive claim-reference table in LLM prompt context for accurate citation guidance
+16. **buildReferenceContext() Enhanced** - Added comprehensive claim-reference table in LLM prompt context for accurate citation guidance
 
 #### Knowledge Base
 
-14. **Complete Reference Database** - Verified 60 references from CVA 2025 (US-SET-2200068 - 08.01/2025) exist in `lib/knowledge/imcivree-bbs.ts`
+17. **Complete Reference Database** - Verified 60 references from CVA 2025 (US-SET-2200068 - 08.01/2025) exist in `lib/knowledge/imcivree-bbs.ts`
 
-15. **Claim-to-Reference Mapping** - Full mapping object in knowledge base aligns with RAG system patterns
+18. **Claim-to-Reference Mapping** - Full mapping object in knowledge base aligns with RAG system patterns for emails and banners
 
 ### Technical Details
 
@@ -892,8 +900,9 @@ setTimeout(function() {
 
 | File | Changes |
 |------|---------|
+| `lib/prompts/imcivree-email.ts` | Updated header to white background with full-color logo and lime-green rule |
 | `lib/content-templates/imcivree-banners.ts` | Fixed ISI CSS/JS in patient-support template |
-| `lib/reference-rag.ts` | Expanded CLAIM_PATTERNS, updated reference functions |
+| `lib/reference-rag.ts` | Expanded CLAIM_PATTERNS, updated reference functions for emails and banners |
 
 ### Recent Commits (Nov 30, Session 4)
 
