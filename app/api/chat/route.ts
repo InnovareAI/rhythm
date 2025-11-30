@@ -8,6 +8,8 @@ import { getImcivreeBannerPrompt } from '@/lib/prompts/imcivree-banner'
 import { generateImage, generateVideo } from '@/lib/fal'
 import { searchBrandInfo } from '@/lib/brand-search'
 import { createConversation, updateConversation, saveMessage, saveGeneratedContent } from '@/lib/conversation-storage'
+import { getTemplate, hasTemplate, getTemplateKey } from '@/lib/content-templates/imcivree-emails'
+import { createSimulatedStreamWithId } from '@/lib/simulated-streaming'
 // Temporarily disabled - canvas library has issues in serverless environment
 // import { generateSocialMockup } from '@/lib/social-mockup'
 
@@ -556,6 +558,42 @@ export async function POST(request: NextRequest) {
           keyMessage: keyMessage || ''
         }
 
+        // Check for pre-approved template (RAG approach)
+        // Use template if: first generation, no custom key message, and template exists
+        const isFirstGeneration = messages.length <= 1
+        const hasCustomInstructions = data.keyMessage && data.keyMessage.trim().length > 0
+        const segment = 'aware' // Default segment for HCP (TODO: add segment selector to UI)
+
+        if (isFirstGeneration && !hasCustomInstructions) {
+          const template = getTemplate(data.audience, data.emailType, data.audience === 'hcp' ? segment : undefined)
+
+          if (template) {
+            console.log('[IMCIVREE] Using pre-approved template:', getTemplateKey(data.audience, data.emailType, segment))
+            console.log('[IMCIVREE] Template references:', template.references)
+
+            // Return simulated streaming response (maintains UX)
+            const stream = createSimulatedStreamWithId(
+              template.html,
+              providedConversationId,
+              3500, // 3.5 second simulated generation time
+              'Your IMCIVREE email has been generated.'
+            )
+
+            return new Response(stream, {
+              headers: {
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                'Connection': 'keep-alive',
+              },
+            })
+          } else {
+            console.log('[IMCIVREE] No template found for:', getTemplateKey(data.audience, data.emailType, segment))
+          }
+        } else {
+          console.log('[IMCIVREE] Using LLM generation (custom instructions or refinement)')
+        }
+
+        // Fallback to LLM generation (custom instructions or no template)
         const systemPrompt = getImcivreeEmailPrompt({
           audience: data.audience,
           emailType: data.emailType,
