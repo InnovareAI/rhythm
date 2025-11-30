@@ -169,6 +169,9 @@ export function createSimulatedStreamWithId(
         }
       }
 
+      // 2-second pause before revealing the final email
+      await sleep(2000)
+
       // Final message with full content
       controller.enqueue(
         encoder.encode(

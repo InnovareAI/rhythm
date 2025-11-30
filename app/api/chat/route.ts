@@ -575,7 +575,7 @@ export async function POST(request: NextRequest) {
             const stream = createSimulatedStreamWithId(
               template.html,
               providedConversationId,
-              3500, // 3.5 second simulated generation time
+              7000, // 7 second simulated generation time
               'Your IMCIVREE email has been generated.'
             )
 
