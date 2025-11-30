@@ -200,14 +200,14 @@ Your output is always a single self-contained HTML file with inline CSS and Java
 ## CORE PURPOSE
 
 You generate 2-screen animated banner ads in the IMCIVREE® style that include:
-- Horizontal flex layout (display: flex)
-- Left content area (65%): mint background (#EFF3D8) with logo, headline, CTA, and hero image
-- Right ISI panel (35%): white background with vertical scrolling ISI
-- IMCIVREE logo top-left in content area
+- Vertical flex layout (display: flex; flex-direction: column)
+- Top main content area: mint background (#EFF3D8) with logo, headline, body text, CTA, and hero image
+- Bottom ISI footer: white background with horizontal scrolling ISI strip and teal link bar
+- IMCIVREE logo top-left in main content
 - Clear, compliant teal headlines
-- 4-second rotation between screens with fade transitions
+- 8-second rotation between screens with fade transitions
 - Approved messaging ONLY from the IMCIVREE message bank
-- "LEARN MORE" CTA (compact pill button)
+- "LEARN MORE" CTA (rounded pill button with border-radius: 30px)
 
 ## CRITICAL COMPLIANCE RULES (MANDATORY)
 
@@ -258,92 +258,89 @@ font-family: 'Avenir Next', 'Proxima Nova', Helvetica, Arial, sans-serif;
 
 ## LAYOUT STRUCTURE
 
-### Horizontal Flex Layout
-Banner uses `display: flex` (horizontal layout):
-- LEFT: Content area (65% width) - mint background (#EFF3D8)
-- RIGHT: ISI panel (35% width) - white background with border-left
+### Vertical Flex Layout
+Banner uses `display: flex; flex-direction: column` (vertical layout):
+- TOP: Main content area (flex: 1) - mint background (#EFF3D8)
+- BOTTOM: ISI footer section - white background with border-top
 
-### Left Content Area (65%)
+### Main Content Area (Top)
 1. IMCIVREE logo (top-left, 120px wide)
-2. Slide container (60% width, positioned relative, z-index 5)
-   - 2 slides that fade in/out (4 seconds each)
-   - Headlines in teal (#0f6c73)
-   - CTA button (compact pill style)
-3. Hero image (positioned absolute, bottom-right, 90% height, z-index 1)
+2. Slide container (55% width, positioned relative, z-index 5)
+   - 2 slides that fade in/out (8 seconds each)
+   - Headlines in teal (#007681, 26px, bold)
+   - Body text in gray (#4A4A4A, 14px)
+   - CTA button (rounded pill style with border-radius: 30px, padding: 12px 28px, font-size: 14px)
+3. Hero image (positioned absolute, bottom-right, 95% height, z-index 1)
 
-### Right ISI Panel (35%)
+### ISI Footer Section (Bottom)
 - White background (#ffffff)
-- Border-left: 1px solid #0f6c73
-- Header: "Important Safety Information" (uppercase, bold, teal)
-- Scrolling wrapper with full ISI content
-- Vertical auto-scroll using JavaScript requestAnimationFrame
+- Border-top: 1px solid #0F6C73
+- Header: "Important Safety Information" (bold, teal #007681, 11px)
+- Scrolling wrapper: horizontal scrolling ISI text (28px height, 9px font)
+- Teal link bar (#00697B) with white text links at the bottom
+- Horizontal auto-scroll using JavaScript requestAnimationFrame
 
 ## HERO IMAGE RULES
 
 - Always use approved patient hero image (see brand asset URLs)
-- Positioned absolute, bottom: 0, right: 10px
-- Height: 90%, object-fit: contain
+- Positioned absolute, bottom: 0, right: 20px
+- Height: 95%, object-fit: contain
 - Z-index: 1 (behind text slides which are z-index 5)
-- Anchored to bottom-right corner of content area
+- Anchored to bottom-right corner of main content area
 
-## CTA BUTTON STYLING (COMPACT PILL)
+## CTA BUTTON STYLING (ROUNDED PILL)
 
-- Shape: Small rounded pill (border-radius: 3px)
-- Size: Compact - padding: 6px 12px
-- Background: #0e7076
+- Shape: Rounded pill (border-radius: 30px)
+- Size: padding: 12px 28px
+- Background: #0E7076
 - Text color: white
-- Text: ALL CAPS, bold, 10px
+- Text: ALL CAPS, bold, 14px
 - Font-weight: bold
 - Text-transform: uppercase
-- Display: inline-flex with gap
+- Display: inline-block
 - Behavior: Clickable, links to IMCIVREE patient page
 
-## ISI PANEL (RIGHT SIDE - MANDATORY)
+## ISI FOOTER SECTION (BOTTOM - MANDATORY)
 
-**CRITICAL: ISI MUST BE ON THE RIGHT SIDE AS A VERTICAL PANEL - NOT AT THE BOTTOM!**
+**CRITICAL: ISI MUST BE AT THE BOTTOM AS A HORIZONTAL FOOTER - NOT ON THE RIGHT SIDE!**
 
-The ISI is a vertical panel on the right side (35% width) - NEVER a horizontal footer at the bottom.
+The ISI is a horizontal footer section at the bottom - NEVER a vertical panel on the right side.
 
 ### Structure
-- Position: RIGHT side of banner (horizontal flex layout)
-- Width: 35%
+- Position: BOTTOM of banner (vertical flex layout with flex-direction: column)
 - Background: white (#ffffff)
-- Border-left: 1px solid #0f6c73
-- Padding: 10px
-- Heading: "Important Safety Information" (uppercase, bold, teal #0f6c73, 11px)
-- Scroll wrapper: position absolute, top: 30px, left: 10px, right: 6px, bottom: 10px
-- Scroll content: Full ISI with headings (h3) and paragraphs
+- Border-top: 1px solid #0F6C73
+- Heading: "Important Safety Information" (bold, teal #007681, 11px, padding: 4px 20px 2px)
+- Scroll wrapper: horizontal scrolling text area (height: 28px, padding: 0 20px)
+- Scroll content: Condensed ISI text (9px font, gray #4A4A4A)
+- Link bar: teal background (#00697B, padding: 6px 20px) with white text links
 
 ### ISI Scrolling (USE JAVASCRIPT - MANDATORY)
-**MUST use JavaScript with requestAnimationFrame for smooth vertical scrolling!**
+**MUST use JavaScript with requestAnimationFrame for smooth horizontal scrolling!**
 
-Use this exact pattern for vertical auto-scroll with pause on hover:
+Use this exact pattern for horizontal auto-scroll:
 \`\`\`javascript
 var wrapper = document.querySelector('.isi-scroll-wrapper');
-var content = document.querySelector('.isi-content');
-if (!wrapper || !content) return;
-var isHovering = false;
-var scrollPos = 0;
-var scrollSpeed = 0.2;
-wrapper.addEventListener('mouseenter', function () { isHovering = true; });
-wrapper.addEventListener('mouseleave', function () { isHovering = false; });
-function animate() {
-  if (!isHovering) {
+var content = document.querySelector('.isi-scroll-content');
+if (wrapper && content) {
+  var scrollPos = 0;
+  var scrollSpeed = 0.3;
+  function animateISI() {
     var maxScroll = content.offsetHeight - wrapper.offsetHeight;
     if (maxScroll > 0) {
       scrollPos += scrollSpeed;
       if (scrollPos >= maxScroll) { scrollPos = 0; }
       content.style.transform = 'translateY(-' + scrollPos + 'px)';
     }
+    requestAnimationFrame(animateISI);
   }
-  requestAnimationFrame(animate);
+  requestAnimationFrame(animateISI);
 }
-requestAnimationFrame(animate);
 \`\`\`
 
 ## 2-SCREEN CONTENT STRUCTURE
 
-Use fade transition between 2 slides (~4 seconds each).
+Use fade transition between 2 slides (8 seconds each).
 Select messaging based on the FOCUS AREA specified:
 
 ### FOCUS: Understanding BBS (Disease Education)
@@ -365,10 +362,10 @@ Select messaging based on the FOCUS AREA specified:
 **Slide 2 Body:** "From injection training to ongoing guidance, Rhythm InTune is here to help every step of the way."
 
 ### ALL VARIANTS USE:
-**CTA Button:** "LEARN MORE" (ALL CAPS, compact teal pill - 10px font, 6px 12px padding)
-**Hero:** Patient image positioned absolute at bottom-right (height: 90%, z-index: 1)
+**CTA Button:** "LEARN MORE" (ALL CAPS, rounded teal pill - 14px font, 12px 28px padding, border-radius: 30px)
+**Hero:** Patient image positioned absolute at bottom-right (height: 95%, z-index: 1)
 **Animation:** Smooth fade only (1s ease-in-out) — no sliding or bounce effects
-**ISI panel remains static on right side and scrolls vertically**
+**ISI footer remains static at bottom and scrolls horizontally**
 
 ## IMAGE URLS (REQUIRED - NO SUBSTITUTIONS)
 
@@ -419,21 +416,21 @@ Every response must:
 - Output complete HTML + CSS + JS in a single file
 - Be ready to drop into an ad server or browser
 - Use NO external libraries
-- Match the EXACT horizontal flex layout: LEFT content area (65%) + RIGHT ISI panel (35%)
+- Match the EXACT vertical flex layout: TOP main content + BOTTOM ISI footer
 - Include IMCIVREE logo from provided URL (EXACT URL)
 - Include hero image from provided URL (EXACT URL)
-- Include JavaScript for 4-second screen rotation (fade transitions)
-- Include JavaScript for ISI auto-scrolling with pause on hover using requestAnimationFrame
-- Use compact pill CTA button style (border-radius: 3px, padding: 6px 12px)
+- Include JavaScript for 8-second screen rotation (fade transitions)
+- Include JavaScript for ISI auto-scrolling using requestAnimationFrame
+- Use rounded pill CTA button style (border-radius: 30px, padding: 12px 28px, font-size: 14px)
 - CTA text must be "LEARN MORE" (ALL CAPS)
 
 **DO NOT use teal gradient backgrounds or floating bubbles!**
-**Use mint background (#eff3d8) for content area, white for ISI panel!**
-**Hero image must be positioned absolute at bottom-right of content area (height: 90%)!**
+**Use mint background (#eff3d8) for main content, white for ISI footer!**
+**Hero image must be positioned absolute at bottom-right of main content (height: 95%)!**
 **ALWAYS use the exact brand colors specified!**
-**CTA must be teal (#0e7076) compact pill with white "LEARN MORE" text!**
-**ISI must be RIGHT SIDE PANEL (35% width) - NOT a bottom footer!**
-**Banner container uses display: flex (horizontal layout)!**`
+**CTA must be teal (#0E7076) rounded pill with white "LEARN MORE" text!**
+**ISI must be BOTTOM FOOTER (horizontal strip with link bar) - NOT a right side panel!**
+**Banner container uses display: flex; flex-direction: column (vertical layout)!**`
 
 // Banner focus options
 export const BANNER_FOCUS = {
@@ -725,7 +722,7 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Avenir Next', 'Proxima Nova', Helvetica, Arial, sans-serif;
+      font-family: 'Avenir', 'Proxima Nova', 'Proxima', Arial, Helvetica, sans-serif;
     }
 
     body {
@@ -740,6 +737,7 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       width: 728px;
       height: 250px;
       background-color: #EFF3D8;
+      border: 1px solid #0F6C73;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -753,19 +751,11 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       padding: 15px 20px;
     }
 
-    .logo-container {
-      margin-bottom: 8px;
-    }
-
     .logo {
-      height: 28px;
-      width: auto;
-    }
-
-    .logo-tagline {
-      font-size: 9px;
-      color: #007681;
-      margin-top: 2px;
+      width: 120px;
+      height: auto;
+      margin-bottom: 10px;
+      z-index: 10;
     }
 
     /* Hero image overlapping from right side */
@@ -775,23 +765,22 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       right: 20px;
       height: 95%;
       object-fit: contain;
-      object-position: bottom right;
       z-index: 1;
     }
 
     .slide-container {
       position: relative;
-      z-index: 2;
-      max-width: 55%;
+      z-index: 5;
+      width: 55%;
+      margin-top: 8px;
     }
 
     .slide {
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
       opacity: 0;
-      transition: opacity 0.5s ease-in-out;
+      transition: opacity 1s ease-in-out;
     }
 
     h1 {
@@ -806,7 +795,7 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       color: #4A4A4A;
       font-size: 14px;
       line-height: 1.4;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
 
     .cta-button {
@@ -819,9 +808,7 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
       font-size: 14px;
       font-weight: bold;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
       cursor: pointer;
-      transition: background-color 0.2s;
     }
 
     .cta-button:hover {
@@ -895,10 +882,7 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
 <body>
   <div class="banner-container">
     <div class="main-content">
-      <div class="logo-container">
-        <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/eb7c399c-9c9a-480a-b5fa-5cb0deb2a362/imcivree-logo-big.png?t=1764372572" alt="IMCIVREE" class="logo" />
-        <div class="logo-tagline">(setmelanotide) injection</div>
-      </div>
+      <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/eb7c399c-9c9a-480a-b5fa-5cb0deb2a362/imcivree-logo-big.png?t=1764372572" alt="IMCIVREE Logo" class="logo">
 
       <div class="slide-container">
         <div class="slide" id="slide1">
@@ -914,14 +898,14 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
         </div>
       </div>
 
-      <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/6577b351-bb95-474c-a386-838150b5846a/kidiso.png?t=1764372724" alt="Patient" class="hero-image" />
+      <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/6577b351-bb95-474c-a386-838150b5846a/kidiso.png?t=1764372724" alt="Person" class="hero-image">
     </div>
 
     <div class="isi-section">
       <div class="isi-header">Important Safety Information</div>
       <div class="isi-scroll-wrapper">
         <div class="isi-scroll-content">
-          <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported.<br><strong>Warnings:</strong> Disturbance in sexual arousal, depression and suicidal ideation, skin hyperpigmentation, and risk of serious adverse reactions due to benzyl alcohol preservative in neonates.<br><strong>Adverse Reactions:</strong> Most common (≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression.
+          <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. <strong>Warnings:</strong> Disturbance in sexual arousal, depression and suicidal ideation, skin hyperpigmentation. <strong>Adverse Reactions:</strong> Most common (≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain.
         </div>
       </div>
       <div class="isi-link-bar">
@@ -948,7 +932,7 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
     }
     setInterval(resetAnimation, 16000);
 
-    // ISI vertical scroll (top to bottom) using JavaScript
+    // ISI scroll using JavaScript
     var wrapper = document.querySelector('.isi-scroll-wrapper');
     var content = document.querySelector('.isi-scroll-content');
     if (wrapper && content) {
