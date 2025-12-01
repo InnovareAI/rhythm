@@ -289,7 +289,7 @@ Give me a moment...`
               </svg>
             </div>
             <span className="text-lg font-medium text-[#1a1652]">
-              Let's create a banner
+              Disease Education
             </span>
             <span className="text-sm text-[#4a4f55]">
               • HCP • {DA_BANNER_FOCUS.find(f => f.id === bannerFocus)?.name}
@@ -307,101 +307,8 @@ Give me a moment...`
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Chat Area - Left side */}
-        <div className="flex flex-1 flex-col">
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-6">
-            <div className="mx-auto max-w-3xl space-y-6">
-              {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                      message.role === 'user'
-                        ? 'bg-[#1a1652] text-white'
-                        : 'bg-white text-[#4a4f55] shadow-sm border border-[#1a1652]/10'
-                    }`}
-                  >
-                    <p className="whitespace-pre-wrap text-sm leading-relaxed">
-                      {message.content}
-                    </p>
-                  </div>
-                </div>
-              ))}
-
-              {/* Streaming Code Display */}
-              {streamingContent && (
-                <div className="flex justify-start">
-                  <div
-                    ref={streamingRef}
-                    className="max-w-[80%] rounded-2xl bg-white border border-[#1a1652]/10 text-[#4a4f55] px-4 py-3 font-mono text-xs max-h-96 overflow-y-auto scroll-smooth shadow-sm"
-                  >
-                    <div className="flex items-center gap-2 mb-2 text-[#00a7df] text-[10px]">
-                      <div className="h-2 w-2 animate-pulse rounded-full bg-[#00a7df]" />
-                      Generating banner code...
-                    </div>
-                    <pre className="whitespace-pre-wrap break-words">{streamingContent}</pre>
-                  </div>
-                </div>
-              )}
-
-              {/* Processing Banner Message */}
-              {processingBanner && (
-                <div className="flex justify-center">
-                  <div className="rounded-2xl bg-gradient-to-r from-[#1a1652] to-[#00a7df] text-white px-6 py-4 shadow-lg animate-pulse">
-                    <div className="flex items-center gap-3">
-                      <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      <span className="font-medium">Please wait, your banner is being prepared...</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {isLoading && !streamingContent && !processingBanner && (
-                <div className="flex justify-start">
-                  <div className="max-w-[80%] rounded-2xl bg-white px-4 py-3 shadow-sm border border-[#1a1652]/10">
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#1a1652]" style={{ animationDelay: '0ms' }} />
-                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#1a1652]" style={{ animationDelay: '150ms' }} />
-                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#1a1652]" style={{ animationDelay: '300ms' }} />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Input (disabled for demo) */}
-          <div className="border-t border-[#1a1652]/10 bg-white p-4">
-            <div className="mx-auto max-w-3xl">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask for changes or refinements..."
-                  disabled={isLoading}
-                  className="flex-1 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#1a1652] focus:outline-none focus:ring-2 focus:ring-[#1a1652]/20 disabled:bg-gray-100"
-                />
-                <button
-                  type="button"
-                  disabled={isLoading || !input.trim()}
-                  className="rounded-full bg-gradient-to-r from-[#1a1652] to-[#00a7df] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-                >
-                  Send
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Preview Panel - Right side */}
-        <div className="w-1/2 border-l border-[#1a1652]/10 bg-white p-6 overflow-y-auto">
+        {/* Preview Panel - Left side */}
+        <div className="w-1/2 border-r border-[#1a1652]/10 bg-white p-6 overflow-y-auto">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-lg font-semibold text-[#1a1652]">Banner Preview</h3>
             {generatedContent && (
@@ -421,7 +328,7 @@ Give me a moment...`
                     const url = URL.createObjectURL(blob)
                     const a = document.createElement('a')
                     a.href = url
-                    a.download = `disease-awareness-${bannerFocus}-banner.html`
+                    a.download = `disease-education-${bannerFocus}-banner.html`
                     a.click()
                     URL.revokeObjectURL(url)
                   }}
@@ -547,6 +454,99 @@ Give me a moment...`
               </details>
             </>
           )}
+        </div>
+
+        {/* Chat Area - Right side */}
+        <div className="flex flex-1 flex-col">
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-6">
+            <div className="mx-auto max-w-3xl space-y-6">
+              {messages.map((message, index) => (
+                <div
+                  key={index}
+                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                      message.role === 'user'
+                        ? 'bg-[#1a1652] text-white'
+                        : 'bg-white text-[#4a4f55] shadow-sm border border-[#1a1652]/10'
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                      {message.content}
+                    </p>
+                  </div>
+                </div>
+              ))}
+
+              {/* Streaming Code Display */}
+              {streamingContent && (
+                <div className="flex justify-start">
+                  <div
+                    ref={streamingRef}
+                    className="max-w-[80%] rounded-2xl bg-white border border-[#1a1652]/10 text-[#4a4f55] px-4 py-3 font-mono text-xs max-h-96 overflow-y-auto scroll-smooth shadow-sm"
+                  >
+                    <div className="flex items-center gap-2 mb-2 text-[#00a7df] text-[10px]">
+                      <div className="h-2 w-2 animate-pulse rounded-full bg-[#00a7df]" />
+                      Generating banner code...
+                    </div>
+                    <pre className="whitespace-pre-wrap break-words">{streamingContent}</pre>
+                  </div>
+                </div>
+              )}
+
+              {/* Processing Banner Message */}
+              {processingBanner && (
+                <div className="flex justify-center">
+                  <div className="rounded-2xl bg-gradient-to-r from-[#1a1652] to-[#00a7df] text-white px-6 py-4 shadow-lg animate-pulse">
+                    <div className="flex items-center gap-3">
+                      <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span className="font-medium">Please wait, your banner is being prepared...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {isLoading && !streamingContent && !processingBanner && (
+                <div className="flex justify-start">
+                  <div className="max-w-[80%] rounded-2xl bg-white px-4 py-3 shadow-sm border border-[#1a1652]/10">
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#1a1652]" style={{ animationDelay: '0ms' }} />
+                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#1a1652]" style={{ animationDelay: '150ms' }} />
+                      <div className="h-2 w-2 animate-bounce rounded-full bg-[#1a1652]" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Input (disabled for demo) */}
+          <div className="border-t border-[#1a1652]/10 bg-white p-4">
+            <div className="mx-auto max-w-3xl">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask for changes or refinements..."
+                  disabled={isLoading}
+                  className="flex-1 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm text-[#4a4f55] placeholder-gray-400 focus:border-[#1a1652] focus:outline-none focus:ring-2 focus:ring-[#1a1652]/20 disabled:bg-gray-100"
+                />
+                <button
+                  type="button"
+                  disabled={isLoading || !input.trim()}
+                  className="rounded-full bg-gradient-to-r from-[#1a1652] to-[#00a7df] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
