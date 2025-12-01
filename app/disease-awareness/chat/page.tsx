@@ -101,7 +101,7 @@ Give me a moment...`
       if (template) {
         // Simulate smooth coding animation
         const htmlContent = template.html
-        const totalDuration = 3000 // 3 seconds
+        const totalDuration = 45000 // 45 seconds
         const totalChars = htmlContent.length
 
         const simulateTyping = () => {
