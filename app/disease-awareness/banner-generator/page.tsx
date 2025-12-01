@@ -20,6 +20,44 @@ function BannerContent() {
   const [processingBanner, setProcessingBanner] = useState(false)
   const streamingRef = useRef<HTMLDivElement>(null)
 
+  // Ziflow approval state
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'success' | 'error'>('idle')
+
+  // Submit to Ziflow for approval
+  const submitToZiflow = async () => {
+    if (!generatedContent) return
+
+    setIsSubmitting(true)
+    setSubmissionStatus('idle')
+
+    try {
+      const focusObj = DA_BANNER_FOCUS.find(f => f.id === bannerFocus)
+      const response = await fetch('/api/submit-for-approval', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contentType: 'banner',
+          name: focusObj?.name || bannerFocus,
+          htmlContent: generatedContent,
+          audience: 'hcp',
+          focus: bannerFocus,
+        }),
+      })
+
+      if (!response.ok) throw new Error('Failed to submit')
+
+      const data = await response.json()
+      setSubmissionStatus('success')
+      console.log('Submitted to Ziflow:', data)
+    } catch (error) {
+      console.error('Ziflow submission error:', error)
+      setSubmissionStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   // Auto-scroll streaming content
   useEffect(() => {
     if (streamingRef.current) {
@@ -142,6 +180,15 @@ Give me a moment...`
               </span>
             </div>
             <div className="flex items-center gap-4">
+              <Link
+                href="/content-history"
+                className="flex items-center gap-1 text-sm text-[#4a4f55] hover:text-[#1a1652]"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                History
+              </Link>
               <Link
                 href="/disease-awareness"
                 className="text-sm text-[#4a4f55] hover:text-[#1a1652]"
@@ -381,6 +428,43 @@ Give me a moment...`
                   className="text-sm bg-gradient-to-r from-[#1a1652] to-[#00a7df] text-white hover:opacity-90 px-3 py-1 rounded"
                 >
                   Download HTML
+                </button>
+                <button
+                  onClick={submitToZiflow}
+                  disabled={isSubmitting || submissionStatus === 'success'}
+                  className={`text-sm px-3 py-1 rounded flex items-center gap-1 ${
+                    submissionStatus === 'success'
+                      ? 'bg-green-600 text-white'
+                      : submissionStatus === 'error'
+                      ? 'bg-red-600 text-white hover:bg-red-700'
+                      : 'bg-purple-600 text-white hover:bg-purple-700'
+                  } disabled:opacity-50`}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Submitting...
+                    </>
+                  ) : submissionStatus === 'success' ? (
+                    <>
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Sent to Ziflow
+                    </>
+                  ) : submissionStatus === 'error' ? (
+                    'Retry Ziflow'
+                  ) : (
+                    <>
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Submit to Ziflow
+                    </>
+                  )}
                 </button>
               </div>
             )}
