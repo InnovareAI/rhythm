@@ -136,7 +136,7 @@ Each frame shows for 5 seconds, then fades to next. Loop continuously.
 ### ISI Content (Upward scrolling)
 - Scrollable window below header (~34px height)
 - CONTINUOUS upward scrolling (bottom → top)
-- Slow, readable speed (35s full cycle)
+- Readable speed (20s full cycle)
 - Scrolling NEVER stops or resets between frames
 - No animation interruption
 
@@ -170,7 +170,7 @@ Prior serious hypersensitivity to setmelanotide or any excipients in IMCIVREE® 
 
 **ISI Scrolling (CSS animation):**
 - @keyframes isiScroll: translateY(100%) to translateY(-100%)
-- Duration: 35 seconds
+- Duration: 20 seconds
 - Linear timing, infinite loop
 - Never pauses or resets
 
@@ -601,7 +601,7 @@ export const HCP_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
     .isi-scroll {
       position: absolute;
       width: 100%;
-      animation: isiScroll 35s linear infinite;
+      animation: isiScroll 20s linear infinite;
       white-space: normal;
     }
 
@@ -921,7 +921,7 @@ export const CONSUMER_BANNER_REFERENCE_HTML = `<!DOCTYPE html>
     var content = document.querySelector('.isi-scroll-content');
     if (wrapper && content) {
       var scrollPos = 0;
-      var scrollSpeed = 0.3;
+      var scrollSpeed = 0.15;
       function animateISI() {
         var maxScroll = content.offsetHeight - wrapper.offsetHeight;
         if (maxScroll > 0) {

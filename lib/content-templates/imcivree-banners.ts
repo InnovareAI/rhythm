@@ -89,7 +89,7 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     .isi-bar { position: relative; flex: 0 0 52px; background: #000000; color: #ffffff; font-size: 11px; line-height: 1.3; overflow: hidden; padding: 4px 10px; }
     .isi-bar-title { font-weight: 700; margin-bottom: 2px; }
     .isi-window { position: relative; overflow: hidden; height: 34px; }
-    .isi-scroll { position: absolute; width: 100%; animation: isiScroll 35s linear infinite; white-space: normal; }
+    .isi-scroll { position: absolute; width: 100%; animation: isiScroll 20s linear infinite; white-space: normal; }
     @keyframes isiScroll { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
     .isi-text { padding-right: 18px; }
     .isi-heading { font-weight: 700; text-transform: uppercase; margin-top: 6px; margin-bottom: 2px; font-size: 11px; }
@@ -202,7 +202,7 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     .isi-bar { position: relative; flex: 0 0 52px; background: #000000; color: #ffffff; font-size: 11px; line-height: 1.3; overflow: hidden; padding: 4px 10px; }
     .isi-bar-title { font-weight: 700; margin-bottom: 2px; }
     .isi-window { position: relative; overflow: hidden; height: 34px; }
-    .isi-scroll { position: absolute; width: 100%; animation: isiScroll 35s linear infinite; white-space: normal; }
+    .isi-scroll { position: absolute; width: 100%; animation: isiScroll 20s linear infinite; white-space: normal; }
     @keyframes isiScroll { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
     .isi-text { padding-right: 18px; }
     .isi-heading { font-weight: 700; text-transform: uppercase; margin-top: 6px; margin-bottom: 2px; font-size: 11px; }
@@ -315,7 +315,7 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     .isi-bar { position: relative; flex: 0 0 52px; background: #000000; color: #ffffff; font-size: 11px; line-height: 1.3; overflow: hidden; padding: 4px 10px; }
     .isi-bar-title { font-weight: 700; margin-bottom: 2px; }
     .isi-window { position: relative; overflow: hidden; height: 34px; }
-    .isi-scroll { position: absolute; width: 100%; animation: isiScroll 35s linear infinite; white-space: normal; }
+    .isi-scroll { position: absolute; width: 100%; animation: isiScroll 20s linear infinite; white-space: normal; }
     @keyframes isiScroll { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
     .isi-text { padding-right: 18px; }
     .isi-heading { font-weight: 700; text-transform: uppercase; margin-top: 6px; margin-bottom: 2px; font-size: 11px; }
@@ -428,7 +428,7 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     .isi-bar { position: relative; flex: 0 0 52px; background: #000000; color: #ffffff; font-size: 11px; line-height: 1.3; overflow: hidden; padding: 4px 10px; }
     .isi-bar-title { font-weight: 700; margin-bottom: 2px; }
     .isi-window { position: relative; overflow: hidden; height: 34px; }
-    .isi-scroll { position: absolute; width: 100%; animation: isiScroll 35s linear infinite; white-space: normal; }
+    .isi-scroll { position: absolute; width: 100%; animation: isiScroll 20s linear infinite; white-space: normal; }
     @keyframes isiScroll { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
     .isi-text { padding-right: 18px; }
     .isi-heading { font-weight: 700; text-transform: uppercase; margin-top: 6px; margin-bottom: 2px; font-size: 11px; }
@@ -587,7 +587,7 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       var content = document.querySelector('.isi-scroll-content');
       if (wrapper && content) {
         var scrollPos = 0;
-        var scrollSpeed = 0.3;
+        var scrollSpeed = 0.15;
         function animateISI() {
           var maxScroll = content.scrollHeight - wrapper.clientHeight;
           if (maxScroll > 0) {
@@ -684,7 +684,7 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       var content = document.querySelector('.isi-scroll-content');
       if (wrapper && content) {
         var scrollPos = 0;
-        var scrollSpeed = 0.3;
+        var scrollSpeed = 0.15;
         function animateISI() {
           var maxScroll = content.scrollHeight - wrapper.clientHeight;
           if (maxScroll > 0) {
@@ -781,7 +781,7 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       var content = document.querySelector('.isi-scroll-content');
       if (wrapper && content) {
         var scrollPos = 0;
-        var scrollSpeed = 0.3;
+        var scrollSpeed = 0.15;
         function animateISI() {
           var maxScroll = content.scrollHeight - wrapper.clientHeight;
           if (maxScroll > 0) {

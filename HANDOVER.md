@@ -2,7 +2,7 @@
 
 **Project:** IMCIVREE Creative Hub
 **Client:** Rhythm Pharmaceuticals / 3cubed
-**Last Updated:** November 30, 2025 (Session 4)
+**Last Updated:** December 1, 2025 (Session 5)
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
 **Repository:** https://github.com/InnovareAI/rhythm.git
 
@@ -24,7 +24,8 @@
 12. [Recent Changes (Session 2)](#recent-changes-november-29-2025---session-2)
 13. [Recent Changes (Session 3)](#recent-changes-november-30-2025---session-3)
 14. [Recent Changes (Session 4)](#recent-changes-november-30-2025---session-4)
-15. [Known Issues & Future Work](#known-issues--future-work)
+15. [Recent Changes (Session 5)](#recent-changes-december-1-2025---session-5)
+16. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
@@ -912,6 +913,48 @@ setTimeout(function() {
 
 ---
 
+## Recent Changes (December 1, 2025 - Session 5)
+
+### ISI Scroll Speed Adjustments
+
+Based on user feedback, the ISI (Important Safety Information) scroll speeds were adjusted for both HCP and Patient banner templates.
+
+#### Changes Made
+
+| Audience | Before | After | Effect |
+|----------|--------|-------|--------|
+| **HCP Banners** | 35s CSS animation | 20s CSS animation | ~43% faster scroll |
+| **Patient Banners** | 0.3 scrollSpeed (JS) | 0.15 scrollSpeed (JS) | 50% slower scroll |
+
+#### Technical Details
+
+**HCP Banners (CSS Animation):**
+```css
+/* Before */
+.isi-scroll { animation: isiScroll 35s linear infinite; }
+
+/* After */
+.isi-scroll { animation: isiScroll 20s linear infinite; }
+```
+
+**Patient Banners (JavaScript):**
+```javascript
+// Before
+var scrollSpeed = 0.3;
+
+// After
+var scrollSpeed = 0.15;
+```
+
+#### Files Modified
+
+| File | Changes |
+|------|---------|
+| `lib/content-templates/imcivree-banners.ts` | Updated ISI scroll speeds for all 4 HCP templates (35s→20s) and all 3 patient templates (0.3→0.15) |
+| `lib/prompts/imcivree-banner.ts` | Updated reference templates and prompt documentation to reflect new scroll speeds |
+
+---
+
 ## Known Issues & Future Work
 
 ### Completed Features (Previously Limitations)
@@ -1008,4 +1051,4 @@ setTimeout(function() {
 
 ---
 
-*Document generated: November 30, 2025*
+*Document generated: December 1, 2025*
