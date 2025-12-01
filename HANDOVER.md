@@ -2,7 +2,7 @@
 
 **Project:** IMCIVREE Creative Hub
 **Client:** Rhythm Pharmaceuticals / 3cubed
-**Last Updated:** December 1, 2025 (Session 5)
+**Last Updated:** December 1, 2025 (Session 6)
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
 **Repository:** https://github.com/InnovareAI/rhythm.git
 
@@ -25,7 +25,8 @@
 13. [Recent Changes (Session 3)](#recent-changes-november-30-2025---session-3)
 14. [Recent Changes (Session 4)](#recent-changes-november-30-2025---session-4)
 15. [Recent Changes (Session 5)](#recent-changes-december-1-2025---session-5)
-16. [Known Issues & Future Work](#known-issues--future-work)
+16. [Recent Changes (Session 6)](#recent-changes-december-1-2025---session-6)
+17. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
@@ -952,6 +953,155 @@ var scrollSpeed = 0.15;
 |------|---------|
 | `lib/content-templates/imcivree-banners.ts` | Updated ISI scroll speeds for all 4 HCP templates (35s→20s) and all 3 patient templates (0.3→0.15) |
 | `lib/prompts/imcivree-banner.ts` | Updated reference templates and prompt documentation to reflect new scroll speeds |
+
+---
+
+## Recent Changes (December 1, 2025 - Session 6)
+
+### Summary: Simplified Reference System + Banner UX Improvements
+
+#### 1. Simplified 5-Reference Demo System
+
+**Problem:** The 60-reference CVA 2025 system was too complex for the demo, causing reference mismatches (e.g., showing `<sup>1,47</sup>` instead of `<sup>1,2</sup>`).
+
+**Solution:** Implemented Brian's simplified 5-reference system for all emails and banners.
+
+**New Reference Mapping:**
+
+| Ref # | Citation | Used For |
+|-------|----------|----------|
+| **1** | IMCIVREE [prescribing information]. Rhythm Pharmaceuticals, Inc. | Indication, MOA, Safety |
+| **2** | Gulati AK et al. Pediatrics. 2012. | Hunger reduction |
+| **3** | Forsythe E et al. Front Pediatr. 2018. | Disease/BBS, MC4R pathway |
+| **4** | Argente J et al. Endocrine Society Annual Meeting Poster. 2022. | Weight reduction, skin darkening |
+| **5** | Grossman DC et al. JAMA. 2017. | Rhythm InTune support |
+
+**Claim-to-Reference Mapping:**
+
+| Claim Type | Reference |
+|------------|-----------|
+| BBS is a rare genetic condition | 3 |
+| MC4R pathway, impaired signaling | 3 |
+| FDA-approved, indication, ages 2+ | 1 |
+| First and only treatment | 1 |
+| Hunger reduction, reduction within weeks | 2 |
+| Weight reduction, BMI reduction, 6-8 weeks | 4 |
+| Side effects, adverse reactions | 1 |
+| Skin darkening | 4 |
+| Rhythm InTune, patient support | 5 |
+
+**Files Updated:**
+- `lib/prompts/imcivree-email.ts` - LLM prompt with 5-ref claim mapping
+- `lib/content-templates/imcivree-emails.ts` - Hardcoded templates (1,47→1,3 etc.)
+- `lib/content-templates/imcivree-banners.ts` - Banner templates with refs
+- `lib/knowledge/imcivree-bbs.ts` - Master reference list simplified
+- `lib/reference-rag.ts` - RAG patterns updated to only use refs 1-5
+
+#### 2. Banner Cutoff Fix
+
+**Problem:** HCP banner headline text was getting cut off on the right side ("Hunger and obesity in BBS come from the brain d..." truncated).
+
+**Solution:** Reduced headline font size for better fit.
+
+```css
+/* Before */
+.headline { font-size: 24px; }
+.subcopy { font-size: 13px; max-width: 90%; }
+
+/* After */
+.headline { font-size: 20px; }
+.subcopy { font-size: 12px; max-width: 95%; }
+```
+
+#### 3. References Added to Banners Below ISI
+
+**Change:** All banner templates now include references on a separate line after the ISI content.
+
+**HCP Banners:** Added as separate `<div class="isi-heading">References</div>` section at end of scrolling ISI.
+
+**Patient Banners:** Added with `<br><br><strong>References:</strong>` after "Please see full Prescribing Information."
+
+#### 4. Patient Banner ISI 3-Second Pause
+
+**Problem:** Patient banner ISI scroll immediately restarted after reaching the end, not allowing time to read references.
+
+**Solution:** Added 3-second pause at end of scroll before restarting.
+
+```javascript
+// Before
+if (scrollPos >= maxScroll) { scrollPos = 0; }
+
+// After
+if (scrollPos >= maxScroll) {
+  isPaused = true;
+  setTimeout(function() {
+    scrollPos = 0;
+    isPaused = false;
+  }, 3000);  // 3 second pause
+}
+```
+
+#### 5. Smooth Code Generation Animation
+
+**Problem:** Banner code generation scroll had jerky/stuttery animation with visible pauses between lines.
+
+**Solution:** Replaced `setInterval` with `requestAnimationFrame` for smooth 60fps animation.
+
+```javascript
+// Before (jerky)
+const interval = setInterval(() => {
+  currentIndex += chunkSize;
+  setStreamingContent(htmlContent.substring(0, currentIndex));
+}, chunkDelay);
+
+// After (smooth)
+const animate = (currentTime) => {
+  const progress = Math.min((currentTime - startTime) / totalDuration, 1);
+  const easedProgress = 1 - (1 - progress) * (1 - progress); // easeOutQuad
+  const currentIndex = Math.floor(easedProgress * totalChars);
+  setStreamingContent(htmlContent.substring(0, currentIndex));
+  if (progress < 1) requestAnimationFrame(animate);
+};
+requestAnimationFrame(animate);
+```
+
+**Additional changes:**
+- Reduced animation duration from 60s to 45s
+- Added easeOutQuad easing for natural slowdown at end
+
+#### 6. Dynamic Banner Specifications Info Box
+
+**Problem:** Banner specs info box always showed "5 frames" even for Patient banners (which use 2 screens).
+
+**Solution:** Made specs dynamic based on audience selection.
+
+**HCP displays:**
+- 5 frames with smooth fade transitions
+- Continuous scrolling ISI at bottom
+
+**Patient displays:**
+- 2 screens with fade transitions
+- Scrolling ISI with 3-second pause at end
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `lib/prompts/imcivree-email.ts` | Replaced 3-ref system with 5-ref demo system |
+| `lib/content-templates/imcivree-emails.ts` | Updated all superscripts and reference blocks |
+| `lib/content-templates/imcivree-banners.ts` | Added refs below ISI, fixed cutoff, added 3s pause |
+| `lib/knowledge/imcivree-bbs.ts` | Simplified to 5 demo references |
+| `lib/reference-rag.ts` | Updated all patterns to use only refs 1-5 |
+| `app/banner-generator/page.tsx` | Smooth animation + dynamic specs info box |
+
+### Recent Commits (Dec 1, Session 6)
+
+```
+a7163b4 Update banner specs info box to be audience-specific
+a1d76b1 Smooth code generation animation using requestAnimationFrame
+8ca8c1c Fix consumer banner ISI scroll - add 3s pause + refs on separate line
+78cc8fc Simplify reference system to 5 demo refs + fix banner cutoff
+```
 
 ---
 
