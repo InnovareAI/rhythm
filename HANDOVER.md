@@ -2,7 +2,7 @@
 
 **Project:** IMCIVREE Creative Hub
 **Client:** Rhythm Pharmaceuticals / 3cubed
-**Last Updated:** December 1, 2025 (Session 6)
+**Last Updated:** December 1, 2025 (Session 7)
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
 **Repository:** https://github.com/InnovareAI/rhythm.git
 
@@ -26,7 +26,8 @@
 14. [Recent Changes (Session 4)](#recent-changes-november-30-2025---session-4)
 15. [Recent Changes (Session 5)](#recent-changes-december-1-2025---session-5)
 16. [Recent Changes (Session 6)](#recent-changes-december-1-2025---session-6)
-17. [Known Issues & Future Work](#known-issues--future-work)
+17. [Recent Changes (Session 7)](#recent-changes-december-1-2025---session-7)
+18. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
@@ -1105,6 +1106,150 @@ a1d76b1 Smooth code generation animation using requestAnimationFrame
 
 ---
 
+## Recent Changes (December 1, 2025 - Session 7)
+
+### Summary: Disease Education Hub + Panel Layout Swap
+
+This session focused on the Disease Education (unbranded) hub, adding generation speed alignment and swapping the panel layout for consistency with user expectations.
+
+#### 1. Disease Education Hub Creation
+
+The Disease Education hub is an **unbranded** content generation system for disease awareness (aHO - Acquired Hypothalamic Obesity) targeting HCPs. It mirrors the IMCIVREE (branded) hub structure but uses purple/teal theming instead of green.
+
+**Hub Location:** `/disease-awareness`
+
+**Content Types:**
+| Type | Route | Description |
+|------|-------|-------------|
+| HCP Education Emails | `/disease-awareness/chat` | Disease awareness emails about aHO |
+| HCP Education Banners | `/disease-awareness/banner-generator` | Educational banners about aHO |
+
+**Email Types Available:**
+| ID | Name | Description |
+|----|------|-------------|
+| `hcp-what-is-aho` | What is aHO | Introduction to acquired hypothalamic obesity |
+| `hcp-mechanism` | The Hypothalamic Pathway | Understanding the MC4R pathway and hyperphagia |
+| `hcp-recognition` | Recognizing aHO | Clinical signs and patient identification |
+
+**Banner Focus Options:**
+| ID | Name | Description |
+|----|------|-------------|
+| `hcp-disease-education` | Disease Education Overview | Introduction to aHO for healthcare professionals |
+| `hcp-mechanism` | Hypothalamic Mechanism | MC4R pathway and hyperphagia mechanism |
+
+#### 2. Generation Speed Alignment
+
+**Problem:** Disease Education email generation was too fast (3 seconds) compared to the branded experience (45 seconds).
+
+**Solution:** Aligned animation duration to 45 seconds for consistent demo pacing.
+
+```typescript
+// Before
+const totalDuration = 3000 // 3 seconds
+
+// After
+const totalDuration = 45000 // 45 seconds
+```
+
+#### 3. Renamed to "Disease Education"
+
+**Change:** Changed header text from "Disease Awareness" to "Disease Education" throughout the disease awareness hub.
+
+**Files Updated:**
+- `app/disease-awareness/chat/page.tsx` - Header shows "Disease Education"
+- `app/disease-awareness/banner-generator/page.tsx` - Header shows "Disease Education"
+
+#### 4. Panel Layout Swap (Preview Left, Chat Right)
+
+**Problem:** User requested the preview panel on the LEFT side and chat/code generation on the RIGHT side.
+
+**Solution:** Swapped the panel order in both email and banner generators.
+
+**Before:**
+```
+┌──────────────────┬──────────────────┐
+│   Chat/Code      │   Preview        │
+│   (Left)         │   (Right)        │
+└──────────────────┴──────────────────┘
+```
+
+**After:**
+```
+┌──────────────────┬──────────────────┐
+│   Preview        │   Chat/Code      │
+│   (Left)         │   (Right)        │
+└──────────────────┴──────────────────┘
+```
+
+**CSS Changes:**
+```tsx
+// Preview Panel - Now on LEFT
+<div className="w-1/2 border-r border-[#1a1652]/10 bg-white p-6 overflow-y-auto">
+
+// Chat Area - Now on RIGHT
+<div className="flex flex-1 flex-col">
+```
+
+#### 5. Download Filename Update
+
+**Change:** Updated download filenames from "disease-awareness" to "disease-education" for consistency with the new naming.
+
+```typescript
+// Before
+a.download = `disease-awareness-${emailType}.html`
+
+// After
+a.download = `disease-education-${emailType}.html`
+```
+
+### Technical Details
+
+**Theme Colors (Disease Education):**
+| Element | Hex Code | Usage |
+|---------|----------|-------|
+| Primary Purple | #1a1652 | Headlines, buttons, branding |
+| Accent Teal | #00a7df | Secondary color, highlights |
+| Background | #f9f2f8 | Page background gradient |
+
+**Animation Configuration:**
+```typescript
+const totalDuration = 45000 // 45 seconds for code generation animation
+const simulateTyping = () => {
+  return new Promise<void>((resolve) => {
+    const startTime = performance.now()
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime
+      const progress = Math.min(elapsed / totalDuration, 1)
+      const easedProgress = 1 - (1 - progress) * (1 - progress) // easeOutQuad
+      const currentIndex = Math.floor(easedProgress * totalChars)
+      setStreamingContent(htmlContent.substring(0, currentIndex))
+      if (progress < 1) {
+        requestAnimationFrame(animate)
+      } else {
+        resolve()
+      }
+    }
+    requestAnimationFrame(animate)
+  })
+}
+```
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `app/disease-awareness/chat/page.tsx` | Renamed to "Disease Education", swapped panels, 45s animation |
+| `app/disease-awareness/banner-generator/page.tsx` | Renamed to "Disease Education", swapped panels, updated download filename |
+
+### Recent Commits (Dec 1, Session 7)
+
+```
+8d04ac5 Rename to Disease Education and swap panel layout (preview left, chat right)
+0c5fb2c Align DA email generation speed with branded banner (45 seconds)
+```
+
+---
+
 ## Known Issues & Future Work
 
 ### Completed Features (Previously Limitations)
@@ -1201,4 +1346,4 @@ a1d76b1 Smooth code generation animation using requestAnimationFrame
 
 ---
 
-*Document generated: December 1, 2025*
+*Document generated: December 1, 2025 (Session 7)*
