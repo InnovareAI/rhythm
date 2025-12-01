@@ -573,7 +573,8 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       <div class="isi-header">Important Safety Information</div>
       <div class="isi-scroll-wrapper">
         <div class="isi-scroll-content">
-          <strong>Indication:</strong> IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with obesity due to Bardet-Biedl syndrome (BBS). <strong>Limitations of Use:</strong> IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective: Other types of obesity not related to BBS or other FDA-approved indications; Obesity associated with other genetic syndromes and general (polygenic) obesity. <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. <strong>Warnings and Precautions:</strong> Disturbance in sexual arousal: Spontaneous penile erections in males and sexual adverse reactions in females have occurred. Depression and suicidal ideation: Depression, suicidal ideation, and depressed mood have been reported. Hypersensitivity reactions: Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. Skin pigmentation: Darkening of pre-existing nevi, and development of new skin pigmentation. Risk of serious adverse reactions due to benzyl alcohol preservative: Risk of serious adverse reactions in neonates and infants. <strong>Adverse Reactions:</strong> Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection. <strong>Use in Specific Populations:</strong> Treatment with IMCIVREE is not recommended when breastfeeding. Discontinue IMCIVREE when pregnancy is recognized unless the benefits of therapy outweigh the potential risks to the fetus. <strong>Adverse Event Reporting:</strong> To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088. Please see full Prescribing Information. <strong>References:</strong> 1. IMCIVREE [prescribing information]. Rhythm Pharmaceuticals, Inc. 3. Forsythe E et al. Front Pediatr. 2018.
+          <strong>Indication:</strong> IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with obesity due to Bardet-Biedl syndrome (BBS). <strong>Limitations of Use:</strong> IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective: Other types of obesity not related to BBS or other FDA-approved indications; Obesity associated with other genetic syndromes and general (polygenic) obesity. <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. <strong>Warnings and Precautions:</strong> Disturbance in sexual arousal: Spontaneous penile erections in males and sexual adverse reactions in females have occurred. Depression and suicidal ideation: Depression, suicidal ideation, and depressed mood have been reported. Hypersensitivity reactions: Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. Skin pigmentation: Darkening of pre-existing nevi, and development of new skin pigmentation. Risk of serious adverse reactions due to benzyl alcohol preservative: Risk of serious adverse reactions in neonates and infants. <strong>Adverse Reactions:</strong> Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection. <strong>Use in Specific Populations:</strong> Treatment with IMCIVREE is not recommended when breastfeeding. Discontinue IMCIVREE when pregnancy is recognized unless the benefits of therapy outweigh the potential risks to the fetus. <strong>Adverse Event Reporting:</strong> To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088. Please see full Prescribing Information.
+          <br><br><strong>References:</strong> 1. IMCIVREE [prescribing information]. Rhythm Pharmaceuticals, Inc. 3. Forsythe E et al. Front Pediatr. 2018.
         </div>
       </div>
     </div>
@@ -596,11 +597,18 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       if (wrapper && content) {
         var scrollPos = 0;
         var scrollSpeed = 0.15;
+        var isPaused = false;
         function animateISI() {
           var maxScroll = content.scrollHeight - wrapper.clientHeight;
-          if (maxScroll > 0) {
+          if (maxScroll > 0 && !isPaused) {
             scrollPos += scrollSpeed;
-            if (scrollPos >= maxScroll) { scrollPos = 0; }
+            if (scrollPos >= maxScroll) {
+              isPaused = true;
+              setTimeout(function() {
+                scrollPos = 0;
+                isPaused = false;
+              }, 3000);
+            }
             content.style.transform = 'translateY(-' + scrollPos + 'px)';
           }
           requestAnimationFrame(animateISI);
@@ -670,7 +678,8 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       <div class="isi-header">Important Safety Information</div>
       <div class="isi-scroll-wrapper">
         <div class="isi-scroll-content">
-          <strong>Indication:</strong> IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with obesity due to Bardet-Biedl syndrome (BBS). <strong>Limitations of Use:</strong> IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective: Other types of obesity not related to BBS or other FDA-approved indications; Obesity associated with other genetic syndromes and general (polygenic) obesity. <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. <strong>Warnings and Precautions:</strong> Disturbance in sexual arousal: Spontaneous penile erections in males and sexual adverse reactions in females have occurred. Depression and suicidal ideation: Depression, suicidal ideation, and depressed mood have been reported. Hypersensitivity reactions: Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. Skin pigmentation: Darkening of pre-existing nevi, and development of new skin pigmentation. Risk of serious adverse reactions due to benzyl alcohol preservative: Risk of serious adverse reactions in neonates and infants. <strong>Adverse Reactions:</strong> Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection. <strong>Use in Specific Populations:</strong> Treatment with IMCIVREE is not recommended when breastfeeding. Discontinue IMCIVREE when pregnancy is recognized unless the benefits of therapy outweigh the potential risks to the fetus. <strong>Adverse Event Reporting:</strong> To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088. Please see full Prescribing Information. <strong>References:</strong> 1. IMCIVREE [prescribing information]. Rhythm Pharmaceuticals, Inc. 3. Forsythe E et al. Front Pediatr. 2018.
+          <strong>Indication:</strong> IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with obesity due to Bardet-Biedl syndrome (BBS). <strong>Limitations of Use:</strong> IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective: Other types of obesity not related to BBS or other FDA-approved indications; Obesity associated with other genetic syndromes and general (polygenic) obesity. <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. <strong>Warnings and Precautions:</strong> Disturbance in sexual arousal: Spontaneous penile erections in males and sexual adverse reactions in females have occurred. Depression and suicidal ideation: Depression, suicidal ideation, and depressed mood have been reported. Hypersensitivity reactions: Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. Skin pigmentation: Darkening of pre-existing nevi, and development of new skin pigmentation. Risk of serious adverse reactions due to benzyl alcohol preservative: Risk of serious adverse reactions in neonates and infants. <strong>Adverse Reactions:</strong> Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection. <strong>Use in Specific Populations:</strong> Treatment with IMCIVREE is not recommended when breastfeeding. Discontinue IMCIVREE when pregnancy is recognized unless the benefits of therapy outweigh the potential risks to the fetus. <strong>Adverse Event Reporting:</strong> To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088. Please see full Prescribing Information.
+          <br><br><strong>References:</strong> 1. IMCIVREE [prescribing information]. Rhythm Pharmaceuticals, Inc. 3. Forsythe E et al. Front Pediatr. 2018.
         </div>
       </div>
     </div>
@@ -693,11 +702,18 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       if (wrapper && content) {
         var scrollPos = 0;
         var scrollSpeed = 0.15;
+        var isPaused = false;
         function animateISI() {
           var maxScroll = content.scrollHeight - wrapper.clientHeight;
-          if (maxScroll > 0) {
+          if (maxScroll > 0 && !isPaused) {
             scrollPos += scrollSpeed;
-            if (scrollPos >= maxScroll) { scrollPos = 0; }
+            if (scrollPos >= maxScroll) {
+              isPaused = true;
+              setTimeout(function() {
+                scrollPos = 0;
+                isPaused = false;
+              }, 3000);
+            }
             content.style.transform = 'translateY(-' + scrollPos + 'px)';
           }
           requestAnimationFrame(animateISI);
@@ -767,7 +783,8 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       <div class="isi-header">Important Safety Information</div>
       <div class="isi-scroll-wrapper">
         <div class="isi-scroll-content">
-          <strong>Indication:</strong> IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with obesity due to Bardet-Biedl syndrome (BBS). <strong>Limitations of Use:</strong> IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective: Other types of obesity not related to BBS or other FDA-approved indications; Obesity associated with other genetic syndromes and general (polygenic) obesity. <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. <strong>Warnings and Precautions:</strong> Disturbance in sexual arousal: Spontaneous penile erections in males and sexual adverse reactions in females have occurred. Depression and suicidal ideation: Depression, suicidal ideation, and depressed mood have been reported. Hypersensitivity reactions: Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. Skin pigmentation: Darkening of pre-existing nevi, and development of new skin pigmentation. Risk of serious adverse reactions due to benzyl alcohol preservative: Risk of serious adverse reactions in neonates and infants. <strong>Adverse Reactions:</strong> Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection. <strong>Use in Specific Populations:</strong> Treatment with IMCIVREE is not recommended when breastfeeding. Discontinue IMCIVREE when pregnancy is recognized unless the benefits of therapy outweigh the potential risks to the fetus. <strong>Adverse Event Reporting:</strong> To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088. Please see full Prescribing Information. <strong>References:</strong> 1. IMCIVREE [prescribing information]. Rhythm Pharmaceuticals, Inc. 3. Forsythe E et al. Front Pediatr. 2018.
+          <strong>Indication:</strong> IMCIVREE is indicated to reduce excess body weight and maintain weight reduction long term in adults and pediatric patients aged 2 years and older with obesity due to Bardet-Biedl syndrome (BBS). <strong>Limitations of Use:</strong> IMCIVREE is not indicated for the treatment of patients with the following conditions as IMCIVREE would not be expected to be effective: Other types of obesity not related to BBS or other FDA-approved indications; Obesity associated with other genetic syndromes and general (polygenic) obesity. <strong>Contraindications:</strong> Prior serious hypersensitivity to setmelanotide or any of the excipients in IMCIVREE. Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. <strong>Warnings and Precautions:</strong> Disturbance in sexual arousal: Spontaneous penile erections in males and sexual adverse reactions in females have occurred. Depression and suicidal ideation: Depression, suicidal ideation, and depressed mood have been reported. Hypersensitivity reactions: Serious hypersensitivity reactions (e.g., anaphylaxis) have been reported. Skin pigmentation: Darkening of pre-existing nevi, and development of new skin pigmentation. Risk of serious adverse reactions due to benzyl alcohol preservative: Risk of serious adverse reactions in neonates and infants. <strong>Adverse Reactions:</strong> Most common adverse reactions (incidence ≥20%): skin hyperpigmentation, injection site reactions, nausea, headache, diarrhea, abdominal pain, vomiting, depression, spontaneous penile erection. <strong>Use in Specific Populations:</strong> Treatment with IMCIVREE is not recommended when breastfeeding. Discontinue IMCIVREE when pregnancy is recognized unless the benefits of therapy outweigh the potential risks to the fetus. <strong>Adverse Event Reporting:</strong> To report suspected adverse reactions, contact Rhythm Pharmaceuticals at 833-789-6337 or FDA at 1-800-FDA-1088. Please see full Prescribing Information.
+          <br><br><strong>References:</strong> 1. IMCIVREE [prescribing information]. Rhythm Pharmaceuticals, Inc. 3. Forsythe E et al. Front Pediatr. 2018.
         </div>
       </div>
     </div>
@@ -790,11 +807,18 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
       if (wrapper && content) {
         var scrollPos = 0;
         var scrollSpeed = 0.15;
+        var isPaused = false;
         function animateISI() {
           var maxScroll = content.scrollHeight - wrapper.clientHeight;
-          if (maxScroll > 0) {
+          if (maxScroll > 0 && !isPaused) {
             scrollPos += scrollSpeed;
-            if (scrollPos >= maxScroll) { scrollPos = 0; }
+            if (scrollPos >= maxScroll) {
+              isPaused = true;
+              setTimeout(function() {
+                scrollPos = 0;
+                isPaused = false;
+              }, 3000);
+            }
             content.style.transform = 'translateY(-' + scrollPos + 'px)';
           }
           requestAnimationFrame(animateISI);
