@@ -64,37 +64,138 @@ export const ahoKnowledge = {
     ],
   },
 
-  // Educational references (disease education sources, NOT drug studies)
+  // Educational references - HO Master Reference List (26 references)
+  // Source: US-DSE-2500011 (03.08/2025)
   references: [
     {
       id: 1,
-      citation: 'Lustig RH, et al. Hypothalamic obesity: causes, consequences, treatment. Pediatr Endocrinol Rev. 2008;6(2):220-227.',
-      shortCitation: 'Lustig RH, et al. Pediatr Endocrinol Rev. 2008.',
-      usedFor: ['disease definition', 'mechanism', 'burden'],
+      citation: 'Abuzzahab MJ, Roth CL, Shoemaker AH. Hypothalamic obesity: prologue and promise. Horm Res Paediatr. 2019;91(2):128-136. doi:10.1159/000496564',
+      usedFor: ['C1', 'C2', 'C3', 'P2', 'S1'],
     },
     {
       id: 2,
-      citation: 'van Iersel L, et al. Hypothalamic obesity in children. Endocr Rev. 2019;40(2):531-556.',
-      shortCitation: 'van Iersel L, et al. Endocr Rev. 2019.',
-      usedFor: ['disease definition', 'recognition', 'burden'],
+      citation: 'Roth CL. Hypothalamic obesity in patients with craniopharyngioma: profound changes of several weight regulatory circuits. Front Endocrinol (Lausanne). 2011;2:49. doi:10.3389/fendo.2011.00049',
+      usedFor: ['C1', 'C2', 'C3', 'P2'],
     },
     {
       id: 3,
-      citation: 'Müller HL, et al. Craniopharyngioma. Nat Rev Dis Primers. 2019;5(1):75.',
-      shortCitation: 'Müller HL, et al. Nat Rev Dis Primers. 2019.',
-      usedFor: ['causes', 'mechanism', 'recognition'],
+      citation: 'Roth CL, Enriori PJ, Gebhardt U, et al. Changes of peripheral alpha-melanocyte–stimulating hormone in childhood obesity. Metabolism. 2010;59(2):186-194. doi:10.1016/j.metabol.2009.06.031',
+      usedFor: ['C1', 'C2', 'C3', 'P2'],
     },
     {
       id: 4,
-      citation: 'Roth CL, et al. Hypothalamic obesity in craniopharyngioma patients: disturbed energy homeostasis related to extent of hypothalamic damage. J Clin Endocrinol Metab. 2011;96(9):2854-2862.',
-      shortCitation: 'Roth CL, et al. J Clin Endocrinol Metab. 2011.',
-      usedFor: ['mechanism', 'burden'],
+      citation: 'Roth CL, Gebhardt U, Müller HL. Appetite-regulating hormone changes in patients with craniopharyngioma. Obesity (Silver Spring). 2011;19(1):36-42. doi:10.1038/oby.2010.80',
+      usedFor: ['C1', 'C2', 'C3', 'P2'],
     },
     {
       id: 5,
-      citation: 'Haqq AM, et al. Molecular and clinical aspects of hypothalamic obesity. Obesity Reviews. 2022;23(9):e13459.',
-      shortCitation: 'Haqq AM, et al. Obesity Reviews. 2022.',
-      usedFor: ['disease definition', 'mechanism', 'differential'],
+      citation: 'van Santen HM, van Schaik J, van Roessel IMAA, Beckhuas J, Boehnke F, Müller HL. Diagnostic criteria for the hypothalamic syndrome in childhood. Eur J Endocrinol. 2023;188(2):ivad009. doi:10.1093/ejendo/ivad009',
+      usedFor: ['P3', 'S1'],
+    },
+    {
+      id: 6,
+      citation: 'van Iersel L, Brokke KE, Adan RAH, Bulthuis LCM, van den Akker ELT, van Santen HM. Pathophysiology and individualized treatment of hypothalamic obesity following craniopharyngioma and other suprasellar tumors: a systematic review. Endocr Rev. 2019;40(1):193-235. doi:10.1210/er.2018-00017',
+      usedFor: ['P3', 'M2', 'T1', 'T2', 'S3'],
+    },
+    {
+      id: 7,
+      citation: 'Roth CL. Hypothalamic obesity in craniopharyngioma patients: disturbed energy homeostasis related to extent of hypothalamic damage and its implication for obesity intervention. J Clin Med. 2015;4(9):1774-1797. doi:10.3390/jcm4091774',
+      usedFor: ['P3', 'B2', 'S1', 'T1', 'S3'],
+    },
+    {
+      id: 8,
+      citation: 'Rose SR, Horne VE, Bingham N, Jenkins T, Black J, Inge T. Hypothalamic obesity: 4 years of the International Registry of Hypothalamic Obesity Disorders. Obesity (Silver Spring). 2018;26(11):1727-1732. doi:10.1002/oby.22315',
+      usedFor: ['C4', 'T3'],
+    },
+    {
+      id: 9,
+      citation: 'Lustig RH. Hypothalamic obesity after craniopharyngioma: mechanisms, diagnosis, and treatment. Front Endocrinol (Lausanne). 2011;2:60. doi:10.3389/fendo.2011.00060',
+      usedFor: ['C5', 'T1', 'S3'],
+    },
+    {
+      id: 10,
+      citation: 'Timper K, Brünjng JC. Hypothalamic circuits regulating appetite and energy homeostasis: pathways to obesity. Dis Model Mech. 2017;10(6):679-689. doi:10.1242/dmm.026609',
+      usedFor: ['P1'],
+    },
+    {
+      id: 11,
+      citation: 'Vlaardingerbroek H, van den Akker ELT, Hokken-Koelega ACS. Appetite- and weight-inducing neuroendocrine factors in Prader-Willi syndrome, Bardet-Biedl syndrome and craniopharyngioma versus anorexia nervosa. Endocr Connect. 2021;10(5):R175-R188. doi:10.1530/EC-21-0111',
+      usedFor: ['P1'],
+    },
+    {
+      id: 12,
+      citation: 'Haliloglu B, Bereket A. Hypothalamic obesity in children: pathophysiology to clinical management. J Pediatr Endocrinol Metab. 2015;28(5-6):503-513. doi:10.1515/jpem-2014-0512',
+      usedFor: ['P1', 'S1'],
+    },
+    {
+      id: 13,
+      citation: 'Kayadjanian N, Hsu EA, Wood AM, Carson DS. Caregiver burden… J Clin Endocrinol Metab. 2023;109(1):e76-e87. doi:10.1210/clinem/dgad488',
+      usedFor: ['P2', 'B2', 'B3', 'E1', 'S1'],
+    },
+    {
+      id: 14,
+      citation: 'Craven M, Crowley JH, Chiang L, et al. Patient-relevant outcomes… Front Endocrinol. 2022;13:876770. doi:10.3389/fendo.2022.876770',
+      usedFor: ['P2', 'B1', 'E1'],
+    },
+    {
+      id: 15,
+      citation: 'Bereket A. Postoperative and long-term endocrinologic complications of craniopharyngioma. Horm Res Paediatr. 2020;93(9-10):497-509. doi:10.1159/000515347',
+      usedFor: ['B1', 'M2', 'E1'],
+    },
+    {
+      id: 16,
+      citation: 'Dogra P, Bedatsova L, Van Gompel JJ, et al. Long-term outcomes… Endocrine. 2022;78(1):123-134. doi:10.1007/s12020-022-03134-4',
+      usedFor: ['M1', 'T3'],
+    },
+    {
+      id: 17,
+      citation: 'Crowley RK, Woods C, Fleming M, et al. Somnolence in adult craniopharyngioma patients… Clin Endocrinol (Oxf). 2017;74(6):750–755. doi:10.1111/cen.13365',
+      usedFor: ['M1'],
+    },
+    {
+      id: 18,
+      citation: 'Pereira AM, Schmid EM, Schutte PJ, et al. High prevalence of… Clin Endocrinol (Oxf). 2005;62(2):197–204. doi:10.1111/j.1365-2265.2004.02196.x',
+      usedFor: ['M1'],
+    },
+    {
+      id: 19,
+      citation: 'Demirtas M, Hahn-Pedersen HJ, Jørgensen HL. Comparison between burden… Neurol Ther. 2023;12(4):1051–1068. doi:10.1007/s40120-023-00493-6',
+      usedFor: [],
+    },
+    {
+      id: 20,
+      citation: 'Rosenfeld A, Arrington D, Miller J, et al. Review of craniopharyngiomas… Pediatr Neurol. 2014;50(1):4-10. doi:10.1016/j.pediatrneurol.2013.09.003',
+      usedFor: ['T1', 'S3'],
+    },
+    {
+      id: 21,
+      citation: 'Van Roessel IMAA, Van Den Brink M, Dekker J, et al. Feasibility, safety, and efficacy… Clin Nutr. 2024;43(8):1798-1811. doi:10.1016/j.clnu.2024.05.028',
+      usedFor: ['T1', 'S3'],
+    },
+    {
+      id: 22,
+      citation: 'Müller HL. Craniopharyngioma and hypothalamic injury… Curr Opin Endocrinol Diabetes Obes. 2016;23(1):81-89. doi:10.1097/MED.0000000000000214',
+      usedFor: [],
+    },
+    {
+      id: 23,
+      citation: 'Kim RJ, Shah R, Tershakovec AM, et al. Energy expenditure in obesity associated with craniopharyngioma. Childs Nerv Syst. 2010;26(7):913-917. doi:10.1007/s00381-009-1078-1',
+      usedFor: ['S1'],
+    },
+    {
+      id: 24,
+      citation: 'Dimitri P. Treatment of acquired hypothalamic obesity: now and the future. Front Endocrinol (Lausanne). 2022;13:848680. doi:10.3389/fendo.2022.848680',
+      usedFor: ['T1'],
+    },
+    {
+      id: 25,
+      citation: 'Shoemaker AH, Tamhardt J. Approach to the patient with hypothalamic obesity. J Clin Endocrinol Metab. 2023;108(5):1236-1242. doi:10.1210/clinem/dgac678',
+      usedFor: ['T2'],
+    },
+    {
+      id: 26,
+      citation: 'Roth CL, Zenno A. Treatment of hypothalamic obesity: new drugs on the horizon. Front Endocrinol (Lausanne). 2023;14:1256514. doi:10.3389/fendo.2023.1256514',
+      usedFor: ['T2'],
     },
   ],
 
