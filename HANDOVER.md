@@ -2,7 +2,7 @@
 
 **Project:** IMCIVREE Creative Hub
 **Client:** Rhythm Pharmaceuticals / 3cubed
-**Last Updated:** December 1, 2025 (Session 7)
+**Last Updated:** December 2, 2025 (Session 8)
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
 **Repository:** https://github.com/InnovareAI/rhythm.git
 
@@ -27,7 +27,8 @@
 15. [Recent Changes (Session 5)](#recent-changes-december-1-2025---session-5)
 16. [Recent Changes (Session 6)](#recent-changes-december-1-2025---session-6)
 17. [Recent Changes (Session 7)](#recent-changes-december-1-2025---session-7)
-18. [Known Issues & Future Work](#known-issues--future-work)
+18. [Recent Changes (Session 8)](#recent-changes-december-2-2025---session-8)
+19. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
@@ -1250,6 +1251,67 @@ const simulateTyping = () => {
 
 ---
 
+## Recent Changes (December 2, 2025 - Session 8)
+
+### Summary: Email Generator Panel Layout Swap
+
+This session completed the panel layout swap for the Disease Education email generator to match the user's requested layout: preview on the RIGHT, code generation on the LEFT.
+
+#### Panel Layout Swap (Email Generator)
+
+**Problem:** User requested the email generator to match the banner generator layout with code generation on the LEFT and preview on the RIGHT (opposite of Session 7).
+
+**Solution:** Swapped the panel order in the Disease Education email generator.
+
+**Before (Session 7):**
+```
+┌──────────────────┬──────────────────┐
+│   Preview        │   Chat/Code      │
+│   (Left)         │   (Right)        │
+└──────────────────┴──────────────────┘
+```
+
+**After (Session 8):**
+```
+┌──────────────────┬──────────────────┐
+│   Chat/Code      │   Preview        │
+│   (Left)         │   (Right)        │
+└──────────────────┴──────────────────┘
+```
+
+**Technical Changes:**
+
+```tsx
+// Chat Area - Now on LEFT
+<div className="flex flex-1 flex-col border-r border-[#1a1652]/10">
+  {/* Messages, streaming content, input */}
+</div>
+
+// Preview Panel - Now on RIGHT
+<div className="w-1/2 bg-white p-6 overflow-y-auto">
+  {/* Email preview iframe */}
+</div>
+```
+
+**Additional Cleanup:**
+- Removed duplicate Chat Area section (lines 548-639)
+- Removed `handleSend` function references (not needed for demo mode)
+- Input field remains disabled with placeholder "Request changes or ask questions..."
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `app/disease-awareness/chat/page.tsx` | Swapped panel layout, removed duplicate Chat Area, removed handleSend references |
+
+### Recent Commits (Dec 2, Session 8)
+
+```
+2355db9 Swap email generator panel layout (preview right, chat left)
+```
+
+---
+
 ## Known Issues & Future Work
 
 ### Completed Features (Previously Limitations)
@@ -1346,4 +1408,4 @@ const simulateTyping = () => {
 
 ---
 
-*Document generated: December 1, 2025 (Session 7)*
+*Document generated: December 2, 2025 (Session 8)*
