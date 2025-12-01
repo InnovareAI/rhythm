@@ -1253,11 +1253,33 @@ const simulateTyping = () => {
 
 ## Recent Changes (December 2, 2025 - Session 8)
 
-### Summary: Email Generator Panel Layout Swap
+### Summary: Panel Layout Swaps for Disease Education Generators
 
-This session completed the panel layout swap for the Disease Education email generator to match the user's requested layout: preview on the RIGHT, code generation on the LEFT.
+This session completed panel layout swaps for both the Disease Education banner and email generators to match the user's requested layout: code generation on the LEFT, preview on the RIGHT.
 
-#### Panel Layout Swap (Email Generator)
+#### 1. Banner Generator Panel Layout Swap
+
+**Problem:** User requested banner generator to have code generation on the LEFT and preview on the RIGHT.
+
+**Solution:** Swapped the panel order in the Disease Education banner generator.
+
+**Before:**
+```
+┌──────────────────┬──────────────────┐
+│   Preview        │   Chat/Code      │
+│   (Left)         │   (Right)        │
+└──────────────────┴──────────────────┘
+```
+
+**After:**
+```
+┌──────────────────┬──────────────────┐
+│   Chat/Code      │   Preview        │
+│   (Left)         │   (Right)        │
+└──────────────────┴──────────────────┘
+```
+
+#### 2. Email Generator Panel Layout Swap
 
 **Problem:** User requested the email generator to match the banner generator layout with code generation on the LEFT and preview on the RIGHT (opposite of Session 7).
 
@@ -1302,12 +1324,15 @@ This session completed the panel layout swap for the Disease Education email gen
 
 | File | Changes |
 |------|---------|
+| `app/disease-awareness/banner-generator/page.tsx` | Swapped panel layout (chat left, preview right) |
 | `app/disease-awareness/chat/page.tsx` | Swapped panel layout, removed duplicate Chat Area, removed handleSend references |
 
 ### Recent Commits (Dec 2, Session 8)
 
 ```
+5eabaa5 Update HANDOVER.md with Session 8 changes
 2355db9 Swap email generator panel layout (preview right, chat left)
+e1ba4fe Swap Disease Awareness banner generator panels
 ```
 
 ---
