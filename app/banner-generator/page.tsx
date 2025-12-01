@@ -134,26 +134,34 @@ Give me a moment...`
         // Use hardcoded template with simulated coding animation
         console.log('[BANNER] Using hardcoded template:', audience, bannerFocus)
 
-        // Simulate coding animation over 60 seconds
+        // Simulate smooth coding animation over 45 seconds using requestAnimationFrame
         const htmlContent = template.html
-        const totalDuration = 60000 // 60 seconds
-        const chunkSize = Math.ceil(htmlContent.length / 100) // ~100 chunks
-        const chunkDelay = totalDuration / (htmlContent.length / chunkSize)
-
-        let currentIndex = 0
+        const totalDuration = 45000 // 45 seconds
+        const totalChars = htmlContent.length
 
         const simulateTyping = () => {
           return new Promise<void>((resolve) => {
-            const interval = setInterval(() => {
-              currentIndex += chunkSize
-              if (currentIndex >= htmlContent.length) {
-                setStreamingContent(htmlContent)
-                clearInterval(interval)
-                resolve()
+            const startTime = performance.now()
+
+            const animate = (currentTime: number) => {
+              const elapsed = currentTime - startTime
+              const progress = Math.min(elapsed / totalDuration, 1)
+
+              // Use easeOutQuad for smoother feel at the end
+              const easedProgress = 1 - (1 - progress) * (1 - progress)
+              const currentIndex = Math.floor(easedProgress * totalChars)
+
+              setStreamingContent(htmlContent.substring(0, currentIndex))
+
+              if (progress < 1) {
+                requestAnimationFrame(animate)
               } else {
-                setStreamingContent(htmlContent.substring(0, currentIndex))
+                setStreamingContent(htmlContent)
+                resolve()
               }
-            }, chunkDelay)
+            }
+
+            requestAnimationFrame(animate)
           })
         }
 
