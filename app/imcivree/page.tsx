@@ -100,9 +100,9 @@ export default function ImcivreeHub() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="mt-5 text-2xl font-bold text-[#007a80]">MLR Reviews</h3>
+              <h3 className="mt-5 text-2xl font-bold text-[#007a80]">Creative Review</h3>
               <p className="mt-3 text-[#4a4f55]">
-                Review content for Medical, Legal, and Regulatory compliance.
+                Submit content for creative and compliance review.
               </p>
               <div className="mt-6 inline-flex items-center rounded-full bg-[#007a80] px-6 py-3 text-sm font-semibold text-white transition-opacity group-hover:opacity-90">
                 Start review
@@ -155,8 +155,8 @@ export default function ImcivreeHub() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h4 className="mt-4 text-lg font-bold text-[#007a80]">MLR Ready</h4>
-              <p className="mt-2 text-sm text-[#4a4f55]">Streamlined Medical, Legal, Regulatory review</p>
+              <h4 className="mt-4 text-lg font-bold text-[#007a80]">Review Ready</h4>
+              <p className="mt-2 text-sm text-[#4a4f55]">Streamlined creative and compliance review</p>
             </div>
           </div>
         </div>
