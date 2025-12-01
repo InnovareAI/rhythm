@@ -40,11 +40,11 @@ export default function DiseaseAwarenessHub() {
         </div>
 
         {/* Content Type Cards */}
-        <div className="mt-16 flex flex-col sm:flex-row gap-8 justify-center items-stretch max-w-4xl mx-auto">
+        <div className="mt-16 grid gap-8 sm:grid-cols-2 max-w-3xl mx-auto">
           {/* Emails Card */}
           <Link
             href="/disease-awareness/chat"
-            className="group relative rounded-2xl border-2 border-[#1a1652] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#00a7df] hover:bg-[#f9f2f8] sm:max-w-md flex-1"
+            className="group relative rounded-2xl border-2 border-[#1a1652] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#00a7df] hover:bg-[#f9f2f8]"
           >
             <div className="relative">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[#1a1652] to-[#00a7df]">
@@ -68,7 +68,7 @@ export default function DiseaseAwarenessHub() {
           {/* Banner Ads Card */}
           <Link
             href="/disease-awareness/banner-generator"
-            className="group relative rounded-2xl border-2 border-[#1a1652] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#00a7df] hover:bg-[#f9f2f8] sm:max-w-md flex-1"
+            className="group relative rounded-2xl border-2 border-[#1a1652] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#00a7df] hover:bg-[#f9f2f8]"
           >
             <div className="relative">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[#1a1652] to-[#00a7df]">
