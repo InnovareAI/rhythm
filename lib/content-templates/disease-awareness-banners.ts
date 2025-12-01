@@ -21,7 +21,8 @@ export interface DABannerTemplate {
 
 // Helper to generate template key
 export function getDABannerTemplateKey(focus: string): string {
-  return `hcp-${focus}`
+  // If focus already starts with 'hcp-', use it directly
+  return focus.startsWith('hcp-') ? focus : `hcp-${focus}`
 }
 
 // Check if a banner template exists
@@ -295,6 +296,6 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
 
 // Banner focus options for Disease Awareness
 export const DA_BANNER_FOCUS = [
-  { id: 'disease-education', name: 'Disease Education Overview' },
-  { id: 'mechanism', name: 'Hypothalamic Mechanism' },
+  { id: 'hcp-disease-education', name: 'Disease Education Overview', description: 'Introduction to aHO for healthcare professionals' },
+  { id: 'hcp-mechanism', name: 'Hypothalamic Mechanism', description: 'MC4R pathway and hyperphagia mechanism' },
 ]

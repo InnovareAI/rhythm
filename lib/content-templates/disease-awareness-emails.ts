@@ -20,7 +20,8 @@ export interface DAEmailTemplate {
 
 // Helper to generate template key
 export function getDATemplateKey(emailType: string): string {
-  return `hcp-${emailType}`
+  // If emailType already starts with 'hcp-', use it directly
+  return emailType.startsWith('hcp-') ? emailType : `hcp-${emailType}`
 }
 
 // Check if a template exists
@@ -340,7 +341,7 @@ ${REFERENCES_BLOCK}
 
 // Email type options for Disease Awareness
 export const DA_EMAIL_TYPES = [
-  { id: 'what-is-aho', name: 'What is aHO' },
-  { id: 'mechanism', name: 'The Hypothalamic Pathway' },
-  { id: 'recognition', name: 'Recognizing aHO' },
+  { id: 'hcp-what-is-aho', name: 'What is aHO', description: 'Introduction to acquired hypothalamic obesity' },
+  { id: 'hcp-mechanism', name: 'The Hypothalamic Pathway', description: 'Understanding the MC4R pathway and hyperphagia' },
+  { id: 'hcp-recognition', name: 'Recognizing aHO', description: 'Clinical signs and patient identification' },
 ]
