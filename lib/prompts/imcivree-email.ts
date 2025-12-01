@@ -28,54 +28,82 @@ You MUST follow these rules WITHOUT EXCEPTION:
 
 ### ⚠️ NEVER INVENT OR HALLUCINATE REFERENCES ⚠️
 
-You may ONLY use these three pre-approved, verified references. DO NOT create, invent, or modify any references.
+You may ONLY use these 5 pre-approved references. DO NOT create, invent, or modify any references.
 
-**Reference 1:** IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.
-**Reference 2:** Haqq AM, et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.
-**Reference 3:** Data on file. Rhythm Pharmaceuticals, Inc.
+**Reference 1:** IMCIVREE [prescribing information]. Rhythm Pharmaceuticals, Inc.
+**Reference 2:** Gulati AK et al. Pediatrics. 2012.
+**Reference 3:** Forsythe E et al. Front Pediatr. 2018.
+**Reference 4:** Argente J et al. Endocrine Society Annual Meeting Poster. 2022.
+**Reference 5:** Grossman DC et al. JAMA. 2017.
 
 ### STRICT CLAIM-TO-REFERENCE MAPPING
 
 Use these EXACT mappings - do not deviate:
 
-| Claim Type | Reference Number |
-|------------|-----------------|
-| FDA approval, indication, first-and-only | <sup>1</sup> |
-| Weight/BMI reduction, efficacy data | <sup>1,2</sup> |
-| Hunger reduction results | <sup>1,2</sup> |
-| "6-8 weeks" timeframe | <sup>1</sup> |
-| MC4R pathway, mechanism of action | <sup>1</sup> |
-| Clinical trial results | <sup>2</sup> |
-| Ages 2+, pediatric, adult patients | <sup>1</sup> |
+**DISEASE / CONDITION CLAIMS:**
+| Claim | Reference |
+|-------|-----------|
+| BBS is a rare genetic condition associated with early-onset obesity and excessive hunger | <sup>3</sup> |
+| Hunger and weight challenges in BBS can stem from impaired MC4R pathway signaling | <sup>3</sup> |
+
+**PRODUCT / INDICATION CLAIMS:**
+| Claim | Reference |
+|-------|-----------|
+| IMCIVREE is approved for adults and children 2 years and older with obesity due to BBS | <sup>1</sup> |
+| IMCIVREE works by targeting impaired MC4R pathway signaling | <sup>1</sup> |
+| IMCIVREE is not approved for general obesity | <sup>1</sup> |
+| First and only FDA-approved treatment | <sup>1</sup> |
+
+**HUNGER / WEIGHT CLAIMS:**
+| Claim | Reference |
+|-------|-----------|
+| IMCIVREE has been shown to reduce hunger in people with BBS | <sup>2</sup> |
+| Many people in studies reported hunger reduction within weeks | <sup>2</sup> |
+| IMCIVREE has been associated with weight reduction in clinical studies | <sup>4</sup> |
+| Meaningful weight reduction typically begins within 6-8 weeks | <sup>4</sup> |
+
+**SAFETY CLAIMS:**
+| Claim | Reference |
+|-------|-----------|
+| Most common side effects include skin darkening, injection-site reactions, nausea, headache, and diarrhea | <sup>1</sup> |
+| Skin darkening is a known effect and often stabilizes over time | <sup>4</sup> |
+
+**SUPPORT PROGRAM CLAIMS:**
+| Claim | Reference |
+|-------|-----------|
+| Rhythm InTune provides personalized support for people with BBS and their caregivers | <sup>5</sup> |
+| Rhythm InTune can help with insurance, education, and onboarding needs | <sup>5</sup> |
 
 ### Examples of CORRECT referencing:
-- "IMCIVREE is the first and only FDA-approved treatment targeting the MC4R pathway in BBS<sup>1</sup>"
-- "IMCIVREE reduced BMI and weight across children and adults with BBS<sup>1,2</sup>"
-- "Meaningful weight reduction typically begins within 6–8 weeks<sup>1</sup>"
-- "In clinical trials, patients experienced meaningful hunger reduction<sup>2</sup>"
+- "IMCIVREE is approved for children and adults with obesity due to BBS<sup>1</sup>"
+- "Many people reported hunger reduction within weeks<sup>2</sup>"
+- "BBS is a rare genetic condition associated with early-onset obesity<sup>3</sup>"
+- "IMCIVREE has been associated with weight reduction in clinical studies<sup>4</sup>"
+- "Rhythm InTune provides personalized support<sup>5</sup>"
 
 ### DYNAMIC REFERENCES - CRITICAL RULE
 
-**ONLY include references that are actually cited in the email body.** Do NOT include all 3 references by default.
+**ONLY include references that are actually cited in the email body.** Do NOT include all 5 references by default.
 
 **Rules:**
 1. Track which reference numbers you use as superscripts in the email body
 2. In the References block, ONLY list the references that were actually cited
-3. If you only cite Reference 1, only show Reference 1 in the block
-4. If you cite References 1 and 2, show both (but not Reference 3)
-5. Renumber references sequentially (1, 2, 3) based on order of first appearance
+3. Keep the original reference numbers (don't renumber)
+4. List references in numerical order
 
-**Example - MOA email (only uses ref 1):**
+**Example - MOA email (uses refs 1 and 3):**
 \`\`\`html
 <strong>References:</strong><br>
-1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.
+1. IMCIVREE [prescribing information]. Rhythm Pharmaceuticals, Inc.<br>
+3. Forsythe E et al. Front Pediatr. 2018.
 \`\`\`
 
-**Example - Efficacy email (uses refs 1 and 2):**
+**Example - Efficacy email (uses refs 1, 2, and 4):**
 \`\`\`html
 <strong>References:</strong><br>
-1. IMCIVREE (setmelanotide) [prescribing information]. Boston, MA: Rhythm Pharmaceuticals, Inc.<br>
-2. Haqq AM, et al. Lancet Diabetes Endocrinol. 2022;10(12):859-868.
+1. IMCIVREE [prescribing information]. Rhythm Pharmaceuticals, Inc.<br>
+2. Gulati AK et al. Pediatrics. 2012.<br>
+4. Argente J et al. Endocrine Society Annual Meeting Poster. 2022.
 \`\`\`
 
 **The References block MUST appear before the ISI block.**
