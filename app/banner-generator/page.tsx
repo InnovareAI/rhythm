@@ -518,15 +518,24 @@ Give me a moment...`
             />
           </div>
 
-          {/* Banner Specs Info */}
+          {/* Banner Specs Info - Dynamic based on audience */}
           <div className="mb-8 p-4 bg-[#007a80]/5 rounded-lg">
             <h4 className="font-medium text-[#007a80] mb-2">Banner Specifications</h4>
             <ul className="text-sm text-[#4a4f55] space-y-1">
               <li>• Size: 728 × 250 pixels (Leaderboard)</li>
               <li>• Format: Animated HTML/CSS/JS</li>
-              <li>• 5 frames with smooth fade transitions</li>
-              <li>• Continuous scrolling ISI at bottom</li>
-              <li>• "Learn more" CTA on final frame</li>
+              {audience === 'hcp' ? (
+                <>
+                  <li>• 5 frames with smooth fade transitions</li>
+                  <li>• Continuous scrolling ISI at bottom</li>
+                </>
+              ) : (
+                <>
+                  <li>• 2 screens with fade transitions</li>
+                  <li>• Scrolling ISI with 3-second pause at end</li>
+                </>
+              )}
+              <li>• "Learn more" CTA button</li>
             </ul>
           </div>
 
