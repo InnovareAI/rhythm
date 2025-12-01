@@ -39,9 +39,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate content type
-    if (!['imcivree-email', 'imcivree-banner'].includes(contentType)) {
+    if (!['imcivree-email', 'imcivree-banner', 'da-email', 'da-banner'].includes(contentType)) {
       return NextResponse.json(
-        { error: 'Invalid contentType. Must be imcivree-email or imcivree-banner' },
+        { error: 'Invalid contentType. Must be imcivree-email, imcivree-banner, da-email, or da-banner' },
         { status: 400 }
       )
     }

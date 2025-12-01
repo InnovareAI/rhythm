@@ -10,7 +10,7 @@ import { getSupabase } from './supabase'
 // TYPES
 // =============================================================================
 
-export type ContentType = 'imcivree-email' | 'imcivree-banner'
+export type ContentType = 'imcivree-email' | 'imcivree-banner' | 'da-email' | 'da-banner'
 export type Audience = 'hcp' | 'patient'
 export type ContentStatus = 'draft' | 'pending_review' | 'approved' | 'rejected' | 'needs_changes'
 
