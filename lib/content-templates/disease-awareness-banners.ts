@@ -64,16 +64,9 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
     .headline { font-weight: 800; font-size: 22px; line-height: 1.2; letter-spacing: 0.02em; margin-bottom: 10px; }
     .subcopy { font-size: 13px; line-height: 1.4; max-width: 95%; opacity: 0.9; }
     .cta-row { margin-top: 18px; display: flex; justify-content: flex-end; }
-    .cta-button { background: #c9f1fe; color: #1a1652; border-radius: 999px; padding: 10px 24px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }
-    .cta-button:hover { filter: brightness(1.05); }
+    .cta-button { background: #A00868; color: #ffffff; border-radius: 8px; padding: 10px 24px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }
+    .cta-button:hover { background: #7a0550; }
     .brain-icon { position: absolute; top: 20px; right: 24px; width: 50px; height: 50px; opacity: 0.15; }
-    .bubble-layer { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
-    .bubble { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(201,241,254,0.35), rgba(201,241,254,0.05)); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); animation: floatUp 18s linear infinite; opacity: 0.55; }
-    .bubble:nth-child(1) { width: 90px; height: 90px; left: 4%; bottom: -20%; animation-duration: 26s; }
-    .bubble:nth-child(2) { width: 60px; height: 60px; left: 45%; bottom: -30%; animation-duration: 22s; animation-delay: -8s; }
-    .bubble:nth-child(3) { width: 120px; height: 120px; right: 2%; bottom: -40%; animation-duration: 30s; animation-delay: -5s; }
-    .bubble:nth-child(4) { width: 40px; height: 40px; right: 30%; bottom: -25%; animation-duration: 18s; animation-delay: -10s; }
-    @keyframes floatUp { 0% { transform: translateY(0); } 100% { transform: translateY(-180%); } }
     .refs-bar { position: relative; flex: 0 0 52px; background: #1a1652; color: #c9f1fe; font-size: 10px; line-height: 1.3; overflow: hidden; padding: 4px 10px; }
     .refs-bar-title { font-weight: 700; margin-bottom: 2px; color: #00a7df; }
     .refs-window { position: relative; overflow: hidden; height: 34px; }
@@ -86,13 +79,6 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
   <div class="banner">
     <div class="banner-inner">
       <div class="frames">
-        <div class="bubble-layer" aria-hidden="true">
-          <div class="bubble"></div>
-          <div class="bubble"></div>
-          <div class="bubble"></div>
-          <div class="bubble"></div>
-        </div>
-
         <!-- Brain Icon Watermark -->
         <svg class="brain-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -132,13 +118,14 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
         <div class="refs-window">
           <div class="refs-scroll">
             <div class="refs-text">
-              1. Lustig RH, et al. Pediatr Endocrinol Rev. 2008;6(2):220-227.
-              2. van Iersel L, et al. Endocr Rev. 2019;40(2):531-556.
-              3. Müller HL, et al. Nat Rev Dis Primers. 2019;5(1):75.
-              4. Roth CL, et al. J Clin Endocrinol Metab. 2011;96(9):2854-2862.
-              5. Haqq AM, et al. Obesity Reviews. 2022;23(9):e13459.
+              1. Abuzzahab MJ, Roth CL, Shoemaker AH. Hypothalamic obesity: prologue and promise. Horm Res Paediatr. 2019;91(2):128-136. doi:10.1159/000496564
+              2. Roth CL. Hypothalamic obesity in patients with craniopharyngioma: profound changes of several weight regulatory circuits. Front Endocrinol (Lausanne). 2011;2:49. doi:10.3389/fendo.2011.00049
+              3. van Iersel L, Brokke KE, Adan RAH, et al. Pathophysiology and individualized treatment of hypothalamic obesity following craniopharyngioma and other suprasellar tumors: a systematic review. Endocr Rev. 2019;40(1):193-235. doi:10.1210/er.2018-00017
+              4. Roth CL. Hypothalamic obesity in craniopharyngioma patients: disturbed energy homeostasis related to extent of hypothalamic damage and its implication for obesity intervention. J Clin Med. 2015;4(9):1774-1797. doi:10.3390/jcm4091774
               <br><br>
               This information is intended for US healthcare professionals only and is provided for educational purposes.
+              <br><br>
+              © 2025. Rhythm Pharmaceuticals, Inc. All rights reserved. Rhythm and its logo are trademarks of Rhythm Pharmaceuticals, Inc. US-DSE-2500011 (03.08/2025)
             </div>
           </div>
         </div>
@@ -161,12 +148,12 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
   </script>
 </body>
 </html>`,
-    references: [1, 2, 3, 4, 5],
+    references: [1, 2, 6, 7],
     approved: true,
     lastUpdated: '2025-12-01',
     audience: 'hcp',
     focus: 'disease-education',
-    description: 'Disease Education - Overview of aHO for healthcare professionals'
+    description: 'Disease Education - Overview of HO for healthcare professionals'
   },
 
   // ==========================================
@@ -189,16 +176,9 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
     .headline { font-weight: 800; font-size: 22px; line-height: 1.2; letter-spacing: 0.02em; margin-bottom: 10px; }
     .subcopy { font-size: 13px; line-height: 1.4; max-width: 95%; opacity: 0.9; }
     .cta-row { margin-top: 18px; display: flex; justify-content: flex-end; }
-    .cta-button { background: #c9f1fe; color: #1a1652; border-radius: 999px; padding: 10px 24px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }
-    .cta-button:hover { filter: brightness(1.05); }
+    .cta-button { background: #A00868; color: #ffffff; border-radius: 8px; padding: 10px 24px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }
+    .cta-button:hover { background: #7a0550; }
     .brain-icon { position: absolute; top: 20px; right: 24px; width: 50px; height: 50px; opacity: 0.15; }
-    .bubble-layer { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
-    .bubble { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(201,241,254,0.35), rgba(201,241,254,0.05)); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); animation: floatUp 18s linear infinite; opacity: 0.55; }
-    .bubble:nth-child(1) { width: 90px; height: 90px; left: 4%; bottom: -20%; animation-duration: 26s; }
-    .bubble:nth-child(2) { width: 60px; height: 60px; left: 45%; bottom: -30%; animation-duration: 22s; animation-delay: -8s; }
-    .bubble:nth-child(3) { width: 120px; height: 120px; right: 2%; bottom: -40%; animation-duration: 30s; animation-delay: -5s; }
-    .bubble:nth-child(4) { width: 40px; height: 40px; right: 30%; bottom: -25%; animation-duration: 18s; animation-delay: -10s; }
-    @keyframes floatUp { 0% { transform: translateY(0); } 100% { transform: translateY(-180%); } }
     .refs-bar { position: relative; flex: 0 0 52px; background: #1a1652; color: #c9f1fe; font-size: 10px; line-height: 1.3; overflow: hidden; padding: 4px 10px; }
     .refs-bar-title { font-weight: 700; margin-bottom: 2px; color: #00a7df; }
     .refs-window { position: relative; overflow: hidden; height: 34px; }
@@ -211,13 +191,6 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
   <div class="banner">
     <div class="banner-inner">
       <div class="frames">
-        <div class="bubble-layer" aria-hidden="true">
-          <div class="bubble"></div>
-          <div class="bubble"></div>
-          <div class="bubble"></div>
-          <div class="bubble"></div>
-        </div>
-
         <!-- Brain Icon Watermark -->
         <svg class="brain-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -257,12 +230,13 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
         <div class="refs-window">
           <div class="refs-scroll">
             <div class="refs-text">
-              1. Lustig RH, et al. Pediatr Endocrinol Rev. 2008;6(2):220-227.
-              2. van Iersel L, et al. Endocr Rev. 2019;40(2):531-556.
-              4. Roth CL, et al. J Clin Endocrinol Metab. 2011;96(9):2854-2862.
-              5. Haqq AM, et al. Obesity Reviews. 2022;23(9):e13459.
+              1. Abuzzahab MJ, Roth CL, Shoemaker AH. Hypothalamic obesity: prologue and promise. Horm Res Paediatr. 2019;91(2):128-136. doi:10.1159/000496564
+              2. Roth CL. Hypothalamic obesity in patients with craniopharyngioma: profound changes of several weight regulatory circuits. Front Endocrinol (Lausanne). 2011;2:49. doi:10.3389/fendo.2011.00049
+              3. Timper K, Brünjng JC. Hypothalamic circuits regulating appetite and energy homeostasis: pathways to obesity. Dis Model Mech. 2017;10(6):679-689. doi:10.1242/dmm.026609
               <br><br>
               This information is intended for US healthcare professionals only and is provided for educational purposes.
+              <br><br>
+              © 2025. Rhythm Pharmaceuticals, Inc. All rights reserved. Rhythm and its logo are trademarks of Rhythm Pharmaceuticals, Inc. US-DSE-2500011 (03.08/2025)
             </div>
           </div>
         </div>
@@ -285,7 +259,7 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
   </script>
 </body>
 </html>`,
-    references: [1, 2, 4, 5],
+    references: [1, 2, 10],
     approved: true,
     lastUpdated: '2025-12-01',
     audience: 'hcp',
