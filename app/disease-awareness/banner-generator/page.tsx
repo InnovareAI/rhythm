@@ -2,35 +2,23 @@
 
 import { useState, useRef, useEffect, Suspense } from 'react'
 import Link from 'next/link'
-import { DA_BANNER_FOCUS, DA_CINEMATIC_FOCUS, getDABannerTemplate, hasDABannerTemplate } from '@/lib/content-templates/disease-awareness-banners'
+import { DA_CINEMATIC_FOCUS, getDABannerTemplate, hasDABannerTemplate } from '@/lib/content-templates/disease-awareness-banners'
 
 type Message = {
   role: 'user' | 'assistant'
   content: string
 }
 
-type BannerStyle = '5-frame' | 'cinematic'
-
 function BannerContent() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [generatedContent, setGeneratedContent] = useState<string | null>(null)
-  const [bannerStyle, setBannerStyle] = useState<BannerStyle>('cinematic')
   const [bannerFocus, setBannerFocus] = useState<string>('hcp-cinematic-injury')
   const [step, setStep] = useState<'select' | 'chat'>('select')
   const [streamingContent, setStreamingContent] = useState('')
   const [processingBanner, setProcessingBanner] = useState(false)
   const streamingRef = useRef<HTMLDivElement>(null)
-
-  // Update default focus when style changes
-  useEffect(() => {
-    if (bannerStyle === 'cinematic') {
-      setBannerFocus('hcp-cinematic-injury')
-    } else {
-      setBannerFocus('hcp-disease-education')
-    }
-  }, [bannerStyle])
 
   // Ziflow approval state
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -44,7 +32,7 @@ function BannerContent() {
     setSubmissionStatus('idle')
 
     try {
-      const focusObj = DA_BANNER_FOCUS.find(f => f.id === bannerFocus)
+      const focusObj = DA_CINEMATIC_FOCUS.find(f => f.id === bannerFocus)
       const response = await fetch('/api/submit-for-approval', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -80,10 +68,9 @@ function BannerContent() {
   // Initialize greeting and generate when entering chat
   useEffect(() => {
     if (step === 'chat' && !generatedContent) {
-      const focusOptions = bannerStyle === 'cinematic' ? DA_CINEMATIC_FOCUS : DA_BANNER_FOCUS
-      const focusObj = focusOptions.find(f => f.id === bannerFocus)
+      const focusObj = DA_CINEMATIC_FOCUS.find(f => f.id === bannerFocus)
 
-      const cinematicMessage = `Great! I'll create a **cinematic HCP education banner** focused on **${focusObj?.name}**.
+      const greetingMessage = `Great! I'll create a **cinematic HCP education banner** focused on **${focusObj?.name}**.
 
 I'm generating your banner now with:
 - 3-frame structure with smooth opacity fades
@@ -94,20 +81,10 @@ I'm generating your banner now with:
 
 Give me a moment...`
 
-      const fiveFrameMessage = `Great! I'll create an HCP education banner focused on **${focusObj?.name}**.
-
-I'm generating your disease awareness banner now with:
-- 5-frame structure with smooth fade transitions
-- Purple/teal gradient styling
-- Scrolling references bar at bottom
-- Educational content about aHO
-
-Give me a moment...`
-
       setMessages([
         {
           role: 'assistant',
-          content: bannerStyle === 'cinematic' ? cinematicMessage : fiveFrameMessage
+          content: greetingMessage
         }
       ])
 
@@ -239,125 +216,51 @@ Give me a moment...`
             Generate animated banner ads for HCP disease awareness
           </p>
 
-          {/* Banner Style Toggle */}
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex rounded-lg border border-[#1a1652]/20 p-1 bg-white">
-              <button
-                onClick={() => setBannerStyle('cinematic')}
-                className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
-                  bannerStyle === 'cinematic'
-                    ? 'bg-gradient-to-r from-[#A00868] to-[#181050] text-white shadow-sm'
-                    : 'text-[#4a4f55] hover:text-[#1a1652]'
-                }`}
-              >
-                Cinematic 3-Frame
-              </button>
-              <button
-                onClick={() => setBannerStyle('5-frame')}
-                className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
-                  bannerStyle === '5-frame'
-                    ? 'bg-gradient-to-r from-[#1a1652] to-[#00a7df] text-white shadow-sm'
-                    : 'text-[#4a4f55] hover:text-[#1a1652]'
-                }`}
-              >
-                5-Frame Standard
-              </button>
+          {/* Banner Focus Selection */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-[#1a1652] mb-4">Select HO Claim</h3>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {DA_CINEMATIC_FOCUS.map((focus) => (
+                <button
+                  key={focus.id}
+                  onClick={() => setBannerFocus(focus.id)}
+                  className={`text-left p-4 rounded-xl border-2 transition-all ${
+                    bannerFocus === focus.id
+                      ? 'border-[#A00868] bg-[#A00868]/5'
+                      : 'border-gray-200 hover:border-[#A00868]/50'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 ${
+                      bannerFocus === focus.id ? 'border-[#A00868] bg-[#A00868]' : 'border-gray-300'
+                    }`}>
+                      {bannerFocus === focus.id && (
+                        <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-[#1a1652] text-sm">{focus.name}</h4>
+                      <p className="text-xs text-[#4a4f55] mt-1">{focus.description}</p>
+                    </div>
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
-
-          {/* Banner Focus Selection - Cinematic */}
-          {bannerStyle === 'cinematic' && (
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold text-[#1a1652] mb-4">Select HO Claim</h3>
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {DA_CINEMATIC_FOCUS.map((focus) => (
-                  <button
-                    key={focus.id}
-                    onClick={() => setBannerFocus(focus.id)}
-                    className={`text-left p-4 rounded-xl border-2 transition-all ${
-                      bannerFocus === focus.id
-                        ? 'border-[#A00868] bg-[#A00868]/5'
-                        : 'border-gray-200 hover:border-[#A00868]/50'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 ${
-                        bannerFocus === focus.id ? 'border-[#A00868] bg-[#A00868]' : 'border-gray-300'
-                      }`}>
-                        {bannerFocus === focus.id && (
-                          <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        )}
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-[#1a1652] text-sm">{focus.name}</h4>
-                        <p className="text-xs text-[#4a4f55] mt-1">{focus.description}</p>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Banner Focus Selection - 5-Frame */}
-          {bannerStyle === '5-frame' && (
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold text-[#1a1652] mb-4">Select Focus Area</h3>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {DA_BANNER_FOCUS.map((focus) => (
-                  <button
-                    key={focus.id}
-                    onClick={() => setBannerFocus(focus.id)}
-                    className={`text-left p-5 rounded-xl border-2 transition-all ${
-                      bannerFocus === focus.id
-                        ? 'border-[#00a7df] bg-[#00a7df]/5'
-                        : 'border-gray-200 hover:border-[#00a7df]/50'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
-                        bannerFocus === focus.id ? 'border-[#00a7df] bg-[#00a7df]' : 'border-gray-300'
-                      }`}>
-                        {bannerFocus === focus.id && (
-                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        )}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-[#1a1652]">{focus.name}</h3>
-                        <p className="text-sm text-[#4a4f55] mt-1">{focus.description}</p>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Banner Specs Info */}
           <div className="mb-8 p-4 bg-[#1a1652]/5 rounded-lg">
             <h4 className="font-medium text-[#1a1652] mb-2">Banner Specifications</h4>
-            {bannerStyle === 'cinematic' ? (
-              <ul className="text-sm text-[#4a4f55] space-y-1">
-                <li>• Size: 480 × 320 pixels</li>
-                <li>• Format: Pure CSS animation (no JavaScript)</li>
-                <li>• Frame 1: Cinemagraph video + emotional headline</li>
-                <li>• Frame 2: Single HO claim with superscript</li>
-                <li>• Frame 3: CTA button + micro-reference footer</li>
-                <li>• Style: Retail-minimal (Everlane/Casper aesthetic)</li>
-              </ul>
-            ) : (
-              <ul className="text-sm text-[#4a4f55] space-y-1">
-                <li>• Size: 728 × 250 pixels (Leaderboard)</li>
-                <li>• Format: Animated HTML/CSS/JS</li>
-                <li>• 5 frames with smooth fade transitions</li>
-                <li>• Scrolling references bar at bottom</li>
-                <li>• "Learn more" CTA button</li>
-              </ul>
-            )}
+            <ul className="text-sm text-[#4a4f55] space-y-1">
+              <li>• Size: 480 × 320 pixels</li>
+              <li>• Format: Pure CSS animation (no JavaScript)</li>
+              <li>• Frame 1: Cinemagraph video + emotional headline</li>
+              <li>• Frame 2: Single HO claim with superscript</li>
+              <li>• Frame 3: CTA button + micro-reference footer</li>
+              <li>• Style: Retail-minimal (Everlane/Casper aesthetic)</li>
+            </ul>
           </div>
 
           {/* Generate Button */}
@@ -397,10 +300,8 @@ Give me a moment...`
               Disease Education
             </span>
             <span className="text-sm text-[#4a4f55]">
-              • HCP • {bannerStyle === 'cinematic'
-                ? DA_CINEMATIC_FOCUS.find(f => f.id === bannerFocus)?.name
-                : DA_BANNER_FOCUS.find(f => f.id === bannerFocus)?.name}
-              {bannerStyle === 'cinematic' && <span className="ml-1 px-1.5 py-0.5 bg-[#A00868]/10 text-[#A00868] rounded text-xs">Cinematic</span>}
+              • HCP • {DA_CINEMATIC_FOCUS.find(f => f.id === bannerFocus)?.name}
+              <span className="ml-1 px-1.5 py-0.5 bg-[#A00868]/10 text-[#A00868] rounded text-xs">Cinematic</span>
             </span>
           </div>
           <div className="flex items-center gap-4">
@@ -585,8 +486,8 @@ Give me a moment...`
                 <div className="shadow-lg bg-white rounded overflow-hidden">
                   <iframe
                     srcDoc={generatedContent}
-                    width={bannerStyle === 'cinematic' ? '480' : '760'}
-                    height={bannerStyle === 'cinematic' ? '320' : '320'}
+                    width="480"
+                    height="320"
                     className="border-0 block"
                     title="Banner Preview"
                     style={{ margin: 0, padding: 0 }}
@@ -641,10 +542,7 @@ Give me a moment...`
           {generatedContent && (
             <>
               <div className="mb-4 text-xs text-[#4a4f55] text-center">
-                {bannerStyle === 'cinematic'
-                  ? '480 × 320 pixels • Cinematic 3-Frame • Pure CSS Animation'
-                  : '728 × 300 pixels (Leaderboard + References Bar) • Animated HTML Banner'
-                }
+                480 × 320 pixels • Cinematic 3-Frame • Pure CSS Animation
               </div>
 
               {/* Raw HTML (collapsed) */}

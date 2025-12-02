@@ -82,7 +82,7 @@ ${BASE_STYLES}
 </head>
 <body>
 <div class="brand-bar">
- <div><!-- LOGO_PLACEHOLDER --></div>
+ <div style="font-family:Montserrat,sans-serif;font-weight:700;font-size:16px;color:white;">DifferentObesity<span style="color:#A00868;">.com</span></div>
  <div style="font-size:12px;">FOR U.S. HEALTHCARE PROFESSIONALS</div>
 </div>
 
@@ -124,8 +124,9 @@ ${BASE_STYLES}
    <li>van Santen HM, van Schaik J, van Roessel IMAA, Beckhuas J, Boehnke F, Müller HL. Diagnostic criteria for the hypothalamic syndrome in childhood. Eur J Endocrinol. 2023;188(2):ivad009. doi:10.1093/ejendo/ivad009</li>
    <li>van Iersel L, Brokke KE, Adan RAH, Bulthuis LCM, van den Akker ELT, van Santen HM. Pathophysiology and individualized treatment of hypothalamic obesity following craniopharyngioma and other suprasellar tumors: a systematic review. Endocr Rev. 2019;40(1):193-235. doi:10.1210/er.2018-00017</li>
    <li>Roth CL. Hypothalamic obesity in craniopharyngioma patients: disturbed energy homeostasis related to extent of hypothalamic damage and its implication for obesity intervention. J Clin Med. 2015;4(9):1774-1797. doi:10.3390/jcm4091774</li>
-   <li>Craven M, Crowley JH, Chiang L, et al. Patient-relevant outcomes… Front Endocrinol. 2022;13:876770. doi:10.3389/fendo.2022.876770</li>
-   <li>Kayadjanian N, Hsu EA, Wood AM, Carson DS. Caregiver burden… J Clin Endocrinol Metab. 2023;109(1):e76-e87. doi:10.1210/clinem/dgad488</li>
+   <li>Craven M, Crowley JH, Chiang L, et al. Patient-relevant outcomes and health-related quality of life in patients with craniopharyngioma: a systematic review. Front Endocrinol. 2022;13:876770. doi:10.3389/fendo.2022.876770</li>
+   <li>Kayadjanian N, Hsu EA, Wood AM, Carson DS. Caregiver burden associated with hyperphagia in hypothalamic obesity: a systematic review. J Clin Endocrinol Metab. 2023;109(1):e76-e87. doi:10.1210/clinem/dgad488</li>
+   <li>Müller HL. Childhood craniopharyngioma: current controversies on management in diagnostics, treatment and follow-up. Expert Rev Neurother. 2010;10(4):515-524. doi:10.1586/ern.10.15</li>
  </ol>
 </div>
 
@@ -163,7 +164,7 @@ ${BASE_STYLES}
 </head>
 <body>
 <div class="brand-bar">
- <div><!-- LOGO_PLACEHOLDER --></div>
+ <div style="font-family:Montserrat,sans-serif;font-weight:700;font-size:16px;color:white;">DifferentObesity<span style="color:#A00868;">.com</span></div>
  <div style="font-size:12px;">FOR U.S. HEALTHCARE PROFESSIONALS</div>
 </div>
 
@@ -247,7 +248,7 @@ ${BASE_STYLES}
 </head>
 <body>
 <div class="brand-bar">
- <div><!-- LOGO_PLACEHOLDER --></div>
+ <div style="font-family:Montserrat,sans-serif;font-weight:700;font-size:16px;color:white;">DifferentObesity<span style="color:#A00868;">.com</span></div>
  <div style="font-size:12px;">FOR U.S. HEALTHCARE PROFESSIONALS</div>
 </div>
 
