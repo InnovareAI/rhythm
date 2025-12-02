@@ -243,7 +243,7 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap');
 body { margin:0; padding:0; }
 .banner { width:480px; height:320px; position:relative; overflow:hidden; font-family:'Open Sans', sans-serif; }
-.frame { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; }
+.frame { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transition: opacity 0.6s ease-in-out; }
 
 @keyframes frame1cycle {
  0%, 32% { opacity:1; }
@@ -311,7 +311,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap');
 body { margin:0; padding:0; }
 .banner { width:480px; height:320px; position:relative; overflow:hidden; font-family:'Open Sans', sans-serif; }
-.frame { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; }
+.frame { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transition: opacity 0.6s ease-in-out; }
 
 @keyframes frame1cycle {
  0%, 32% { opacity:1; }
@@ -379,7 +379,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap');
 body { margin:0; padding:0; }
 .banner { width:480px; height:320px; position:relative; overflow:hidden; font-family:'Open Sans', sans-serif; }
-.frame { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; }
+.frame { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transition: opacity 0.6s ease-in-out; }
 
 @keyframes frame1cycle {
  0%, 32% { opacity:1; }
@@ -447,7 +447,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap');
 body { margin:0; padding:0; }
 .banner { width:480px; height:320px; position:relative; overflow:hidden; font-family:'Open Sans', sans-serif; }
-.frame { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; }
+.frame { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transition: opacity 0.6s ease-in-out; }
 
 @keyframes frame1cycle {
  0%, 32% { opacity:1; }
@@ -515,7 +515,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap');
 body { margin:0; padding:0; }
 .banner { width:480px; height:320px; position:relative; overflow:hidden; font-family:'Open Sans', sans-serif; }
-.frame { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; }
+.frame { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transition: opacity 0.6s ease-in-out; }
 
 @keyframes frame1cycle {
  0%, 32% { opacity:1; }
