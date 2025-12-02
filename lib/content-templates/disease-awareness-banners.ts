@@ -61,8 +61,8 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
     .frames { position: relative; flex: 1 1 auto; padding: 20px 24px 8px; overflow: hidden; }
     .frame { position: absolute; inset: 0; padding: 24px 28px 16px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
     .frame.active { opacity: 1; z-index: 2; }
-    .headline { font-weight: 800; font-size: 22px; line-height: 1.2; letter-spacing: 0.02em; margin-bottom: 10px; }
-    .subcopy { font-size: 13px; line-height: 1.4; max-width: 95%; opacity: 0.9; }
+    .headline { font-weight: 800; font-size: 18px; line-height: 1.2; letter-spacing: 0.02em; margin-bottom: 10px; }
+    .subcopy { font-size: 12px; line-height: 1.4; max-width: 98%; opacity: 0.9; }
     .cta-row { margin-top: 18px; display: flex; justify-content: flex-end; }
     .cta-button { background: #A00868; color: #ffffff; border-radius: 8px; padding: 10px 24px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }
     .cta-button:hover { background: #7a0550; }
@@ -173,8 +173,8 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
     .frames { position: relative; flex: 1 1 auto; padding: 20px 24px 8px; overflow: hidden; }
     .frame { position: absolute; inset: 0; padding: 24px 28px 16px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
     .frame.active { opacity: 1; z-index: 2; }
-    .headline { font-weight: 800; font-size: 22px; line-height: 1.2; letter-spacing: 0.02em; margin-bottom: 10px; }
-    .subcopy { font-size: 13px; line-height: 1.4; max-width: 95%; opacity: 0.9; }
+    .headline { font-weight: 800; font-size: 18px; line-height: 1.2; letter-spacing: 0.02em; margin-bottom: 10px; }
+    .subcopy { font-size: 12px; line-height: 1.4; max-width: 98%; opacity: 0.9; }
     .cta-row { margin-top: 18px; display: flex; justify-content: flex-end; }
     .cta-button { background: #A00868; color: #ffffff; border-radius: 8px; padding: 10px 24px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }
     .cta-button:hover { background: #7a0550; }

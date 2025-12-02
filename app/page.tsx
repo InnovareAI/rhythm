@@ -26,40 +26,7 @@ export default function Home() {
 
         {/* Hub Cards */}
         <div className="flex flex-col sm:flex-row gap-8 justify-center items-stretch max-w-4xl mx-auto">
-          {/* IMCIVREE Branded Hub Card */}
-          <Link
-            href="/imcivree"
-            className="group relative rounded-2xl border-2 border-[#007a80] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#1c7b80] hover:bg-[#f6fbfb] sm:max-w-md flex-1"
-          >
-            <div className="relative">
-              <div className="mb-4 flex justify-center">
-                <img
-                  src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png"
-                  alt="IMCIVREE"
-                  className="h-10"
-                />
-              </div>
-              <h3 className="text-center text-xl font-bold text-[#007a80]">IMCIVREE Creative Hub</h3>
-              <p className="mt-2 text-center text-sm text-[#4a4f55]">
-                Branded promotional content with ISI
-              </p>
-              <div className="mt-4 text-center">
-                <span className="inline-block rounded-full bg-[#007a80]/10 px-3 py-1 text-xs font-medium text-[#007a80]">
-                  Branded
-                </span>
-              </div>
-              <div className="mt-4 flex justify-center">
-                <span className="inline-flex items-center text-sm font-semibold text-[#007a80] group-hover:text-[#1c7b80]">
-                  Enter Hub
-                  <svg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Disease Awareness Hub Card */}
+          {/* Disease Awareness Hub Card - LEFT */}
           <Link
             href="/disease-awareness"
             className="group relative rounded-2xl border-2 border-[#1a1652] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#00a7df] hover:bg-[#f9f2f8] sm:max-w-md flex-1"
@@ -83,6 +50,39 @@ export default function Home() {
               </div>
               <div className="mt-4 flex justify-center">
                 <span className="inline-flex items-center text-sm font-semibold text-[#00a7df] group-hover:text-[#1a1652]">
+                  Enter Hub
+                  <svg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </Link>
+
+          {/* IMCIVREE Branded Hub Card - RIGHT */}
+          <Link
+            href="/imcivree"
+            className="group relative rounded-2xl border-2 border-[#007a80] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#1c7b80] hover:bg-[#f6fbfb] sm:max-w-md flex-1"
+          >
+            <div className="relative">
+              <div className="mb-4 flex justify-center">
+                <img
+                  src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png"
+                  alt="IMCIVREE"
+                  className="h-10"
+                />
+              </div>
+              <h3 className="text-center text-xl font-bold text-[#007a80]">IMCIVREE Creative Hub</h3>
+              <p className="mt-2 text-center text-sm text-[#4a4f55]">
+                Branded promotional content with ISI
+              </p>
+              <div className="mt-4 text-center">
+                <span className="inline-block rounded-full bg-[#007a80]/10 px-3 py-1 text-xs font-medium text-[#007a80]">
+                  Branded
+                </span>
+              </div>
+              <div className="mt-4 flex justify-center">
+                <span className="inline-flex items-center text-sm font-semibold text-[#007a80] group-hover:text-[#1c7b80]">
                   Enter Hub
                   <svg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
