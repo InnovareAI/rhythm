@@ -2,7 +2,7 @@
 
 **Project:** IMCIVREE Creative Hub
 **Client:** Rhythm Pharmaceuticals / 3cubed
-**Last Updated:** December 2, 2025 (Session 10)
+**Last Updated:** December 2, 2025 (Session 11)
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
 **Repository:** https://github.com/InnovareAI/rhythm.git
 
@@ -30,7 +30,8 @@
 18. [Recent Changes (Session 8)](#recent-changes-december-2-2025---session-8)
 19. [Recent Changes (Session 9)](#recent-changes-december-2-2025---session-9)
 20. [Recent Changes (Session 10)](#recent-changes-december-2-2025---session-10)
-21. [Known Issues & Future Work](#known-issues--future-work)
+21. [Recent Changes (Session 11)](#recent-changes-december-2-2025---session-11)
+22. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
@@ -1525,6 +1526,140 @@ ca85a21 Add cinematic 3-frame HO banner system to Disease Awareness
 
 ---
 
+## Recent Changes (December 2, 2025 - Session 11)
+
+### Summary: Cinematic Banner Refinements + Email Template Fixes
+
+This session refined the cinematic 3-frame banner system and fixed HCP email templates based on user feedback and verification against the original ChatGPT "Unbranded Obesity Banner Maker" specifications.
+
+#### 1. Removed 5-Frame Banners
+
+**Change:** Deleted the 5-frame banner templates from Disease Awareness as they were "not as compelling" compared to the cinematic 3-frame style.
+
+**Deleted Templates:**
+- `hcp-disease-education` - Disease Education Overview
+- `hcp-mechanism` - Hypothalamic Mechanism
+
+**Files Updated:**
+- `lib/content-templates/disease-awareness-banners.ts` - Removed template exports
+- `app/disease-awareness/banner-generator/page.tsx` - Removed `DA_BANNER_FOCUS` import and 5-frame toggle UI
+
+#### 2. Added Smooth Transitions to Cinematic Banners
+
+**Change:** Added CSS transitions for smoother opacity fades between frames.
+
+```css
+/* Added to all frame classes */
+transition: opacity 0.6s ease-in-out;
+```
+
+#### 3. Fixed Frame 2 Centering
+
+**Problem:** Frame 2 text was shifted to the right compared to Frame 1, which was perfectly centered.
+
+**Root Cause:** Frame 2 had redundant flex properties that conflicted with the base `.frame` class.
+
+**Before (broken):**
+```css
+.frame2 {
+  background:#181050;
+  animation: frame2cycle 12s infinite;
+  color:#FFFFFF;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+  font-size:22px;
+}
+```
+
+**After (fixed):**
+```css
+.frame2 {
+  background:#181050;
+  animation: frame2cycle 12s infinite;
+  color:#FFFFFF;
+  text-align:center;
+  font-size:22px;
+}
+```
+
+**Solution:** Removed `display:flex; justify-content:center; align-items:center; padding:20px;` from `.frame2` - now relies on base `.frame` class for centering (same as frame1).
+
+#### 4. Added Line Breaks to Frame 2 Text
+
+**Change:** Frame 2 claim text now breaks into 2 lines after "results" for better readability.
+
+**Before:**
+```html
+<div>HYPOTHALAMIC OBESITY (HO) results from hypothalamic injury<sup>1</sup>.</div>
+```
+
+**After:**
+```html
+<div style="text-align:center;">HYPOTHALAMIC OBESITY (HO) results<br>from hypothalamic injury<sup>1</sup>.</div>
+```
+
+#### 5. Fixed HCP Email Template References
+
+**Problem:** Reference 10 was missing and references 8 and 9 were truncated.
+
+**Fixes:**
+- Added Reference 10: `Müller HL. Childhood craniopharyngioma: current controversies on management in diagnostics, treatment and follow-up. Expert Rev Neurother. 2010;10(4):515-524. doi:10.1586/ern.10.15`
+- Fixed truncated Reference 8 with full title
+- Fixed truncated Reference 9 with full title
+
+#### 6. Added Text-Based Logo to HCP Emails
+
+**Problem:** HCP email templates had `LOGO_PLACEHOLDER` instead of actual logo.
+
+**Solution:** Added text-based logo matching DifferentObesity.com branding:
+
+```html
+<div style="font-family:Montserrat,sans-serif;font-weight:700;font-size:16px;color:white;">
+  DifferentObesity<span style="color:#A00868;">.com</span>
+</div>
+```
+
+### Technical Details
+
+**HO Color Palette (verified against ChatGPT spec):**
+| Color | Hex Code | Usage |
+|-------|----------|-------|
+| Deep Indigo | #181050 | Frame backgrounds |
+| Awareness Magenta | #A00868 | CTA button, logo accent |
+| Soft Lavender | #F0E0F8 | Headline text |
+| Pale Off-White | #F8F0F8 | Body text, reference text |
+
+**Frame Timing (verified):**
+- Frame 1: 0-32% (opacity 1), 33-100% (opacity 0)
+- Frame 2: 0-32% (opacity 0), 33-66% (opacity 1), 67-100% (opacity 0)
+- Frame 3: 0-66% (opacity 0), 67-100% (opacity 1)
+- Total cycle: 12 seconds
+
+**Typography (verified):**
+- Headlines: Montserrat Bold (700)
+- Body/CTA: Open Sans (400, 600)
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `lib/content-templates/disease-awareness-banners.ts` | Removed 5-frame templates, fixed frame2 CSS, added transitions, added line breaks |
+| `lib/content-templates/disease-awareness-emails.ts` | Added ref 10, fixed refs 8/9, added text-based logo |
+| `app/disease-awareness/banner-generator/page.tsx` | Removed 5-frame toggle UI |
+
+### Recent Commits (Dec 2, Session 11)
+
+```
+bc4f897 Fix cinematic banner centering, remove 5-frame banners, fix email refs
+a9580ca Fix frame2 text centering and add line breaks
+1d15751 Fix frame2 centering to match frame1
+```
+
+---
+
 ## Known Issues & Future Work
 
 ### Completed Features (Previously Limitations)
@@ -1621,4 +1756,4 @@ ca85a21 Add cinematic 3-frame HO banner system to Disease Awareness
 
 ---
 
-*Document generated: December 2, 2025 (Session 10)*
+*Document generated: December 2, 2025 (Session 11)*
