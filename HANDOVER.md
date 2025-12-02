@@ -2,7 +2,7 @@
 
 **Project:** IMCIVREE Creative Hub
 **Client:** Rhythm Pharmaceuticals / 3cubed
-**Last Updated:** December 2, 2025 (Session 9)
+**Last Updated:** December 2, 2025 (Session 10)
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
 **Repository:** https://github.com/InnovareAI/rhythm.git
 
@@ -29,7 +29,8 @@
 17. [Recent Changes (Session 7)](#recent-changes-december-1-2025---session-7)
 18. [Recent Changes (Session 8)](#recent-changes-december-2-2025---session-8)
 19. [Recent Changes (Session 9)](#recent-changes-december-2-2025---session-9)
-20. [Known Issues & Future Work](#known-issues--future-work)
+20. [Recent Changes (Session 10)](#recent-changes-december-2-2025---session-10)
+21. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
@@ -1431,6 +1432,99 @@ d1d91e4 Fix banner cutoff, improve text sizing, and swap landing page layout
 
 ---
 
+## Recent Changes (December 2, 2025 - Session 10)
+
+### Summary: Cinematic 3-Frame HO Banner System
+
+This session implemented a new cinematic banner style for Disease Awareness content based on detailed user specifications from a ChatGPT-based banner maker.
+
+#### 1. Cinematic 3-Frame Banner System
+
+**New Feature:** A cinematic 3-frame banner system for Hypothalamic Obesity (HO) disease awareness.
+
+**Frame Structure:**
+| Frame | Duration | Content |
+|-------|----------|---------|
+| Frame 1 | 0-32% | Cinemagraph video + emotional headline |
+| Frame 2 | 33-66% | Single HO claim with superscript reference |
+| Frame 3 | 67-100% | CTA button + micro-reference footer |
+
+**Animation:** Pure CSS using opacity keyframes (12-second cycle)
+
+```css
+@keyframes frame1cycle { 0%, 32% { opacity:1; } 33%, 100% { opacity:0; } }
+@keyframes frame2cycle { 0%, 32% { opacity:0; } 33%, 66% { opacity:1; } 67%, 100% { opacity:0; } }
+@keyframes frame3cycle { 0%, 66% { opacity:0; } 67%, 100% { opacity:1; } }
+```
+
+**Cinemagraph Video:** `https://hcp.differentobesity.com/homepage-cinemagraph.mp4`
+
+**Banner Dimensions:** 480×320 pixels (cinematic) vs 760×320 (5-frame standard)
+
+#### 2. HO Color Palette
+
+| Color | Hex Code | Usage |
+|-------|----------|-------|
+| Deep Indigo | #181050 | Frame backgrounds |
+| Awareness Magenta | #A00868 | CTA button |
+| Soft Lavender | #F0E0F8 | Headline text |
+| Pale Off-White | #F8F0F8 | Body text, reference text |
+
+#### 3. Typography
+
+- **Headlines:** Montserrat Bold
+- **Body/CTA:** Open Sans (400, 600)
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap');
+```
+
+#### 4. Cinematic Banner Templates
+
+Five cinematic templates added to Disease Awareness:
+
+| Template ID | Name | Claim Focus |
+|-------------|------|-------------|
+| `hcp-cinematic-injury` | HO from Injury | HYPOTHALAMIC OBESITY (HO) results from hypothalamic injury |
+| `hcp-cinematic-mc4r` | MC4R Pathway | MC4R regulates hunger and satiety |
+| `hcp-cinematic-hyperphagia` | Hyperphagia Prevalence | ~70% of patients with HO experience hyperphagia |
+| `hcp-cinematic-weight-gain` | Weight Gain Timeline | Weight gain can begin 6–12 months post-injury |
+| `hcp-cinematic-screening` | Early Screening | Early screening is critical |
+
+#### 5. Style Toggle UI
+
+**New UI Element:** Toggle between cinematic and standard banner styles.
+
+```
+┌─────────────────────────────────────┐
+│  [Cinematic 3-Frame] [5-Frame Standard] │
+└─────────────────────────────────────┘
+```
+
+**Behavior:**
+- Cinematic style shows 480×320 preview with claim dropdown
+- 5-Frame standard shows 760×320 preview with focus options
+
+#### 6. HO Spelling Rules
+
+- **First mention:** "HYPOTHALAMIC OBESITY (HO)"
+- **Subsequent mentions:** "HO" only
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `lib/content-templates/disease-awareness-banners.ts` | Added 5 cinematic templates, DA_CINEMATIC_FOCUS array |
+| `app/disease-awareness/banner-generator/page.tsx` | Added BannerStyle type, style toggle UI, claim selection, dynamic preview sizing |
+
+### Recent Commits (Dec 2, Session 10)
+
+```
+ca85a21 Add cinematic 3-frame HO banner system to Disease Awareness
+```
+
+---
+
 ## Known Issues & Future Work
 
 ### Completed Features (Previously Limitations)
@@ -1527,4 +1621,4 @@ d1d91e4 Fix banner cutoff, improve text sizing, and swap landing page layout
 
 ---
 
-*Document generated: December 2, 2025 (Session 9)*
+*Document generated: December 2, 2025 (Session 10)*
