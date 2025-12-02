@@ -93,7 +93,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 
 <!-- FRAME 2 - Single HO Claim -->
 <div class="frame frame2">
- <div>HYPOTHALAMIC OBESITY (HO) results from hypothalamic injury<sup>1</sup>.</div>
+ <div style="text-align:center; width:100%; padding:0 30px;">HYPOTHALAMIC OBESITY (HO) results<br>from hypothalamic injury<sup>1</sup>.</div>
 </div>
 
 <!-- FRAME 3 - CTA + Reference -->
@@ -161,7 +161,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 
 <!-- FRAME 2 - Single HO Claim -->
 <div class="frame frame2">
- <div>MC4R regulates hunger and satiety<sup>1</sup>.</div>
+ <div style="text-align:center; width:100%; padding:0 30px;">MC4R regulates<br>hunger and satiety<sup>1</sup>.</div>
 </div>
 
 <!-- FRAME 3 - CTA + Reference -->
@@ -229,7 +229,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 
 <!-- FRAME 2 - Single HO Claim -->
 <div class="frame frame2">
- <div>~70% of patients with HO<br>experience hyperphagia<sup>1</sup>.</div>
+ <div style="text-align:center; width:100%; padding:0 30px;">~70% of patients with HO<br>experience hyperphagia<sup>1</sup>.</div>
 </div>
 
 <!-- FRAME 3 - CTA + Reference -->
@@ -297,7 +297,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 
 <!-- FRAME 2 - Single HO Claim -->
 <div class="frame frame2">
- <div>Weight gain can begin<br>6–12 months post-injury<sup>2</sup>.</div>
+ <div style="text-align:center; width:100%; padding:0 30px;">Weight gain can begin<br>6–12 months post-injury<sup>2</sup>.</div>
 </div>
 
 <!-- FRAME 3 - CTA + Reference -->
@@ -365,7 +365,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 
 <!-- FRAME 2 - Single HO Claim -->
 <div class="frame frame2">
- <div>Early screening is critical<sup>3</sup>.</div>
+ <div style="text-align:center; width:100%; padding:0 30px;">Early screening<br>is critical<sup>3</sup>.</div>
 </div>
 
 <!-- FRAME 3 - CTA + Reference -->
