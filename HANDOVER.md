@@ -2,7 +2,7 @@
 
 **Project:** IMCIVREE Creative Hub
 **Client:** Rhythm Pharmaceuticals / 3cubed
-**Last Updated:** December 2, 2025 (Session 11)
+**Last Updated:** December 2, 2025 (Session 12)
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
 **Repository:** https://github.com/InnovareAI/rhythm.git
 
@@ -31,7 +31,8 @@
 19. [Recent Changes (Session 9)](#recent-changes-december-2-2025---session-9)
 20. [Recent Changes (Session 10)](#recent-changes-december-2-2025---session-10)
 21. [Recent Changes (Session 11)](#recent-changes-december-2-2025---session-11)
-22. [Known Issues & Future Work](#known-issues--future-work)
+22. [Recent Changes (Session 12)](#recent-changes-december-2-2025---session-12)
+23. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
@@ -1660,6 +1661,130 @@ a9580ca Fix frame2 text centering and add line breaks
 
 ---
 
+## Recent Changes (December 2, 2025 - Session 12)
+
+### Summary: Cinematic Banner Copy Update + Content History Separation + UX Improvements
+
+This session focused on updating the cinematic banner emotional copy, adding a separate Content History page for Disease Awareness content, fixing content filtering between branded and unbranded hubs, and speeding up the content generation animation.
+
+#### 1. Cinematic Banner Frame 1 Copy Update
+
+**Change:** Updated the emotional headline on Frame 1 of all cinematic banners.
+
+**New Copy:**
+```
+She didn't want to raid the fridge
+in the middle of the night again.
+Her brain did.
+```
+
+**HTML Implementation:**
+```html
+<h1>She didn't want to raid the fridge<br>in the middle of the night again.<br><strong>Her brain did.</strong></h1>
+```
+
+**Font Size Adjustment:**
+- Frame 1 headline reduced from 28px to 24px for better fit
+
+**Templates Updated:**
+- `hcp-cinematic-injury`
+- `hcp-cinematic-mc4r`
+- `hcp-cinematic-hyperphagia`
+- `hcp-cinematic-weight-gain`
+- `hcp-cinematic-screening`
+
+#### 2. Disease Awareness Content History Page
+
+**New Feature:** Separate Content History page for unbranded (Disease Awareness) content.
+
+**Route:** `/disease-awareness/content-history`
+
+**Features:**
+- Purple/teal theming matching Disease Awareness hub
+- Filters only for `da-*` content types (`da-email`, `da-banner`)
+- Filter buttons for All, Emails, Banners
+- Preview modal with iframe
+- Copy HTML and Download functionality
+- Link to banner generator
+
+**UI Changes:**
+- Disease Awareness hub now has 3-column grid (added Content History card)
+- Content History card links to `/disease-awareness/content-history`
+
+#### 3. Content Filtering Fixes
+
+**Problem:** Both branded and unbranded content was showing in both Content History pages.
+
+**Solution:** Added client-side filtering based on content type prefix.
+
+**Branded History (`/content-history`):**
+```typescript
+const brandedContent = (data.content || []).filter((item: ContentItem) =>
+  item.content_type.startsWith('imcivree-')
+)
+```
+
+**Unbranded History (`/disease-awareness/content-history`):**
+```typescript
+const daContent = (data.content || []).filter((item: ContentItem) =>
+  item.content_type.startsWith('da-')
+)
+```
+
+**Content Type Naming Convention:**
+| Hub | Email Type | Banner Type |
+|-----|------------|-------------|
+| IMCIVREE (Branded) | `imcivree-email` | `imcivree-banner` |
+| Disease Awareness (Unbranded) | `da-email` | `da-banner` |
+
+#### 4. Content Generation Animation Speed
+
+**Change:** Reduced animation duration from 45 seconds to 10 seconds for faster demo experience.
+
+**Files Updated:**
+- `app/banner-generator/page.tsx`
+- `app/disease-awareness/chat/page.tsx`
+- `app/disease-awareness/banner-generator/page.tsx`
+
+**Code Change:**
+```typescript
+// Before
+const totalDuration = 45000 // 45 seconds
+
+// After
+const totalDuration = 10000 // 10 seconds
+```
+
+#### 5. History Link Fixes
+
+**Problem:** Disease Awareness generators linked to `/content-history` (branded) instead of `/disease-awareness/content-history` (unbranded).
+
+**Solution:** Fixed History links in Disease Awareness generators.
+
+**Files Updated:**
+- `app/disease-awareness/banner-generator/page.tsx` - History link now goes to `/disease-awareness/content-history`
+- `app/disease-awareness/chat/page.tsx` - History link now goes to `/disease-awareness/content-history`
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `lib/content-templates/disease-awareness-banners.ts` | Updated Frame 1 copy to "raid the fridge" headline, reduced font to 24px |
+| `app/disease-awareness/page.tsx` | Changed to 3-column grid, added Content History card |
+| `app/disease-awareness/content-history/page.tsx` | NEW FILE - Unbranded content history with `da-*` filtering |
+| `app/content-history/page.tsx` | Added `imcivree-*` filtering for branded content only |
+| `app/banner-generator/page.tsx` | Changed animation from 45s to 10s |
+| `app/disease-awareness/chat/page.tsx` | Changed animation from 45s to 10s, fixed History link |
+| `app/disease-awareness/banner-generator/page.tsx` | Changed animation from 45s to 10s, fixed History link |
+
+### Recent Commits (Dec 2, Session 12)
+
+```
+46bd3c0 Update HANDOVER.md with Session 11 changes
+```
+
+---
+
 ## Known Issues & Future Work
 
 ### Completed Features (Previously Limitations)
@@ -1756,4 +1881,4 @@ a9580ca Fix frame2 text centering and add line breaks
 
 ---
 
-*Document generated: December 2, 2025 (Session 11)*
+*Document generated: December 2, 2025 (Session 12)*
