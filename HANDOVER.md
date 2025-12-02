@@ -2,7 +2,7 @@
 
 **Project:** IMCIVREE Creative Hub
 **Client:** Rhythm Pharmaceuticals / 3cubed
-**Last Updated:** December 2, 2025 (Session 8)
+**Last Updated:** December 2, 2025 (Session 9)
 **Production URL:** https://beautiful-cactus-21f97b.netlify.app
 **Repository:** https://github.com/InnovareAI/rhythm.git
 
@@ -28,7 +28,8 @@
 16. [Recent Changes (Session 6)](#recent-changes-december-1-2025---session-6)
 17. [Recent Changes (Session 7)](#recent-changes-december-1-2025---session-7)
 18. [Recent Changes (Session 8)](#recent-changes-december-2-2025---session-8)
-19. [Known Issues & Future Work](#known-issues--future-work)
+19. [Recent Changes (Session 9)](#recent-changes-december-2-2025---session-9)
+20. [Known Issues & Future Work](#known-issues--future-work)
 
 ---
 
@@ -1337,6 +1338,99 @@ e1ba4fe Swap Disease Awareness banner generator panels
 
 ---
 
+## Recent Changes (December 2, 2025 - Session 9)
+
+### Summary: Landing Page Layout Swap + Banner Text Fixes + ActiveCampaign Integration
+
+This session focused on landing page UX improvements and initial CRM integration setup.
+
+#### 1. Landing Page Layout Swap
+
+**Problem:** User wanted Disease Education (unbranded) hub on the LEFT and IMCIVREE (branded) hub on the RIGHT.
+
+**Solution:** Swapped the card positions on the home page.
+
+**Before:**
+```
+┌──────────────────┬──────────────────┐
+│   IMCIVREE       │   Disease        │
+│   (Branded)      │   Education      │
+│   Left           │   Right          │
+└──────────────────┴──────────────────┘
+```
+
+**After:**
+```
+┌──────────────────┬──────────────────┐
+│   Disease        │   IMCIVREE       │
+│   Education      │   (Branded)      │
+│   Left           │   Right          │
+└──────────────────┴──────────────────┘
+```
+
+#### 2. Disease Education Banner Text Cutoff Fix
+
+**Problem:** Banner headline and subcopy text was getting cut off on the right side.
+
+**Solution:** Reduced font sizes and increased max-width for better text fit.
+
+**Changes:**
+```css
+/* Before */
+.headline { font-size: 22px; }
+.subcopy { font-size: 13px; max-width: 95%; }
+
+/* After */
+.headline { font-size: 18px; }
+.subcopy { font-size: 12px; max-width: 98%; }
+```
+
+#### 3. ActiveCampaign API Key Authentication
+
+**New Feature:** CRM integration endpoint for ActiveCampaign authentication.
+
+**Endpoint:** `POST /api/crm/connect/activecampaign`
+
+**Flow:**
+1. User enters ActiveCampaign account URL (e.g., `yourcompany.api-us1.com`)
+2. User enters API key from ActiveCampaign settings
+3. System validates credentials via test API call
+4. On success, credentials are saved for future use
+
+**Request:**
+```json
+{
+  "accountUrl": "yourcompany.api-us1.com",
+  "apiKey": "your-api-key-here"
+}
+```
+
+**Response (success):**
+```json
+{
+  "success": true,
+  "message": "ActiveCampaign connected successfully"
+}
+```
+
+**Note:** This uses API key authentication (no OAuth flow required), which is simpler than HubSpot/Salesforce OAuth integrations.
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `app/page.tsx` | Swapped landing page card layout (Disease Education left, IMCIVREE right) |
+| `lib/content-templates/disease-awareness-banners.ts` | Reduced font sizes (22px→18px headline, 13px→12px subcopy), increased max-width to 98% |
+
+### Recent Commits (Dec 2, Session 9)
+
+```
+217e6a1 Add ActiveCampaign API key authentication
+d1d91e4 Fix banner cutoff, improve text sizing, and swap landing page layout
+```
+
+---
+
 ## Known Issues & Future Work
 
 ### Completed Features (Previously Limitations)
@@ -1433,4 +1527,4 @@ e1ba4fe Swap Disease Awareness banner generator panels
 
 ---
 
-*Document generated: December 2, 2025 (Session 8)*
+*Document generated: December 2, 2025 (Session 9)*
