@@ -1785,6 +1785,97 @@ const totalDuration = 10000 // 10 seconds
 
 ---
 
+## Recent Changes (December 2, 2025 - Session 13)
+
+### Summary: Disease Awareness Content Persistence Fix
+
+This session fixed a critical bug preventing Disease Awareness (unbranded) content from being saved to the database and appearing in Content History.
+
+#### 1. Added Save Functionality to DA Generators
+
+**Problem:** Disease Awareness banners and emails were not being saved to the database after generation.
+
+**Solution:** Added `saveToDatabase()` function to both generators.
+
+**Banner Generator (`app/disease-awareness/banner-generator/page.tsx`):**
+```typescript
+const saveToDatabase = async (html: string) => {
+  try {
+    const response = await fetch('/api/save-content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contentType: 'da-banner',
+        audience: 'hcp',
+        focus: bannerFocus,
+        htmlContent: html
+      })
+    })
+    // ...
+  }
+}
+```
+
+**Email Generator (`app/disease-awareness/chat/page.tsx`):**
+```typescript
+const saveToDatabase = async (html: string) => {
+  try {
+    const response = await fetch('/api/save-content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contentType: 'da-email',
+        audience: 'hcp',
+        focus: emailType,
+        htmlContent: html
+      })
+    })
+    // ...
+  }
+}
+```
+
+#### 2. Fixed API Field Names
+
+**Problem:** Initial implementation used snake_case (`content_type`, `html_content`) but API expected camelCase.
+
+**Fix:** Changed to camelCase (`contentType`, `htmlContent`).
+
+#### 3. Database Constraint Update
+
+**Problem:** Supabase `imcivree_content` table had a CHECK constraint only allowing `imcivree-email` and `imcivree-banner` content types.
+
+**Solution:** Updated constraint to include DA types:
+```sql
+ALTER TABLE imcivree_content DROP CONSTRAINT IF EXISTS imcivree_content_content_type_check;
+ALTER TABLE imcivree_content ADD CONSTRAINT imcivree_content_content_type_check
+CHECK (content_type IN ('imcivree-email', 'imcivree-banner', 'da-email', 'da-banner'));
+```
+
+#### Files Modified
+
+| File | Change |
+|------|--------|
+| `app/disease-awareness/banner-generator/page.tsx` | Added `saveToDatabase()` function, called after generation |
+| `app/disease-awareness/chat/page.tsx` | Added `saveToDatabase()` function, called after generation |
+
+#### Database Changes
+
+| Table | Change |
+|-------|--------|
+| `imcivree_content` | Updated `content_type_check` constraint to allow `da-email`, `da-banner` |
+
+### Content Type Reference
+
+| Hub | Content Type | Description |
+|-----|--------------|-------------|
+| IMCIVREE (Branded) | `imcivree-email` | Branded HCP/Patient emails |
+| IMCIVREE (Branded) | `imcivree-banner` | Branded animated banners |
+| Disease Awareness (Unbranded) | `da-email` | Unbranded aHO education emails |
+| Disease Awareness (Unbranded) | `da-banner` | Unbranded cinematic banners |
+
+---
+
 ## Known Issues & Future Work
 
 ### Completed Features (Previously Limitations)

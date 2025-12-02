@@ -91,6 +91,30 @@ Give me a moment...`
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step])
 
+  // Save content to database
+  const saveToDatabase = async (html: string) => {
+    try {
+      const response = await fetch('/api/save-content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contentType: 'da-email',
+          audience: 'hcp',
+          focus: emailType,
+          htmlContent: html
+        })
+      })
+      if (!response.ok) {
+        const err = await response.json()
+        console.error('Failed to save email to database:', err)
+      } else {
+        console.log('Email saved to database')
+      }
+    } catch (error) {
+      console.error('Error saving email:', error)
+    }
+  }
+
   const generateEmail = async () => {
     setIsLoading(true)
     setStreamingContent('')
@@ -101,7 +125,7 @@ Give me a moment...`
       if (template) {
         // Simulate smooth coding animation
         const htmlContent = template.html
-        const totalDuration = 45000 // 45 seconds
+        const totalDuration = 10000 // 10 seconds
         const totalChars = htmlContent.length
 
         const simulateTyping = () => {
@@ -137,6 +161,10 @@ Give me a moment...`
         setProcessingEmail(false)
 
         setGeneratedContent(htmlContent)
+
+        // Save to database
+        await saveToDatabase(htmlContent)
+
         setMessages(prev => [...prev, {
           role: 'assistant',
           content: `Your email is ready! You can download the HTML or copy to clipboard.`
@@ -181,7 +209,7 @@ Give me a moment...`
             </div>
             <div className="flex items-center gap-4">
               <Link
-                href="/content-history"
+                href="/disease-awareness/content-history"
                 className="flex items-center gap-1 text-sm text-[#4a4f55] hover:text-[#1a1652]"
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -134,9 +134,9 @@ Give me a moment...`
         // Use hardcoded template with simulated coding animation
         console.log('[BANNER] Using hardcoded template:', audience, bannerFocus)
 
-        // Simulate smooth coding animation over 45 seconds using requestAnimationFrame
+        // Simulate smooth coding animation over 10 seconds using requestAnimationFrame
         const htmlContent = template.html
-        const totalDuration = 45000 // 45 seconds
+        const totalDuration = 10000 // 10 seconds
         const totalChars = htmlContent.length
 
         const simulateTyping = () => {

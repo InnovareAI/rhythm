@@ -40,7 +40,7 @@ export default function DiseaseAwarenessHub() {
         </div>
 
         {/* Content Type Cards */}
-        <div className="mt-16 grid gap-8 sm:grid-cols-2 max-w-3xl mx-auto">
+        <div className="mt-16 grid gap-8 sm:grid-cols-3 max-w-5xl mx-auto">
           {/* Emails Card */}
           <Link
             href="/disease-awareness/chat"
@@ -82,6 +82,30 @@ export default function DiseaseAwarenessHub() {
               </p>
               <div className="mt-6 inline-flex items-center rounded-full bg-gradient-to-r from-[#1a1652] to-[#00a7df] px-6 py-3 text-sm font-semibold text-white transition-opacity group-hover:opacity-90">
                 Create banner
+                <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </Link>
+
+          {/* Content History Card */}
+          <Link
+            href="/disease-awareness/content-history"
+            className="group relative rounded-2xl border-2 border-[#1a1652] bg-white p-8 shadow-lg transition-all hover:shadow-xl hover:border-[#00a7df] hover:bg-[#f9f2f8]"
+          >
+            <div className="relative">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[#1a1652] to-[#00a7df]">
+                <svg className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="mt-5 text-2xl font-bold text-[#1a1652]">Content History</h3>
+              <p className="mt-3 text-[#4a4f55]">
+                View and download previously generated disease education content.
+              </p>
+              <div className="mt-6 inline-flex items-center rounded-full bg-gradient-to-r from-[#1a1652] to-[#00a7df] px-6 py-3 text-sm font-semibold text-white transition-opacity group-hover:opacity-90">
+                View history
                 <svg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>

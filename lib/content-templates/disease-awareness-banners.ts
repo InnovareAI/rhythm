@@ -70,7 +70,7 @@ body { margin:0; padding:0; }
 }
 
 .frame1 { animation: frame1cycle 12s infinite; color:#FFFFFF; text-align:center; display:flex; flex-direction:column; justify-content:center; font-family:'Montserrat', sans-serif; }
-.frame1 h1 { font-weight:700; font-size:28px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.frame1 h1 { font-weight:700; font-size:24px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
 .frame2 { background:#181050; animation: frame2cycle 12s infinite; color:#FFFFFF; text-align:center; font-size:22px; }
 
@@ -88,7 +88,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 <!-- FRAME 1 - Cinemagraph + Emotional Headline -->
 <div class="frame frame1">
  <video src="https://hcp.differentobesity.com/homepage-cinemagraph.mp4" autoplay loop muted playsinline></video>
- <h1>Her soccer dreams<br>didn't change.<br><strong>Her brain did.</strong></h1>
+ <h1>She didn't want to raid the fridge<br>in the middle of the night again.<br><strong>Her brain did.</strong></h1>
 </div>
 
 <!-- FRAME 2 - Single HO Claim -->
@@ -138,7 +138,7 @@ body { margin:0; padding:0; }
 }
 
 .frame1 { animation: frame1cycle 12s infinite; color:#FFFFFF; text-align:center; display:flex; flex-direction:column; justify-content:center; font-family:'Montserrat', sans-serif; }
-.frame1 h1 { font-weight:700; font-size:28px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.frame1 h1 { font-weight:700; font-size:24px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
 .frame2 { background:#A00868; animation: frame2cycle 12s infinite; color:#FFFFFF; text-align:center; font-size:22px; }
 
@@ -156,7 +156,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 <!-- FRAME 1 - Cinemagraph + Emotional Headline -->
 <div class="frame frame1">
  <video src="https://hcp.differentobesity.com/homepage-cinemagraph.mp4" autoplay loop muted playsinline></video>
- <h1>Her soccer dreams<br>didn't change.<br><strong>Her brain did.</strong></h1>
+ <h1>She didn't want to raid the fridge<br>in the middle of the night again.<br><strong>Her brain did.</strong></h1>
 </div>
 
 <!-- FRAME 2 - Single HO Claim -->
@@ -206,7 +206,7 @@ body { margin:0; padding:0; }
 }
 
 .frame1 { animation: frame1cycle 12s infinite; color:#FFFFFF; text-align:center; display:flex; flex-direction:column; justify-content:center; font-family:'Montserrat', sans-serif; }
-.frame1 h1 { font-weight:700; font-size:28px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.frame1 h1 { font-weight:700; font-size:24px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
 .frame2 { background:#181050; animation: frame2cycle 12s infinite; color:#FFFFFF; text-align:center; font-size:20px; line-height:1.3; }
 
@@ -224,7 +224,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 <!-- FRAME 1 - Cinemagraph + Emotional Headline -->
 <div class="frame frame1">
  <video src="https://hcp.differentobesity.com/homepage-cinemagraph.mp4" autoplay loop muted playsinline></video>
- <h1>Her soccer dreams<br>didn't change.<br><strong>Her brain did.</strong></h1>
+ <h1>She didn't want to raid the fridge<br>in the middle of the night again.<br><strong>Her brain did.</strong></h1>
 </div>
 
 <!-- FRAME 2 - Single HO Claim -->
@@ -274,7 +274,7 @@ body { margin:0; padding:0; }
 }
 
 .frame1 { animation: frame1cycle 12s infinite; color:#FFFFFF; text-align:center; display:flex; flex-direction:column; justify-content:center; font-family:'Montserrat', sans-serif; }
-.frame1 h1 { font-weight:700; font-size:28px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.frame1 h1 { font-weight:700; font-size:24px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
 .frame2 { background:#A00868; animation: frame2cycle 12s infinite; color:#FFFFFF; text-align:center; font-size:20px; line-height:1.3; }
 
@@ -292,7 +292,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 <!-- FRAME 1 - Cinemagraph + Emotional Headline -->
 <div class="frame frame1">
  <video src="https://hcp.differentobesity.com/homepage-cinemagraph.mp4" autoplay loop muted playsinline></video>
- <h1>Her soccer dreams<br>didn't change.<br><strong>Her brain did.</strong></h1>
+ <h1>She didn't want to raid the fridge<br>in the middle of the night again.<br><strong>Her brain did.</strong></h1>
 </div>
 
 <!-- FRAME 2 - Single HO Claim -->
@@ -342,7 +342,7 @@ body { margin:0; padding:0; }
 }
 
 .frame1 { animation: frame1cycle 12s infinite; color:#FFFFFF; text-align:center; display:flex; flex-direction:column; justify-content:center; font-family:'Montserrat', sans-serif; }
-.frame1 h1 { font-weight:700; font-size:28px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.frame1 h1 { font-weight:700; font-size:24px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
 .frame2 { background:#181050; animation: frame2cycle 12s infinite; color:#FFFFFF; text-align:center; font-size:22px; }
 
@@ -360,7 +360,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 <!-- FRAME 1 - Cinemagraph + Emotional Headline -->
 <div class="frame frame1">
  <video src="https://hcp.differentobesity.com/homepage-cinemagraph.mp4" autoplay loop muted playsinline></video>
- <h1>Her soccer dreams<br>didn't change.<br><strong>Her brain did.</strong></h1>
+ <h1>She didn't want to raid the fridge<br>in the middle of the night again.<br><strong>Her brain did.</strong></h1>
 </div>
 
 <!-- FRAME 2 - Single HO Claim -->

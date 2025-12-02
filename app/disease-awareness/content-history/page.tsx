@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation'
 
 interface ContentItem {
   id: string
-  content_type: 'imcivree-email' | 'imcivree-banner'
-  audience: 'hcp' | 'patient'
+  content_type: 'da-email' | 'da-banner'
+  audience: 'hcp'
   focus: string | null
   key_message: string | null
   html_content: string
@@ -28,7 +28,7 @@ interface ContentVersion {
   created_at: string
 }
 
-export default function ContentHistoryPage() {
+export default function DAContentHistoryPage() {
   const router = useRouter()
   const [content, setContent] = useState<ContentItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -38,32 +38,21 @@ export default function ContentHistoryPage() {
   const [versions, setVersions] = useState<ContentVersion[]>([])
   const [loadingVersions, setLoadingVersions] = useState(false)
 
-  // Ziflow feedback state
-  const [ziflowFeedback, setZiflowFeedback] = useState<any>(null)
-  const [loadingFeedback, setLoadingFeedback] = useState(false)
-
   // Filters
-  const [typeFilter, setTypeFilter] = useState<'all' | 'imcivree-email' | 'imcivree-banner'>('all')
-  const [audienceFilter, setAudienceFilter] = useState<'all' | 'hcp' | 'patient'>('all')
-  const [statusFilter, setStatusFilter] = useState<'all' | 'draft' | 'pending_review' | 'approved' | 'rejected' | 'needs_changes'>('all')
+  const [typeFilter, setTypeFilter] = useState<'all' | 'da-email' | 'da-banner'>('all')
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     fetchHistory()
-  }, [typeFilter, audienceFilter, statusFilter])
+  }, [typeFilter])
 
   const fetchHistory = async () => {
     try {
       setIsLoading(true)
       const params = new URLSearchParams()
+      // Filter to disease-awareness content types
       if (typeFilter !== 'all') {
         params.set('contentType', typeFilter)
-      }
-      if (audienceFilter !== 'all') {
-        params.set('audience', audienceFilter)
-      }
-      if (statusFilter !== 'all') {
-        params.set('status', statusFilter)
       }
       params.set('limit', '100')
 
@@ -74,11 +63,11 @@ export default function ContentHistoryPage() {
       }
 
       const data = await response.json()
-      // Filter to only IMCIVREE (branded) content
-      const brandedContent = (data.content || []).filter((item: ContentItem) =>
-        item.content_type.startsWith('imcivree-')
+      // Filter to only da- (disease awareness) content
+      const daContent = (data.content || []).filter((item: ContentItem) =>
+        item.content_type.startsWith('da-')
       )
-      setContent(brandedContent)
+      setContent(daContent)
       setError(null)
     } catch (err: any) {
       console.error('Error fetching history:', err)
@@ -103,30 +92,6 @@ export default function ContentHistoryPage() {
     }
   }
 
-  const fetchZiflowFeedback = async (proofId: string) => {
-    try {
-      setLoadingFeedback(true)
-      const response = await fetch(`/api/ziflow-feedback/${proofId}`)
-      if (response.ok) {
-        const data = await response.json()
-        setZiflowFeedback(data)
-      }
-    } catch (err) {
-      console.error('Error fetching Ziflow feedback:', err)
-    } finally {
-      setLoadingFeedback(false)
-    }
-  }
-
-  // Fetch Ziflow feedback when selecting an item with a proof ID
-  useEffect(() => {
-    if (selectedItem?.ziflow_proof_id) {
-      fetchZiflowFeedback(selectedItem.ziflow_proof_id)
-    } else {
-      setZiflowFeedback(null)
-    }
-  }, [selectedItem?.ziflow_proof_id])
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleDateString('en-US', {
@@ -139,41 +104,45 @@ export default function ContentHistoryPage() {
   }
 
   const getContentTypeLabel = (item: ContentItem) => {
-    return item.content_type === 'imcivree-email' ? 'Email' : 'Banner'
-  }
-
-  const getAudienceLabel = (item: ContentItem) => {
-    return item.audience === 'hcp' ? 'HCP' : 'Patient'
+    return item.content_type === 'da-email' ? 'Email' : 'Banner'
   }
 
   const getFocusLabel = (item: ContentItem) => {
     const focusLabels: Record<string, string> = {
-      'moa': 'Mechanism of Action',
-      'summary': 'Clinical Summary',
-      'dosing': 'Dosing Information',
-      'efficacy': 'Efficacy Data',
-      'efficacy-weight': 'Weight Reduction',
-      'efficacy-hunger': 'Hunger Reduction',
-      'treatment': 'Treatment Journey',
-      'getting-started': 'Getting Started',
-      'what-to-expect': 'What to Expect',
-      'support': 'Support Resources',
-      'understanding': 'Understanding BBS',
-      'hope': 'Path Forward'
+      'hcp-what-is-aho': 'What is aHO',
+      'hcp-mechanism': 'Hypothalamic Pathway',
+      'hcp-recognition': 'Recognizing aHO',
+      'hcp-cinematic-injury': 'HO from Injury',
+      'hcp-cinematic-mc4r': 'MC4R Pathway',
+      'hcp-cinematic-hyperphagia': 'Hyperphagia Prevalence',
+      'hcp-cinematic-weight-gain': 'Weight Gain Timeline',
+      'hcp-cinematic-screening': 'Early Screening',
+      'hcp-disease-education': 'Disease Education',
     }
     return focusLabels[item.focus || ''] || item.focus || 'General'
   }
 
   // Client-side filtering for search
   const filteredContent = useMemo(() => {
-    if (!searchQuery.trim()) return content
-    const query = searchQuery.toLowerCase()
-    return content.filter(item => {
-      const focus = getFocusLabel(item).toLowerCase()
-      const keyMessage = (item.key_message || '').toLowerCase()
-      return focus.includes(query) || keyMessage.includes(query)
-    })
-  }, [content, searchQuery])
+    let filtered = content
+
+    // Apply type filter
+    if (typeFilter !== 'all') {
+      filtered = filtered.filter(item => item.content_type === typeFilter)
+    }
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
+      filtered = filtered.filter(item => {
+        const focus = getFocusLabel(item).toLowerCase()
+        const keyMessage = (item.key_message || '').toLowerCase()
+        return focus.includes(query) || keyMessage.includes(query)
+      })
+    }
+
+    return filtered
+  }, [content, typeFilter, searchQuery])
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -209,7 +178,7 @@ export default function ContentHistoryPage() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `imcivree-${item.content_type.split('-')[1]}-${item.id.slice(0, 8)}.html`
+    a.download = `disease-education-${item.content_type.includes('email') ? 'email' : 'banner'}-${item.id.slice(0, 8)}.html`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -234,28 +203,26 @@ export default function ContentHistoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#f6fbfb] via-white to-[#f6fbfb]">
+    <div className="min-h-screen bg-gradient-to-b from-[#f9f2f8] via-white to-[#f9f2f8]">
       {/* Header */}
-      <header className="border-b border-[#007a80]/10 bg-white">
+      <header className="border-b border-[#1a1652]/10 bg-white">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-2xl font-bold text-[#007a80]">
+            <Link href="/" className="text-2xl font-bold text-[#1a1652]">
               3cubed
             </Link>
-            <div className="h-6 w-px bg-[#007a80]/20" />
-            <img
-              src="https://rhythmtx.com/wp-content/uploads/2024/10/imcivree-logo-big.png"
-              alt="IMCIVREE"
-              className="h-8"
-            />
-            <div className="h-6 w-px bg-[#007a80]/20" />
-            <span className="text-lg font-medium text-[#007a80]">
+            <div className="h-6 w-px bg-[#1a1652]/20" />
+            <span className="text-lg font-medium text-[#1a1652]">
+              Disease Education
+            </span>
+            <div className="h-6 w-px bg-[#1a1652]/20" />
+            <span className="text-lg font-medium text-[#00a7df]">
               Content History
             </span>
           </div>
           <Link
-            href="/"
-            className="text-sm text-[#4a4f55] hover:text-[#007a80]"
+            href="/disease-awareness"
+            className="text-sm text-[#4a4f55] hover:text-[#1a1652]"
           >
             ← Back to Hub
           </Link>
@@ -265,12 +232,12 @@ export default function ContentHistoryPage() {
       <main className="mx-auto max-w-7xl px-6 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-[#007a80]">Content History</h1>
-            <p className="text-[#4a4f55] mt-1">View and manage your generated emails and banners</p>
+            <h1 className="text-3xl font-bold text-[#1a1652]">Content History</h1>
+            <p className="text-[#4a4f55] mt-1">View and manage your disease education content</p>
           </div>
           <button
             onClick={fetchHistory}
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-[#007a80] text-white rounded-lg hover:bg-[#1c7b80]"
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-[#1a1652] to-[#00a7df] text-white rounded-lg hover:opacity-90"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -280,7 +247,7 @@ export default function ContentHistoryPage() {
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+        <div className="bg-white rounded-xl border border-[#1a1652]/10 p-4 mb-6">
           {/* Search */}
           <div className="relative mb-4">
             <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -291,70 +258,27 @@ export default function ContentHistoryPage() {
               placeholder="Search by focus area or key message..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#007a80]/20 focus:border-[#007a80]"
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1a1652]/20 focus:border-[#1a1652]"
             />
           </div>
 
-          {/* Filter Rows */}
+          {/* Filter Row */}
           <div className="flex flex-wrap gap-4">
             {/* Type Filter */}
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Content Type</label>
               <div className="flex gap-1">
-                {(['all', 'imcivree-email', 'imcivree-banner'] as const).map((f) => (
+                {(['all', 'da-email', 'da-banner'] as const).map((f) => (
                   <button
                     key={f}
                     onClick={() => setTypeFilter(f)}
                     className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
                       typeFilter === f
-                        ? 'bg-[#007a80] text-white'
+                        ? 'bg-gradient-to-r from-[#1a1652] to-[#00a7df] text-white'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
-                    {f === 'all' ? 'All' : f === 'imcivree-email' ? 'Emails' : 'Banners'}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Audience Filter */}
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Audience</label>
-              <div className="flex gap-1">
-                {(['all', 'hcp', 'patient'] as const).map((f) => (
-                  <button
-                    key={f}
-                    onClick={() => setAudienceFilter(f)}
-                    className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-                      audienceFilter === f
-                        ? 'bg-amber-500 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    {f === 'all' ? 'All' : f === 'hcp' ? 'HCP' : 'Patient'}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Status Filter */}
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
-              <div className="flex gap-1">
-                {(['all', 'draft', 'pending_review', 'approved', 'needs_changes'] as const).map((f) => (
-                  <button
-                    key={f}
-                    onClick={() => setStatusFilter(f)}
-                    className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-                      statusFilter === f
-                        ? f === 'approved' ? 'bg-green-600 text-white'
-                        : f === 'pending_review' ? 'bg-blue-600 text-white'
-                        : f === 'needs_changes' ? 'bg-yellow-500 text-white'
-                        : 'bg-gray-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    {f === 'all' ? 'All' : f === 'pending_review' ? 'In Review' : f === 'needs_changes' ? 'Needs Changes' : f.charAt(0).toUpperCase() + f.slice(1)}
+                    {f === 'all' ? 'All' : f === 'da-email' ? 'Emails' : 'Banners'}
                   </button>
                 ))}
               </div>
@@ -362,7 +286,7 @@ export default function ContentHistoryPage() {
           </div>
 
           {/* Active filters count */}
-          {(typeFilter !== 'all' || audienceFilter !== 'all' || statusFilter !== 'all' || searchQuery) && (
+          {(typeFilter !== 'all' || searchQuery) && (
             <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
               <span className="text-xs text-gray-500">
                 Showing {filteredContent.length} of {content.length} items
@@ -370,11 +294,9 @@ export default function ContentHistoryPage() {
               <button
                 onClick={() => {
                   setTypeFilter('all')
-                  setAudienceFilter('all')
-                  setStatusFilter('all')
                   setSearchQuery('')
                 }}
-                className="text-xs text-[#007a80] hover:underline"
+                className="text-xs text-[#1a1652] hover:underline"
               >
                 Clear all filters
               </button>
@@ -384,7 +306,7 @@ export default function ContentHistoryPage() {
 
         {isLoading ? (
           <div className="text-center py-12">
-            <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-[#007a80] border-t-transparent"></div>
+            <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-[#1a1652] border-t-transparent"></div>
             <p className="mt-4 text-sm text-[#4a4f55]">Loading content...</p>
           </div>
         ) : error ? (
@@ -398,29 +320,29 @@ export default function ContentHistoryPage() {
             </button>
           </div>
         ) : filteredContent.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
-            <svg className="mx-auto h-16 w-16 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="text-center py-16 bg-white rounded-xl border border-[#1a1652]/10">
+            <svg className="mx-auto h-16 w-16 text-[#1a1652]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h3 className="mt-4 text-lg font-medium text-[#007a80]">
+            <h3 className="mt-4 text-lg font-medium text-[#1a1652]">
               {content.length === 0 ? 'No content yet' : 'No matching content'}
             </h3>
             <p className="mt-2 text-sm text-[#4a4f55]">
               {content.length === 0
-                ? 'Generate some emails or banners to see them here.'
+                ? 'Generate some disease education content to see it here.'
                 : 'Try adjusting your search or filters.'}
             </p>
             {content.length === 0 && (
               <div className="mt-6 flex justify-center gap-4">
                 <Link
-                  href="/chat"
-                  className="px-6 py-2 bg-[#007a80] text-white rounded-lg hover:bg-[#1c7b80]"
+                  href="/disease-awareness/chat"
+                  className="px-6 py-2 bg-gradient-to-r from-[#1a1652] to-[#00a7df] text-white rounded-lg hover:opacity-90"
                 >
                   Create Email
                 </Link>
                 <Link
-                  href="/banner-generator"
-                  className="px-6 py-2 border border-[#007a80] text-[#007a80] rounded-lg hover:bg-[#007a80]/5"
+                  href="/disease-awareness/banner-generator"
+                  className="px-6 py-2 border border-[#1a1652] text-[#1a1652] rounded-lg hover:bg-[#1a1652]/5"
                 >
                   Create Banner
                 </Link>
@@ -432,12 +354,12 @@ export default function ContentHistoryPage() {
             {filteredContent.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                className="bg-white rounded-xl border border-[#1a1652]/10 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
                 onClick={() => setSelectedItem(item)}
               >
                 {/* Preview */}
                 <div className="h-40 bg-gray-50 relative overflow-hidden">
-                  {item.content_type === 'imcivree-banner' ? (
+                  {item.content_type === 'da-banner' ? (
                     <iframe
                       srcDoc={item.html_content}
                       className="w-full h-full pointer-events-none"
@@ -446,7 +368,7 @@ export default function ContentHistoryPage() {
                     />
                   ) : (
                     <div className="flex items-center justify-center h-full">
-                      <svg className="h-16 w-16 text-[#007a80]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="h-16 w-16 text-[#1a1652]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                     </div>
@@ -456,17 +378,17 @@ export default function ContentHistoryPage() {
                 {/* Info */}
                 <div className="p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="px-2 py-0.5 text-xs font-medium bg-[#007a80]/10 text-[#007a80] rounded">
+                    <span className="px-2 py-0.5 text-xs font-medium bg-[#1a1652]/10 text-[#1a1652] rounded">
                       {getContentTypeLabel(item)}
                     </span>
-                    <span className="px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 rounded">
-                      {getAudienceLabel(item)}
+                    <span className="px-2 py-0.5 text-xs font-medium bg-[#00a7df]/10 text-[#00a7df] rounded">
+                      HCP
                     </span>
                     <span className={`px-2 py-0.5 text-xs font-medium rounded ${getStatusColor(item.status)}`}>
                       {getStatusLabel(item.status)}
                     </span>
                   </div>
-                  <h3 className="font-semibold text-[#007a80] line-clamp-1">
+                  <h3 className="font-semibold text-[#1a1652] line-clamp-1">
                     {getFocusLabel(item)}
                   </h3>
                   <p className="text-xs text-gray-500 mt-1">
@@ -487,17 +409,17 @@ export default function ContentHistoryPage() {
               <div className="p-4 border-b border-gray-200 flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="px-2 py-0.5 text-xs font-medium bg-[#007a80]/10 text-[#007a80] rounded">
+                    <span className="px-2 py-0.5 text-xs font-medium bg-[#1a1652]/10 text-[#1a1652] rounded">
                       {getContentTypeLabel(selectedItem)}
                     </span>
-                    <span className="px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 rounded">
-                      {getAudienceLabel(selectedItem)}
+                    <span className="px-2 py-0.5 text-xs font-medium bg-[#00a7df]/10 text-[#00a7df] rounded">
+                      HCP
                     </span>
                     <span className={`px-2 py-0.5 text-xs font-medium rounded ${getStatusColor(selectedItem.status)}`}>
                       {getStatusLabel(selectedItem.status)}
                     </span>
                   </div>
-                  <h2 className="text-lg font-bold text-[#007a80]">{getFocusLabel(selectedItem)}</h2>
+                  <h2 className="text-lg font-bold text-[#1a1652]">{getFocusLabel(selectedItem)}</h2>
                   <p className="text-xs text-gray-500">
                     {formatDate(selectedItem.created_at)}
                     {selectedItem.version > 1 && ` • Version ${selectedItem.version}`}
@@ -515,7 +437,7 @@ export default function ContentHistoryPage() {
                       }}
                       className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                         showVersions
-                          ? 'bg-purple-100 text-purple-700'
+                          ? 'bg-[#1a1652]/10 text-[#1a1652]'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                     >
@@ -542,93 +464,31 @@ export default function ContentHistoryPage() {
 
               {/* Version History Panel */}
               {showVersions && (
-                <div className="p-4 bg-purple-50 border-b border-purple-100">
-                  <h3 className="text-sm font-semibold text-purple-800 mb-3">Version History</h3>
+                <div className="p-4 bg-[#1a1652]/5 border-b border-[#1a1652]/10">
+                  <h3 className="text-sm font-semibold text-[#1a1652] mb-3">Version History</h3>
                   {loadingVersions ? (
                     <div className="text-center py-4">
-                      <div className="h-6 w-6 mx-auto animate-spin rounded-full border-2 border-purple-600 border-t-transparent"></div>
+                      <div className="h-6 w-6 mx-auto animate-spin rounded-full border-2 border-[#1a1652] border-t-transparent"></div>
                     </div>
                   ) : versions.length === 0 ? (
-                    <p className="text-sm text-purple-600">No version history available</p>
+                    <p className="text-sm text-[#1a1652]/70">No version history available</p>
                   ) : (
                     <div className="space-y-2 max-h-40 overflow-auto">
                       {versions.map((v) => (
                         <div
                           key={v.id}
-                          className="flex items-center justify-between p-2 bg-white rounded-lg border border-purple-100"
+                          className="flex items-center justify-between p-2 bg-white rounded-lg border border-[#1a1652]/10"
                         >
                           <div>
-                            <span className="text-sm font-medium text-purple-800">v{v.version_number}</span>
+                            <span className="text-sm font-medium text-[#1a1652]">v{v.version_number}</span>
                             <span className="text-xs text-gray-500 ml-2">{formatDate(v.created_at)}</span>
                             {v.change_notes && (
                               <p className="text-xs text-gray-600 mt-0.5">{v.change_notes}</p>
                             )}
-                            <span className="text-xs text-purple-600 ml-2">({v.change_source})</span>
+                            <span className="text-xs text-[#00a7df] ml-2">({v.change_source})</span>
                           </div>
                         </div>
                       ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Ziflow Feedback Panel */}
-              {selectedItem.ziflow_proof_id && (
-                <div className="p-4 bg-blue-50 border-b border-blue-100">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-semibold text-blue-800 flex items-center gap-2">
-                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      Reviewer Feedback
-                    </h3>
-                    {ziflowFeedback?.proofUrl && (
-                      <a
-                        href={ziflowFeedback.proofUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-blue-600 hover:underline"
-                      >
-                        View in Ziflow →
-                      </a>
-                    )}
-                  </div>
-                  {loadingFeedback ? (
-                    <div className="text-center py-4">
-                      <div className="h-6 w-6 mx-auto animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
-                    </div>
-                  ) : ziflowFeedback?.comments?.length > 0 ? (
-                    <div className="space-y-2 max-h-48 overflow-auto">
-                      {ziflowFeedback.comments.map((comment: any) => (
-                        <div
-                          key={comment.id}
-                          className="p-3 bg-white rounded-lg border border-blue-100"
-                        >
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm font-medium text-blue-800">
-                              {comment.authorName}
-                            </span>
-                            <span className="text-xs text-gray-500">
-                              {comment.createdAt && formatDate(comment.createdAt)}
-                            </span>
-                          </div>
-                          <p className="text-sm text-gray-700">{comment.text}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-4 bg-white rounded-lg border border-blue-100">
-                      <p className="text-sm text-blue-600">
-                        {ziflowFeedback?.status === 'in_progress'
-                          ? 'Waiting for reviewer feedback...'
-                          : 'No comments yet'}
-                      </p>
-                      <button
-                        onClick={() => selectedItem.ziflow_proof_id && fetchZiflowFeedback(selectedItem.ziflow_proof_id)}
-                        className="mt-2 text-xs text-blue-700 hover:underline"
-                      >
-                        Refresh
-                      </button>
                     </div>
                   )}
                 </div>
@@ -641,7 +501,7 @@ export default function ContentHistoryPage() {
                     srcDoc={selectedItem.html_content}
                     className="w-full"
                     style={{
-                      height: selectedItem.content_type === 'imcivree-banner' ? '250px' : '600px',
+                      height: selectedItem.content_type === 'da-banner' ? '320px' : '600px',
                       maxHeight: '70vh'
                     }}
                     sandbox="allow-same-origin allow-scripts"
@@ -667,29 +527,29 @@ export default function ContentHistoryPage() {
                         audience: selectedItem.audience,
                         focus: selectedItem.focus,
                         key_message: selectedItem.key_message,
-                        html_content: selectedItem.html_content,
-                        ziflow_proof_id: selectedItem.ziflow_proof_id,
-                        ziflow_feedback: ziflowFeedback
+                        html_content: selectedItem.html_content
                       }))
                       // Navigate to the appropriate generator
-                      router.push(selectedItem.content_type === 'imcivree-email' ? '/chat' : '/chat?type=banner')
+                      router.push(selectedItem.content_type === 'da-email'
+                        ? '/disease-awareness/chat'
+                        : '/disease-awareness/banner-generator')
                     }}
-                    className="flex items-center gap-1 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                    className="flex items-center gap-1 px-4 py-2 text-sm bg-[#1a1652] text-white rounded-lg hover:opacity-90"
                   >
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
-                    {ziflowFeedback?.comments?.length > 0 ? 'Address Feedback' : 'Edit / Create Revision'}
+                    Edit / Create Revision
                   </button>
                   <button
                     onClick={() => copyHtml(selectedItem)}
-                    className="px-4 py-2 text-sm border border-[#007a80] text-[#007a80] rounded-lg hover:bg-[#007a80]/5"
+                    className="px-4 py-2 text-sm border border-[#1a1652] text-[#1a1652] rounded-lg hover:bg-[#1a1652]/5"
                   >
                     Copy HTML
                   </button>
                   <button
                     onClick={() => downloadHtml(selectedItem)}
-                    className="px-4 py-2 text-sm bg-[#007a80] text-white rounded-lg hover:bg-[#1c7b80]"
+                    className="px-4 py-2 text-sm bg-gradient-to-r from-[#1a1652] to-[#00a7df] text-white rounded-lg hover:opacity-90"
                   >
                     Download
                   </button>
