@@ -72,7 +72,7 @@ body { margin:0; padding:0; }
 .frame1 { animation: frame1cycle 12s infinite; color:#FFFFFF; text-align:center; display:flex; flex-direction:column; justify-content:center; font-family:'Montserrat', sans-serif; }
 .frame1 h1 { font-weight:700; font-size:28px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
-.frame2 { background:#181050; animation: frame2cycle 12s infinite; color:#FFFFFF; display:flex; justify-content:center; align-items:center; text-align:center; padding:20px; font-size:22px; }
+.frame2 { background:#181050; animation: frame2cycle 12s infinite; color:#FFFFFF; text-align:center; font-size:22px; }
 
 .frame3 { background:#F8F0F8; animation: frame3cycle 12s infinite; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
 
@@ -93,7 +93,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 
 <!-- FRAME 2 - Single HO Claim -->
 <div class="frame frame2">
- <div style="text-align:center; width:100%; padding:0 30px;">HYPOTHALAMIC OBESITY (HO) results<br>from hypothalamic injury<sup>1</sup>.</div>
+ <div style="text-align:center;">HYPOTHALAMIC OBESITY (HO) results<br>from hypothalamic injury<sup>1</sup>.</div>
 </div>
 
 <!-- FRAME 3 - CTA + Reference -->
@@ -140,7 +140,7 @@ body { margin:0; padding:0; }
 .frame1 { animation: frame1cycle 12s infinite; color:#FFFFFF; text-align:center; display:flex; flex-direction:column; justify-content:center; font-family:'Montserrat', sans-serif; }
 .frame1 h1 { font-weight:700; font-size:28px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
-.frame2 { background:#A00868; animation: frame2cycle 12s infinite; color:#FFFFFF; display:flex; justify-content:center; align-items:center; text-align:center; padding:20px; font-size:22px; }
+.frame2 { background:#A00868; animation: frame2cycle 12s infinite; color:#FFFFFF; text-align:center; font-size:22px; }
 
 .frame3 { background:#F0E0F8; animation: frame3cycle 12s infinite; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
 
@@ -161,7 +161,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 
 <!-- FRAME 2 - Single HO Claim -->
 <div class="frame frame2">
- <div style="text-align:center; width:100%; padding:0 30px;">MC4R regulates<br>hunger and satiety<sup>1</sup>.</div>
+ <div style="text-align:center;">MC4R regulates<br>hunger and satiety<sup>1</sup>.</div>
 </div>
 
 <!-- FRAME 3 - CTA + Reference -->
@@ -208,7 +208,7 @@ body { margin:0; padding:0; }
 .frame1 { animation: frame1cycle 12s infinite; color:#FFFFFF; text-align:center; display:flex; flex-direction:column; justify-content:center; font-family:'Montserrat', sans-serif; }
 .frame1 h1 { font-weight:700; font-size:28px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
-.frame2 { background:#181050; animation: frame2cycle 12s infinite; color:#FFFFFF; display:flex; justify-content:center; align-items:center; text-align:center; padding:20px; font-size:20px; line-height:1.3; }
+.frame2 { background:#181050; animation: frame2cycle 12s infinite; color:#FFFFFF; text-align:center; font-size:20px; line-height:1.3; }
 
 .frame3 { background:#F8F0F8; animation: frame3cycle 12s infinite; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
 
@@ -229,7 +229,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 
 <!-- FRAME 2 - Single HO Claim -->
 <div class="frame frame2">
- <div style="text-align:center; width:100%; padding:0 30px;">~70% of patients with HO<br>experience hyperphagia<sup>1</sup>.</div>
+ <div style="text-align:center;">~70% of patients with HO<br>experience hyperphagia<sup>1</sup>.</div>
 </div>
 
 <!-- FRAME 3 - CTA + Reference -->
@@ -276,7 +276,7 @@ body { margin:0; padding:0; }
 .frame1 { animation: frame1cycle 12s infinite; color:#FFFFFF; text-align:center; display:flex; flex-direction:column; justify-content:center; font-family:'Montserrat', sans-serif; }
 .frame1 h1 { font-weight:700; font-size:28px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
-.frame2 { background:#A00868; animation: frame2cycle 12s infinite; color:#FFFFFF; display:flex; justify-content:center; align-items:center; text-align:center; padding:20px; font-size:20px; line-height:1.3; }
+.frame2 { background:#A00868; animation: frame2cycle 12s infinite; color:#FFFFFF; text-align:center; font-size:20px; line-height:1.3; }
 
 .frame3 { background:#F0E0F8; animation: frame3cycle 12s infinite; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
 
@@ -297,7 +297,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 
 <!-- FRAME 2 - Single HO Claim -->
 <div class="frame frame2">
- <div style="text-align:center; width:100%; padding:0 30px;">Weight gain can begin<br>6–12 months post-injury<sup>2</sup>.</div>
+ <div style="text-align:center;">Weight gain can begin<br>6–12 months post-injury<sup>2</sup>.</div>
 </div>
 
 <!-- FRAME 3 - CTA + Reference -->
@@ -344,7 +344,7 @@ body { margin:0; padding:0; }
 .frame1 { animation: frame1cycle 12s infinite; color:#FFFFFF; text-align:center; display:flex; flex-direction:column; justify-content:center; font-family:'Montserrat', sans-serif; }
 .frame1 h1 { font-weight:700; font-size:28px; line-height:1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
-.frame2 { background:#181050; animation: frame2cycle 12s infinite; color:#FFFFFF; display:flex; justify-content:center; align-items:center; text-align:center; padding:20px; font-size:22px; }
+.frame2 { background:#181050; animation: frame2cycle 12s infinite; color:#FFFFFF; text-align:center; font-size:22px; }
 
 .frame3 { background:#F8F0F8; animation: frame3cycle 12s infinite; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
 
@@ -365,7 +365,7 @@ video { width:100%; height:100%; object-fit:cover; position:absolute; top:0; lef
 
 <!-- FRAME 2 - Single HO Claim -->
 <div class="frame frame2">
- <div style="text-align:center; width:100%; padding:0 30px;">Early screening<br>is critical<sup>3</sup>.</div>
+ <div style="text-align:center;">Early screening<br>is critical<sup>3</sup>.</div>
 </div>
 
 <!-- FRAME 3 - CTA + Reference -->
