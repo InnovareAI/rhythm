@@ -72,9 +72,9 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     .banner { position: relative; width: 728px; height: 250px; overflow: hidden; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); background: linear-gradient(135deg, #0F7C8F, #0C5F73); color: #ffffff; }
     .banner-inner { position: absolute; inset: 0; display: flex; flex-direction: column; }
     .frames { position: relative; flex: 1 1 auto; padding: 20px 24px 8px; overflow: hidden; }
-    .frame { position: absolute; inset: 0; padding: 24px 28px 16px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
+    .frame { position: absolute; inset: 0; padding: 20px 20px 12px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
     .frame.active { opacity: 1; z-index: 2; }
-    .headline { font-weight: 800; font-size: 20px; line-height: 1.2; letter-spacing: 0.02em; margin-bottom: 10px; }
+    .headline { font-weight: 800; font-size: 18px; line-height: 1.25; letter-spacing: 0.01em; margin-bottom: 10px; }
     .subcopy { font-size: 12px; line-height: 1.4; max-width: 95%; opacity: 0.9; }
     .cta-row { margin-top: 18px; display: flex; justify-content: flex-end; }
     .cta-button { background: #8CD038; color: #00313C; border-radius: 999px; padding: 8px 20px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }
@@ -187,9 +187,9 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     .banner { position: relative; width: 728px; height: 250px; overflow: hidden; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); background: linear-gradient(135deg, #0F7C8F, #0C5F73); color: #ffffff; }
     .banner-inner { position: absolute; inset: 0; display: flex; flex-direction: column; }
     .frames { position: relative; flex: 1 1 auto; padding: 20px 24px 8px; overflow: hidden; }
-    .frame { position: absolute; inset: 0; padding: 24px 28px 16px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
+    .frame { position: absolute; inset: 0; padding: 20px 20px 12px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
     .frame.active { opacity: 1; z-index: 2; }
-    .headline { font-weight: 800; font-size: 20px; line-height: 1.2; letter-spacing: 0.02em; margin-bottom: 10px; }
+    .headline { font-weight: 800; font-size: 18px; line-height: 1.25; letter-spacing: 0.01em; margin-bottom: 10px; }
     .subcopy { font-size: 12px; line-height: 1.4; max-width: 95%; opacity: 0.9; }
     .cta-row { margin-top: 18px; display: flex; justify-content: flex-end; }
     .cta-button { background: #8CD038; color: #00313C; border-radius: 999px; padding: 8px 20px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }
@@ -302,9 +302,9 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     .banner { position: relative; width: 728px; height: 250px; overflow: hidden; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); background: linear-gradient(135deg, #0F7C8F, #0C5F73); color: #ffffff; }
     .banner-inner { position: absolute; inset: 0; display: flex; flex-direction: column; }
     .frames { position: relative; flex: 1 1 auto; padding: 20px 24px 8px; overflow: hidden; }
-    .frame { position: absolute; inset: 0; padding: 24px 28px 16px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
+    .frame { position: absolute; inset: 0; padding: 20px 20px 12px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
     .frame.active { opacity: 1; z-index: 2; }
-    .headline { font-weight: 800; font-size: 20px; line-height: 1.2; letter-spacing: 0.02em; margin-bottom: 10px; }
+    .headline { font-weight: 800; font-size: 18px; line-height: 1.25; letter-spacing: 0.01em; margin-bottom: 10px; }
     .subcopy { font-size: 12px; line-height: 1.4; max-width: 95%; opacity: 0.9; }
     .cta-row { margin-top: 18px; display: flex; justify-content: flex-end; }
     .cta-button { background: #8CD038; color: #00313C; border-radius: 999px; padding: 8px 20px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }
@@ -417,9 +417,9 @@ export const BANNER_TEMPLATES: Record<string, BannerTemplate> = {
     .banner { position: relative; width: 728px; height: 250px; overflow: hidden; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); background: linear-gradient(135deg, #0F7C8F, #0C5F73); color: #ffffff; }
     .banner-inner { position: absolute; inset: 0; display: flex; flex-direction: column; }
     .frames { position: relative; flex: 1 1 auto; padding: 20px 24px 8px; overflow: hidden; }
-    .frame { position: absolute; inset: 0; padding: 24px 28px 16px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
+    .frame { position: absolute; inset: 0; padding: 20px 20px 12px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
     .frame.active { opacity: 1; z-index: 2; }
-    .headline { font-weight: 800; font-size: 20px; line-height: 1.2; letter-spacing: 0.02em; margin-bottom: 10px; }
+    .headline { font-weight: 800; font-size: 18px; line-height: 1.25; letter-spacing: 0.01em; margin-bottom: 10px; }
     .subcopy { font-size: 12px; line-height: 1.4; max-width: 95%; opacity: 0.9; }
     .cta-row { margin-top: 18px; display: flex; justify-content: flex-end; }
     .cta-button { background: #8CD038; color: #00313C; border-radius: 999px; padding: 8px 20px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }

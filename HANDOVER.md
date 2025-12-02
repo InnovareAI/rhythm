@@ -1874,6 +1874,23 @@ CHECK (content_type IN ('imcivree-email', 'imcivree-banner', 'da-email', 'da-ban
 | Disease Awareness (Unbranded) | `da-email` | Unbranded aHO education emails |
 | Disease Awareness (Unbranded) | `da-banner` | Unbranded cinematic banners |
 
+#### 4. IMCIVREE Banner Text Cutoff Fix
+
+**Problem:** Longer headline text was getting cut off on the sides of IMCIVREE banners.
+
+**Solution:** Adjusted frame padding and headline font size.
+
+**CSS Changes (`lib/content-templates/imcivree-banners.ts`):**
+```css
+/* Frame padding - reduced horizontal */
+.frame { padding: 20px 20px 12px; }  /* was: 24px 28px 16px */
+
+/* Headline - smaller font, better line height */
+.headline { font-size: 18px; line-height: 1.25; }  /* was: 20px, 1.2 */
+```
+
+**Result:** More horizontal space for text, better wrapping on long headlines.
+
 ---
 
 ## Known Issues & Future Work
