@@ -56,7 +56,7 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #f3f5f7; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    .banner { position: relative; width: 728px; height: 250px; overflow: hidden; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); background: linear-gradient(135deg, #1a1652, #00a7df); color: #ffffff; }
+    .banner { position: relative; width: 750px; height: 250px; overflow: hidden; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); background: linear-gradient(135deg, #1a1652, #00a7df); color: #ffffff; }
     .banner-inner { position: absolute; inset: 0; display: flex; flex-direction: column; }
     .frames { position: relative; flex: 1 1 auto; padding: 20px 24px 8px; overflow: hidden; }
     .frame { position: absolute; inset: 0; padding: 24px 28px 16px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
@@ -67,12 +67,8 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
     .cta-button { background: #A00868; color: #ffffff; border-radius: 8px; padding: 10px 24px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }
     .cta-button:hover { background: #7a0550; }
     .brain-icon { position: absolute; top: 20px; right: 24px; width: 50px; height: 50px; opacity: 0.15; }
-    .refs-bar { position: relative; flex: 0 0 52px; background: #1a1652; color: #c9f1fe; font-size: 10px; line-height: 1.3; overflow: hidden; padding: 4px 10px; }
-    .refs-bar-title { font-weight: 700; margin-bottom: 2px; color: #00a7df; }
-    .refs-window { position: relative; overflow: hidden; height: 34px; }
-    .refs-scroll { position: absolute; width: 100%; animation: refsScroll 25s linear infinite; white-space: normal; }
-    @keyframes refsScroll { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
-    .refs-text { padding-right: 18px; }
+    .references { position: relative; flex: 0 0 auto; background: #1a1652; color: #c9f1fe; font-size: 8px; line-height: 1.3; padding: 6px 12px; }
+    .references strong { font-weight: 700; color: #00a7df; }
   </style>
 </head>
 <body>
@@ -113,22 +109,8 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
         </section>
       </div>
 
-      <section class="refs-bar" aria-label="References">
-        <div class="refs-bar-title">References</div>
-        <div class="refs-window">
-          <div class="refs-scroll">
-            <div class="refs-text">
-              1. Abuzzahab MJ, Roth CL, Shoemaker AH. Hypothalamic obesity: prologue and promise. Horm Res Paediatr. 2019;91(2):128-136. doi:10.1159/000496564
-              2. Roth CL. Hypothalamic obesity in patients with craniopharyngioma: profound changes of several weight regulatory circuits. Front Endocrinol (Lausanne). 2011;2:49. doi:10.3389/fendo.2011.00049
-              3. van Iersel L, Brokke KE, Adan RAH, et al. Pathophysiology and individualized treatment of hypothalamic obesity following craniopharyngioma and other suprasellar tumors: a systematic review. Endocr Rev. 2019;40(1):193-235. doi:10.1210/er.2018-00017
-              4. Roth CL. Hypothalamic obesity in craniopharyngioma patients: disturbed energy homeostasis related to extent of hypothalamic damage and its implication for obesity intervention. J Clin Med. 2015;4(9):1774-1797. doi:10.3390/jcm4091774
-              <br><br>
-              This information is intended for US healthcare professionals only and is provided for educational purposes.
-              <br><br>
-              © 2025. Rhythm Pharmaceuticals, Inc. All rights reserved. Rhythm and its logo are trademarks of Rhythm Pharmaceuticals, Inc. US-DSE-2500011 (03.08/2025)
-            </div>
-          </div>
-        </div>
+      <section class="references" aria-label="References">
+        <strong>References:</strong> 1. Abuzzahab MJ et al. Horm Res Paediatr. 2019;91(2):128-136. 2. Roth CL. Front Endocrinol. 2011;2:49. 3. van Iersel L et al. Endocr Rev. 2019;40(1):193-235. 4. Roth CL. J Clin Med. 2015;4(9):1774-1797. | This information is intended for US healthcare professionals only. © 2025 Rhythm Pharmaceuticals, Inc. US-DSE-2500011 (03.08/2025)
       </section>
     </div>
   </div>
@@ -168,7 +150,7 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #f3f5f7; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    .banner { position: relative; width: 728px; height: 250px; overflow: hidden; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); background: linear-gradient(135deg, #1a1652, #00a7df); color: #ffffff; }
+    .banner { position: relative; width: 750px; height: 250px; overflow: hidden; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); background: linear-gradient(135deg, #1a1652, #00a7df); color: #ffffff; }
     .banner-inner { position: absolute; inset: 0; display: flex; flex-direction: column; }
     .frames { position: relative; flex: 1 1 auto; padding: 20px 24px 8px; overflow: hidden; }
     .frame { position: absolute; inset: 0; padding: 24px 28px 16px; opacity: 0; transition: opacity 0.7s ease; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
@@ -179,12 +161,8 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
     .cta-button { background: #A00868; color: #ffffff; border-radius: 8px; padding: 10px 24px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); text-decoration: none; }
     .cta-button:hover { background: #7a0550; }
     .brain-icon { position: absolute; top: 20px; right: 24px; width: 50px; height: 50px; opacity: 0.15; }
-    .refs-bar { position: relative; flex: 0 0 52px; background: #1a1652; color: #c9f1fe; font-size: 10px; line-height: 1.3; overflow: hidden; padding: 4px 10px; }
-    .refs-bar-title { font-weight: 700; margin-bottom: 2px; color: #00a7df; }
-    .refs-window { position: relative; overflow: hidden; height: 34px; }
-    .refs-scroll { position: absolute; width: 100%; animation: refsScroll 25s linear infinite; white-space: normal; }
-    @keyframes refsScroll { 0% { transform: translateY(100%); } 100% { transform: translateY(-100%); } }
-    .refs-text { padding-right: 18px; }
+    .references { position: relative; flex: 0 0 auto; background: #1a1652; color: #c9f1fe; font-size: 8px; line-height: 1.3; padding: 6px 12px; }
+    .references strong { font-weight: 700; color: #00a7df; }
   </style>
 </head>
 <body>
@@ -225,21 +203,8 @@ export const DA_BANNER_TEMPLATES: Record<string, DABannerTemplate> = {
         </section>
       </div>
 
-      <section class="refs-bar" aria-label="References">
-        <div class="refs-bar-title">References</div>
-        <div class="refs-window">
-          <div class="refs-scroll">
-            <div class="refs-text">
-              1. Abuzzahab MJ, Roth CL, Shoemaker AH. Hypothalamic obesity: prologue and promise. Horm Res Paediatr. 2019;91(2):128-136. doi:10.1159/000496564
-              2. Roth CL. Hypothalamic obesity in patients with craniopharyngioma: profound changes of several weight regulatory circuits. Front Endocrinol (Lausanne). 2011;2:49. doi:10.3389/fendo.2011.00049
-              3. Timper K, Brünjng JC. Hypothalamic circuits regulating appetite and energy homeostasis: pathways to obesity. Dis Model Mech. 2017;10(6):679-689. doi:10.1242/dmm.026609
-              <br><br>
-              This information is intended for US healthcare professionals only and is provided for educational purposes.
-              <br><br>
-              © 2025. Rhythm Pharmaceuticals, Inc. All rights reserved. Rhythm and its logo are trademarks of Rhythm Pharmaceuticals, Inc. US-DSE-2500011 (03.08/2025)
-            </div>
-          </div>
-        </div>
+      <section class="references" aria-label="References">
+        <strong>References:</strong> 1. Abuzzahab MJ et al. Horm Res Paediatr. 2019;91(2):128-136. 2. Roth CL. Front Endocrinol. 2011;2:49. 3. Timper K, Brüning JC. Dis Model Mech. 2017;10(6):679-689. | This information is intended for US healthcare professionals only. © 2025 Rhythm Pharmaceuticals, Inc. US-DSE-2500011 (03.08/2025)
       </section>
     </div>
   </div>
